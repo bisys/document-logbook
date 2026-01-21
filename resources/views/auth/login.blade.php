@@ -26,7 +26,11 @@
             <img src="../assets/img/stisla-fill.svg" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
             <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Stisla</span></h4>
             <p class="text-muted">Before you get started, you must login or register if you don't already have an account.</p>
+            @if(session('error'))
+            <p class="text-danger mt-2">{{ session('error') }}</p>
+            @endif
             <form method="POST" action="#" class="needs-validation" novalidate="">
+              @csrf
               <div class="form-group">
                 <label for="email">Email</label>
                 <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>

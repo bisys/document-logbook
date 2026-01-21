@@ -14,15 +14,25 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email','password');
+        $credentials = $request->only('email', 'password');
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->route('dashboard');
+            $role = Auth::user()->role->slug;
+
+            if ($role == 'admin') {
+                return redirect('/admin/dashboard');
+            }
+
+            if ($role == 'accounting') {
+                return redirect('/accounting/dashboard');
+            }
+
+            return redirect('user/dashboard');
         }
 
-        return back()->with('error','Login gagal');
+        return back()->with('error', 'Login failed. Please check your credentials.');
     }
 
     public function logout(Request $request)
