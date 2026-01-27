@@ -4,14 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>@yield('title')</title>
+    <title>@yield('title') &mdash; Document Logbook System</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <!-- CSS Libraries -->
-
+    <link rel="stylesheet" href="/assets/modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/modules/izitoast/dist/css/iziToast.min.css">
+    <link rel="stylesheet" href="/assets/modules/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="/assets/modules/bootstrap-daterangepicker/daterangepicker.css">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="/assets/css/style.css">
@@ -33,7 +36,7 @@
 
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauv.al/">Muhamad Nauval Azhar</a>
+                    Copyright &copy; 2026 <div class="bullet"></div> Developed By <a href="mailto:it-04@thaisummit.co.id">it-04@thaisummit.co.id</a>
                 </div>
                 <div class="footer-right">
                 </div>
@@ -50,12 +53,21 @@
     <script src="/assets/js/stisla.js"></script>
 
     <!-- JS Libraries -->
+    <script src="/assets/modules/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/modules/izitoast/dist/js/iziToast.min.js"></script>
+    <script src="/assets/modules/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/assets/modules/select2/dist/js/select2.full.min.js"></script>
+    <script src="/assets/modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js"></script>
+    <script src="/assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="/assets/modules/cleave.js/dist/cleave.min.js"></script>
 
     <!-- Template JS File -->
     <script src="/assets/js/scripts.js"></script>
     <script src="/assets/js/custom.js"></script>
 
     <!-- Page Specific JS File -->
+    @stack('scripts')
 
 </body>
 

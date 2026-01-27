@@ -8,6 +8,17 @@
         </ul>
     </li>
     @if(auth()->user()->hasRole('admin'))
+    <li class="menu-header">User Management</li>
+    <li>
+        <a href="{{ route('user.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Manage Users</span></a>
+    </li>
+    <li class="menu-header">Master Data</li>
+    <li>
+        <a href="{{ route('department.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Departments</span></a>
+    </li>
+    <li>
+        <a href="{{ route('position.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Positions</span></a>
+    </li>
     <li><a href="/admin/dashboard">Admin Dashboard</a></li>
     <li><a href="/admin/users">Manage Users</a></li>
     @endif
