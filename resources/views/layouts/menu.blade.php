@@ -23,6 +23,9 @@
         <a href="{{ route('department.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Departments</span></a>
     </li>
     <li>
+        <a href="{{ route('document-type.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Document Types</span></a>
+    </li>
+    <li>
         <a href="{{ route('permission.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Permissions</span></a>
     </li>
     <li>

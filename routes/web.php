@@ -7,6 +7,7 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/role/{role}/permission', [RoleController::class, 'syncPermissions']);
         Route::resource('/permission', PermissionController::class);
         Route::resource('/approval', ApprovalController::class);
+        Route::resource('/document-type', DocumentTypeController::class);
         Route::resource('/user', UserController::class);
     });
 
