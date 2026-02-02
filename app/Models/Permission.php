@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Role extends Model
+class Permission extends Model
 {
     use HasSlug;
 
@@ -16,14 +16,14 @@ class Role extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'role',
+        'permission',
         'slug',
     ];
 
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('role')
+            ->generateSlugsFrom('permission')
             ->saveSlugsTo('slug');
     }
 
@@ -32,18 +32,8 @@ class Role extends Model
         return 'slug';
     }
 
-    public function users()
+    public function roles()
     {
-        return $this->hasMany(User::class);
-    }
-
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class, 'role_permission');
-    }
-
-    public function hasPermission($permission)
-    {
-        return $this->permissions()->where('permission', $permission)->exists();
+        return $this->belongsToMany(Role::class, 'role_permission');
     }
 }

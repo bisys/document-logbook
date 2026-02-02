@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->role->slug === $role;
     }
+
+    public function hasPermission($permission)
+    {
+        return $this->role->hasPermission($permission);
+    }
 }

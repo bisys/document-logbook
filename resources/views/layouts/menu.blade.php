@@ -8,19 +8,29 @@
         </ul>
     </li>
     @if(auth()->user()->hasRole('admin'))
+    <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+    @if(auth()->user()->hasPermission('view-user'))
     <li class="menu-header">User Management</li>
     <li>
         <a href="{{ route('user.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Manage Users</span></a>
     </li>
+    @endif
     <li class="menu-header">Master Data</li>
+    <li>
+        <a href="{{ route('approval.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approvals</span></a>
+    </li>
     <li>
         <a href="{{ route('department.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Departments</span></a>
     </li>
     <li>
+        <a href="{{ route('permission.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Permissions</span></a>
+    </li>
+    <li>
         <a href="{{ route('position.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Positions</span></a>
     </li>
-    <li><a href="/admin/dashboard">Admin Dashboard</a></li>
-    <li><a href="/admin/users">Manage Users</a></li>
+    <li>
+        <a href="{{ route('role.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Roles</span></a>
+    </li>
     @endif
 
     @if(auth()->user()->hasRole('accounting'))
