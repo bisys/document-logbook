@@ -9,6 +9,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\CostCenterController;
+use App\Http\Controllers\DocumentStatusController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
@@ -41,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/approval', ApprovalController::class);
         Route::resource('/document-type', DocumentTypeController::class);
         Route::resource('/cost-center', CostCenterController::class);
+        Route::resource('/document-status', DocumentStatusController::class);
         Route::resource('/user', UserController::class);
     });
 

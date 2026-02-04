@@ -26,6 +26,9 @@
         <a href="{{ route('department.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Departments</span></a>
     </li>
     <li>
+        <a href="{{ route('document-status.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Document Statuses</span></a>
+    </li>
+    <li>
         <a href="{{ route('document-type.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Document Types</span></a>
     </li>
     <li>
