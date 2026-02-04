@@ -20,6 +20,9 @@
         <a href="{{ route('approval.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approvals</span></a>
     </li>
     <li>
+        <a href="{{ route('cost-center.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cost Centers</span></a>
+    </li>
+    <li>
         <a href="{{ route('department.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Departments</span></a>
     </li>
     <li>
