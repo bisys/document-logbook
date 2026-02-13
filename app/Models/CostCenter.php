@@ -32,4 +32,24 @@ class CostCenter extends Model
     {
         return 'slug';
     }
+
+    public function supplierPayments()
+    {
+        return $this->hasMany(SupplierPayment::class);
+    }
+
+    public function pettyCashes()
+    {
+        return $this->hasMany(PettyCash::class);
+    }
+
+    public function cashAdvances()
+    {
+        return $this->hasMany(CashAdvance::class);
+    }
+
+    public function internationalTrips()
+    {
+        return $this->hasMany(InternationalTrip::class);
+    }
 }

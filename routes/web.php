@@ -10,6 +10,9 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\DocumentStatusController;
+use App\Http\Controllers\ApprovalStatusController;
+use App\Http\Controllers\ApprovalRoleController;
+use App\Http\Controllers\RevisionStatusController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
@@ -43,6 +46,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/document-type', DocumentTypeController::class);
         Route::resource('/cost-center', CostCenterController::class);
         Route::resource('/document-status', DocumentStatusController::class);
+        Route::resource('/approval-status', ApprovalStatusController::class);
+        Route::resource('/approval-role', ApprovalRoleController::class);
+        Route::resource('/revision-status', RevisionStatusController::class);
         Route::resource('/user', UserController::class);
     });
 

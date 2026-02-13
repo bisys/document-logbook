@@ -3,32 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class Approval extends Model
 {
-    use HasSlug;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'approval',
-        'slug',
+        'approvable_id',
+        'approvable_type',
+        'approval_role_id',
+        'user_id',
+        'approval_status_id',
+        'approval_at',
+        'remark',
     ];
 
-    public function getSlugOptions(): SlugOptions
+    protected $dates = ['approval_at'];
+
+    public function approvable()
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('approval')
-            ->saveSlugsTo('slug');
+        return $this->morphTo();
     }
 
-    public function getRouteKeyName(): string
+    public function role()
     {
-        return 'slug';
+        return $this->belongsTo(ApprovalRole::class, 'approval_role_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(ApprovalStatus::class, 'approval_status_id');
     }
 }

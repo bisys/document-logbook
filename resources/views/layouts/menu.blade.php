@@ -17,7 +17,10 @@
     @endif
     <li class="menu-header">Master Data</li>
     <li>
-        <a href="{{ route('approval.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approvals</span></a>
+        <a href="{{ route('approval-role.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approval Roles</span></a>
+    </li>
+    <li>
+        <a href="{{ route('approval-status.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approval Statuses</span></a>
     </li>
     <li>
         <a href="{{ route('cost-center.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cost Centers</span></a>
@@ -36,6 +39,9 @@
     </li>
     <li>
         <a href="{{ route('position.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Positions</span></a>
+    </li>
+    <li>
+        <a href="{{ route('revision-status.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Revision Statuses</span></a>
     </li>
     <li>
         <a href="{{ route('role.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Roles</span></a>

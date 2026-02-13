@@ -31,4 +31,29 @@ class DocumentStatus extends Model
     {
         return 'slug';
     }
+
+    public function supplierPayments()
+    {
+        return $this->hasMany(SupplierPayment::class);
+    }
+
+    public function pettyCashes()
+    {
+        return $this->hasMany(PettyCash::class);
+    }
+
+    public function cashAdvanceDraws()
+    {
+        return $this->hasMany(CashAdvanceDraw::class);
+    }
+
+    public function cashAdvanceRealizations()
+    {
+        return $this->hasMany(CashAdvanceRealization::class);
+    }
+
+    public function internationalTrips()
+    {
+        return $this->hasMany(InternationalTrip::class);
+    }
 }
