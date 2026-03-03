@@ -21,24 +21,33 @@ class AuthController extends Controller
 
             $role = Auth::user()->role->slug;
 
-            if ($role == 'admin') {
-                return redirect('/admin/dashboard');
+            // Redirect based on role
+            switch ($role) {
+                case 'admin':
+                    return redirect('/admin/dashboard');
+                case 'accounting-staff':
+                    return redirect('/accounting/dashboard');
+                case 'accounting-manager':
+                    return redirect('/accounting-manager/dashboard');
+                case 'accounting-gm':
+                    return redirect('/accounting-gm/dashboard');
+                case 'user':
+                    return redirect('/user/dashboard');
+                default:
+                    Auth::logout();
+                    return back()->with('error', 'Your account does not have a valid role. Please contact the administrator.');
             }
 
-            if ($role == 'accounting') {
-                return redirect('/accounting/dashboard');
-            }
-
-            return redirect('user/dashboard');
+            return back()->with('error', 'Login failed. Please check your credentials.');
         }
-
-        return back()->with('error', 'Login failed. Please check your credentials.');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/login');
     }
 }

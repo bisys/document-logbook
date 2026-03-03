@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class SupplierPayment extends Model
 {
@@ -24,7 +25,8 @@ class SupplierPayment extends Model
         'nominative_summary',
         'calculation_summary',
         'budget_plan',
-        'document_status_id'
+        'document_status_id',
+        'edit_count'
     ];
 
     public function user()
@@ -50,5 +52,36 @@ class SupplierPayment extends Model
     public function revisions()
     {
         return $this->morphMany(Revision::class, 'revisable');
+    }
+
+    public static function generateNumber()
+    {
+        $prefix = 'SPR';
+        $today = Carbon::now()->format('dmY');
+
+        $last = self::whereDate('created_at', Carbon::today())
+            ->where('number', 'like', $prefix . $today . '%')
+            ->orderByDesc('id')
+            ->first();
+
+        if ($last) {
+            $lastNumber = (int) substr($last->number, -4);
+            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $newNumber = '0001';
+        }
+
+        return $prefix . $today . $newNumber;
+    }
+
+    /**
+     * Generate filename for edited files.
+     * Format: {fieldName}_{documentNumber}_edited({editCount}).{extension}
+     */
+    public function generateEditedFileName($fieldName, $originalPath)
+    {
+        $editCount = ($this->edit_count ?? 0) + 1;
+        $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+        return "{$fieldName}_{$this->number}_edited({$editCount}).{$extension}";
     }
 }

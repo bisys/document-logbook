@@ -43,7 +43,7 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->department->department }}</td>
                                         <td>{{ $user->position->position }}</td>
-                                        <td>{{ $user->role_id == 1 ? 'Admin' : ($user->role_id == 2 ? 'Accounting' : 'User') }}</td>
+                                        <td>{{ $user->role->role }}</td>
                                         <td>
                                             <a href="#" data-toggle="modal" data-target="#modal-edit-{{ $user->slug }}" class="btn btn-icon icon-left btn-primary">
                                                 <i class="far fa-edit"></i>
@@ -190,9 +190,9 @@
                     <div class="form-group">
                         <label for="role_id">Role</label>
                         <select name="role_id" id="" class="form-control">
-                            <option value="1" {{ $user->role_id == 1 ? 'selected' : '' }}>Admin</option>
-                            <option value="2" {{ $user->role_id == 2 ? 'selected' : '' }}>Accounting</option>
-                            <option value="3" {{ $user->role_id == 3 ? 'selected' : '' }}>User</option>
+                            @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>{{ $role->role }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

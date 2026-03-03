@@ -57,10 +57,7 @@
     <script src="/assets/modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="/assets/modules/izitoast/dist/js/iziToast.min.js"></script>
     <script src="/assets/modules/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="/assets/modules/select2/dist/js/select2.full.min.js"></script>
-    <script src="/assets/modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js"></script>
     <script src="/assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <script src="/assets/modules/cleave.js/dist/cleave.min.js"></script>
 
     <!-- Template JS File -->
     <script src="/assets/js/scripts.js"></script>

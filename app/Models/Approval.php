@@ -33,7 +33,7 @@ class Approval extends Model
         return $this->belongsTo(ApprovalRole::class, 'approval_role_id');
     }
 
-    public function approver()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

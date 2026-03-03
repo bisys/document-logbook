@@ -15,6 +15,10 @@
         <a href="{{ route('user.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Manage Users</span></a>
     </li>
     @endif
+    <li class="menu-header">Document Management</li>
+    <li>
+        <a href="{{ route('admin.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
     <li class="menu-header">Master Data</li>
     <li>
         <a href="{{ route('approval-role.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Approval Roles</span></a>
@@ -48,12 +52,45 @@
     </li>
     @endif
 
-    @if(auth()->user()->hasRole('accounting'))
+    @if(auth()->user()->hasRole('accounting-staff'))
     <li><a href="/accounting/dashboard">Accounting Dashboard</a></li>
+
+    <li class="menu-header">Document Submission</li>
+    <li>
+        <a href="{{ route('accounting-staff.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
+
+    <li><a href="/accounting/report">Report</a></li>
+    @endif
+
+    @if(auth()->user()->hasRole('accounting-manager'))
+    <li><a href="/accounting/dashboard">Accounting Manager Dashboard</a></li>
+
+    <li class="menu-header">Document Submission</li>
+    <li>
+        <a href="{{ route('accounting-manager.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
+
+    <li><a href="/accounting/report">Report</a></li>
+    @endif
+
+    @if(auth()->user()->hasRole('accounting-gm'))
+    <li><a href="/accounting/gm/dashboard">Accounting General Manager Dashboard</a></li>
+
+    <li class="menu-header">Document Submission</li>
+    <li>
+        <a href="{{ route('accounting-gm.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
+
     <li><a href="/accounting/report">Report</a></li>
     @endif
 
     @if(auth()->user()->hasRole('user'))
-    <li><a href="/dashboard">User Dashboard</a></li>
+    <li><a href="/user/dashboard">User Dashboard</a></li>
+
+    <li class="menu-header">Document Submission</li>
+    <li>
+        <a href="{{ route('user.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
     @endif
 </ul>
