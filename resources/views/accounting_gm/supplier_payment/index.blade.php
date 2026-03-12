@@ -11,9 +11,11 @@
             <div class="breadcrumb-item"><a href="#">Supplier Payments</a></div>
             <div class="breadcrumb-item">
                 @if($statusFilter === 'all') GM Review
-                @elseif($statusFilter === 'waiting-approval') Waiting Approval
+                @elseif($statusFilter === 'waiting-approval-staff') Waiting Approval Staff
+                @elseif($statusFilter === 'waiting-approval-manager') Waiting Approval Manager
+                @elseif($statusFilter === 'waiting-approval-gm') Waiting Approval GM
                 @elseif($statusFilter === 'waiting-revision') Waiting Revision
-                @elseif($statusFilter === 'approved') Approved
+                @elseif($statusFilter === 'fully-approved') Fully Approved
                 @endif
             </div>
         </div>
@@ -27,9 +29,11 @@
                             @php
                             $tabs = [
                             'all' => 'All',
-                            'waiting-approval' => 'Waiting Approval',
+                            'waiting-approval-staff' => 'Waiting Approval Staff',
+                            'waiting-approval-manager' => 'Waiting Approval Manager',
+                            'waiting-approval-gm' => 'Waiting Approval GM',
                             'waiting-revision' => 'Waiting Revision',
-                            'approved' => 'Approved',
+                            'fully-approved' => 'Fully Approved',
                             ];
                             @endphp
                             @foreach($tabs as $key => $label)
@@ -51,9 +55,11 @@
                     <div class="card-header">
                         <h4>
                             @if($statusFilter === 'all') Documents
-                            @elseif($statusFilter === 'waiting-approval') Waiting Approval
+                            @elseif($statusFilter === 'waiting-approval-staff') Waiting Approval Staff
+                            @elseif($statusFilter === 'waiting-approval-manager') Waiting Approval Manager
+                            @elseif($statusFilter === 'waiting-approval-gm') Waiting Approval GM
                             @elseif($statusFilter === 'waiting-revision') Waiting Revision
-                            @elseif($statusFilter === 'approved') Approved
+                            @elseif($statusFilter === 'fully-approved') Fully Approved
                             @endif
                         </h4>
                     </div>

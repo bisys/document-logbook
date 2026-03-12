@@ -43,12 +43,16 @@ class SupplierPaymentController extends Controller
         $supplierPayments = $allPayments->filter(function ($payment) use ($statusFilter) {
             $slug = optional($payment->status)->slug ?? '';
             switch ($statusFilter) {
-                case 'waiting-approval':
-                    return $slug === 'waiting-approval';
+                case 'waiting-approval-staff':
+                    return $slug === 'waiting-approval-staff';
+                case 'waiting-approval-manager':
+                    return $slug === 'waiting-approval-manager';
+                case 'waiting-approval-gm':
+                    return $slug === 'waiting-approval-gm';
                 case 'waiting-revision':
                     return $slug === 'waiting-revision';
-                case 'approved':
-                    return in_array($slug, ['approved', 'fully-approved']);
+                case 'fully-approved':
+                    return $slug === 'fully-approved';
                 default:
                     return true;
             }
@@ -56,12 +60,11 @@ class SupplierPaymentController extends Controller
 
         $counts = [
             'all' => $allPayments->count(),
-            'waiting-approval' => $allPayments->where('status.slug', 'waiting-approval')->count(),
+            'waiting-approval-staff' => $allPayments->where('status.slug', 'waiting-approval-staff')->count(),
+            'waiting-approval-manager' => $allPayments->where('status.slug', 'waiting-approval-manager')->count(),
+            'waiting-approval-gm' => $allPayments->where('status.slug', 'waiting-approval-gm')->count(),
             'waiting-revision' => $allPayments->where('status.slug', 'waiting-revision')->count(),
-            'approved' => $allPayments->filter(function ($p) {
-                $s = optional($p->status)->slug ?? '';
-                return in_array($s, ['approved', 'fully-approved']);
-            })->count(),
+            'fully-approved' => $allPayments->where('status.slug', 'fully-approved')->count(),
         ];
 
         return view('accounting_manager.supplier_payment.index', compact('supplierPayments', 'statusFilter', 'counts'));
@@ -131,6 +134,15 @@ class SupplierPaymentController extends Controller
                     'remark' => $validated['remark'] ?? null,
                     'approval_at' => now(),
                 ]);
+
+                // Update document status to next approval stage
+                $nextStatusSlug = 'waiting-approval-gm'; // Next status after manager approval
+                $nextStatus = DocumentStatus::where('slug', $nextStatusSlug)->first();
+                if ($nextStatus) {
+                    $supplierPayment->update([
+                        'document_status_id' => $nextStatus->id
+                    ]);
+                }
 
                 $supplierPayment->approvals()->save($approval);
             });

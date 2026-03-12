@@ -31,7 +31,11 @@
                                 @php
                                 $statusText = optional($supplierPayment->status)->status ?? 'Unknown';
                                 @endphp
-                                @if(str_contains(strtolower($statusText), 'waiting approval'))
+                                @if(str_contains(strtolower($statusText), 'waiting approval staff'))
+                                <span class="badge badge-warning">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'waiting approval manager'))
+                                <span class="badge badge-warning">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'waiting approval gm'))
                                 <span class="badge badge-warning">{{ $statusText }}</span>
                                 @elseif(str_contains(strtolower($statusText), 'waiting revision'))
                                 <span class="badge badge-warning">{{ $statusText }}</span>

@@ -6,7 +6,7 @@
 <section class="section">
     <div class="section-header">
         <div class="section-header-back">
-            <a onclick="window.history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{ route('user.supplier-payment.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
         <h1>Supplier Payment Detail</h1>
         <div class="section-header-breadcrumb">
@@ -337,6 +337,15 @@
     }
 </style>
 
+@if(session()->has('success'))
+<script>
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
 @if($errors->any())
 @foreach($errors->all() as $error)
 <script>
@@ -346,15 +355,6 @@
     });
 </script>
 @endforeach
-@endif
-
-@if(session()->has('success'))
-<script>
-    iziToast.success({
-        message: '{{ session()->get("success") }}',
-        position: 'topRight'
-    });
-</script>
 @endif
 
 @if(session()->has('error'))

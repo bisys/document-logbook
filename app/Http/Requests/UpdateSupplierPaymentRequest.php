@@ -24,7 +24,7 @@ class UpdateSupplierPaymentRequest extends FormRequest
         return [
             'cost_center_id' => 'required|exists:cost_centers,id',
             'spr_form' => 'sometimes|file|mimes:pdf|max:500',
-            'document_number' => 'required|string|max:255|unique:supplier_payment,document_number,' . $this->route('supplier_payment')->id,
+            'document_number' => 'required|string|max:255|unique:supplier_payment,document_number,' . $this->route('supplierPayment')->id,
             'original_invoice' => 'sometimes|file|mimes:pdf|max:500',
             'copy_invoice' => 'sometimes|file|mimes:pdf|max:500',
             'tax_invoice' => 'sometimes|file|mimes:pdf|max:500',

@@ -47,11 +47,15 @@ class SupplierPaymentController extends Controller
             $slug = optional($payment->status)->slug ?? '';
 
             switch ($statusFilter) {
-                case 'waiting-approval':
-                    return $slug === 'waiting-approval';
+                case 'waiting-approval-staff':
+                    return $slug === 'waiting-approval-staff';
+                case 'waiting-approval-manager':
+                    return $slug === 'waiting-approval-manager';
+                case 'waiting-approval-gm':
+                    return $slug === 'waiting-approval-gm';
                 case 'waiting-revision':
                     return $slug === 'waiting-revision';
-                case 'approved':
+                case 'fully-approved':
                     return in_array($slug, ['approved', 'fully-approved']);
                 default:
                     return true;
@@ -61,9 +65,11 @@ class SupplierPaymentController extends Controller
         // counts for tabs
         $counts = [
             'all' => $allPayments->count(),
-            'waiting-approval' => $allPayments->where('status.slug', 'waiting-approval')->count(),
+            'waiting-approval-staff' => $allPayments->where('status.slug', 'waiting-approval-staff')->count(),
+            'waiting-approval-manager' => $allPayments->where('status.slug', 'waiting-approval-manager')->count(),
+            'waiting-approval-gm' => $allPayments->where('status.slug', 'waiting-approval-gm')->count(),
             'waiting-revision' => $allPayments->where('status.slug', 'waiting-revision')->count(),
-            'approved' => $allPayments->filter(function ($p) {
+            'fully-approved' => $allPayments->filter(function ($p) {
                 $s = optional($p->status)->slug ?? '';
                 return in_array($s, ['approved', 'fully-approved']);
             })->count(),
@@ -93,7 +99,7 @@ class SupplierPaymentController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
-            $data['document_status_id'] = 1; // Set initial status to 'Waiting Approval'
+            $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;  // Set initial status to 'Waiting Approval Staff'
 
             // Handle file uploads with custom naming format
             foreach (
@@ -222,7 +228,7 @@ class SupplierPaymentController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
-            $data['document_status_id'] = 1; // Set initial status to 'Waiting Approval'
+            $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;  // Set initial status to 'Waiting Approval Staff'
 
             // Increment edit count
             $currentEditCount = $supplierPayment->edit_count ?? 0;
@@ -345,10 +351,10 @@ class SupplierPaymentController extends Controller
 
             // If all revisions are revised, update document status to 'waiting approval'
             if ($pendingRevisions === 0) {
-                $waitingApprovalStatus = DocumentStatus::where('slug', 'waiting-approval')->first();
-                if ($waitingApprovalStatus) {
+                $waitingApprovalStaffStatus = DocumentStatus::where('slug', 'waiting-approval-staff')->first();
+                if ($waitingApprovalStaffStatus) {
                     $supplierPayment->update([
-                        'document_status_id' => $waitingApprovalStatus->id
+                        'document_status_id' => $waitingApprovalStaffStatus->id
                     ]);
                 }
             }

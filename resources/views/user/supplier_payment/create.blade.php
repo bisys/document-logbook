@@ -1,26 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Submit Supplier Payment')
+@section('title', 'Create Supplier Payment')
 
 @section('content')
 <section class="section">
     <div class="section-header">
         <div class="section-header-back">
-            <a onclick="window.history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{ route('user.supplier-payment.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
-        <h1>Submit New Supplier Payment</h1>
+        <h1>Create Supplier Payment</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item"><a href="#">All Supplier Payments</a></div>
-            <div class="breadcrumb-item">Submit Supplier Payment</div>
+            <div class="breadcrumb-item">Create Supplier Payment</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Submit Supplier Payment</h2>
-        <p class="section-lead">
-            On this page you can submit a new supplier payment and fill in all fields.
-        </p>
 
         <div class="row">
             <div class="col-12">
@@ -188,6 +184,15 @@
     });
 </script>
 
+@if(session()->has('success'))
+<script>
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
 @if($errors->any())
 @foreach($errors->all() as $error)
 <script>
@@ -199,14 +204,6 @@
 @endforeach
 @endif
 
-@if(session()->has('success'))
-<script>
-    iziToast.success({
-        message: '{{ session()->get("success") }}',
-        position: 'topRight'
-    });
-</script>
-@endif
 
 @if(session()->has('error'))
 <script>

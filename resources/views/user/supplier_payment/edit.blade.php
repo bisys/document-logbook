@@ -6,7 +6,7 @@
 <section class="section">
     <div class="section-header">
         <div class="section-header-back">
-            <a onclick="window.history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            <a href="{{ route('user.supplier-payment.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
         <h1>Edit Supplier Payment</h1>
         <div class="section-header-breadcrumb">
