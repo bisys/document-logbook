@@ -9,6 +9,7 @@ use App\Models\CashAdvanceRealization;
 use App\Models\CashAdvanceDraw;
 use App\Models\Revision;
 use App\Models\DocumentStatus;
+use App\Models\CostCenter;
 use App\Services\ApprovalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,8 +68,9 @@ class CashAdvanceRealizationController extends Controller
             ->doesntHave('realization')
             ->with('costCenter')
             ->get();
+        $costCenters = CostCenter::select('id', 'number', 'name')->get();
 
-        return view('user.cash_advance_realization.create', compact('availableDraws'));
+        return view('user.cash_advance_realization.create', compact('availableDraws', 'costCenters'));
     }
 
     public function store(StoreCashAdvanceRealizationRequest $request)
@@ -93,10 +95,11 @@ class CashAdvanceRealizationController extends Controller
             $data = $request->validated();
             $data['number'] = CashAdvanceRealization::generateNumber();
             $data['cash_advance_draw_id'] = $draw->id;
-            $data['document_number'] = $draw->document_number; // inherit from draw
+            $data['user_id'] = Auth::user()->id;
+            $data['cost_center_id'] = $draw->cost_center_id;
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -166,7 +169,7 @@ class CashAdvanceRealizationController extends Controller
             $currentEditCount = $cashAdvanceRealization->edit_count ?? 0;
             $newEditCount = $currentEditCount + 1;
 
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -201,11 +204,11 @@ class CashAdvanceRealizationController extends Controller
             'minutes_of_meeting' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
             'nominative_summary' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
             'cic_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'budget_plan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'transfer_evidence' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
         ]);
 
         DB::transaction(function () use ($cashAdvanceRealization, $revision, $validated) {
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
                 if (isset($validated[$fileField])) {
                     $file = $validated[$fileField];
                     $extension = $file->getClientOriginalExtension();

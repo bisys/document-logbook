@@ -12,8 +12,9 @@ class CashAdvanceRealization extends Model
     protected $fillable = [
         'cash_advance_draw_id',
         'number',
+        'user_id',
+        'cost_center_id',
         'car_form',
-        'document_number',
         'original_invoice',
         'copy_invoice',
         'internal_memo_entertain',
@@ -21,7 +22,7 @@ class CashAdvanceRealization extends Model
         'minutes_of_meeting',
         'nominative_summary',
         'cic_form',
-        'budget_plan',
+        'transfer_evidence',
         'document_status_id',
         'edit_count'
     ];

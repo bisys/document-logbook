@@ -22,7 +22,6 @@ class UpdateCashAdvanceRealizationRequest extends FormRequest
             'minutes_of_meeting' => 'sometimes|file|mimes:pdf|max:500',
             'nominative_summary' => 'sometimes|file|mimes:pdf|max:500',
             'cic_form' => 'sometimes|file|mimes:pdf|max:500',
-            'budget_plan' => 'sometimes|file|mimes:pdf|max:500',
         ];
     }
 }

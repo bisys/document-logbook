@@ -1,111 +1,353 @@
 @extends('layouts.app')
+
 @section('title', 'Cash Advance Draw Detail')
+
 @section('content')
 <section class="section">
     <div class="section-header">
-        <div class="section-header-back"><a href="{{ route('user.cash-advance-draw.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a></div>
+        <div class="section-header-back">
+            <a href="{{ route('user.cash-advance-draw.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
         <h1>Cash Advance Draw Detail</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('user.cash-advance-draw.index') }}">Cash Advance Draw</a></div>
+            <div class="breadcrumb-item">Detail</div>
+        </div>
     </div>
-    <div class="section-body"><div class="row"><div class="col-12"><div class="card"><div class="card-body">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-                <h4 class="mb-1">{{ $cashAdvanceDraw->number }}</h4>
-                <p class="mb-0 text-muted">Document Number: <strong>{{ $cashAdvanceDraw->document_number }}</strong></p>
-                <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($cashAdvanceDraw->costCenter)->number ?? '' }} - {{ optional($cashAdvanceDraw->costCenter)->name ?? '' }}</strong></p>
-            </div>
-            <div>
-                @php $statusText=optional($cashAdvanceDraw->status)->status??'Unknown'; @endphp
-                @if(str_contains(strtolower($statusText),'waiting'))<span class="badge badge-warning">{{ $statusText }}</span>
-                @elseif(str_contains(strtolower($statusText),'approved'))<span class="badge badge-success">{{ $statusText }}</span>
-                @elseif(str_contains(strtolower($statusText),'rejected'))<span class="badge badge-danger">{{ $statusText }}</span>@endif
-            </div>
-        </div>
-        <hr/>
-        <h5>Submitted By</h5>
-        <div class="table-responsive mb-3"><table class="table table-sm table-bordered"><tbody>
-            <tr><th style="width:200px">Employee ID</th><td>{{ optional($cashAdvanceDraw->user ?? $cashAdvanceDraw)->employee_id ?? '-' }}</td></tr>
-            <tr><th>Name</th><td>{{ optional($cashAdvanceDraw->user ?? $cashAdvanceDraw)->name ?? '-' }}</td></tr>
-            <tr><th>Email</th><td>{{ optional($cashAdvanceDraw->user ?? $cashAdvanceDraw)->email ?? '-' }}</td></tr>
-            <tr><th>Department</th><td>{{ optional(optional($cashAdvanceDraw->user ?? $cashAdvanceDraw)->department)->department ?? '-' }}</td></tr>
-            <tr><th>Position</th><td>{{ optional(optional($cashAdvanceDraw->user ?? $cashAdvanceDraw)->position)->position ?? '-' }}</td></tr>
-        </tbody></table></div>
 
-        <h5>Uploaded Documents</h5>
-        <div class="row mb-4"><div class="col-12"><ul class="list-group">
-            @php $files=['car_form'=>'CAR Form','proposal_or_monitor_budget'=>'Proposal / Monitor Budget','budget_plan'=>'Budget Plan',]; @endphp
-            @foreach($files as $field=>$fileLabel)
-            @if(!empty($cashAdvanceDraw->{$field}))
-            <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">{{ basename($cashAdvanceDraw->{$field}) }}</div></div><div><a href="{{ asset('storage/'.$cashAdvanceDraw->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a></div></li>
-            @else
-            @if(in_array($field, ['car_form','proposal_or_monitor_budget','budget_plan']))
-            <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">Not uploaded</div></div><div><span class="text-muted">—</span></div></li>
-            @endif @endif @endforeach
-        </ul></div></div>
-
+    <div class="section-body">
         <div class="row">
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Revisions</h4></div><div class="card-body">
-                @if($pendingRevisions->isEmpty() && $cashAdvanceDraw->revisions()->count()===0)<p class="text-muted">No revisions.</p>
-                @else<ul class="list-unstyled">
-                    @foreach($cashAdvanceDraw->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
-                    <li class="media mb-3"><div class="media-body">
-                        <div class="float-right text-muted small">{{ optional($rev->revision_at)->format('d M Y H:i') }}</div>
-                        <h6 class="mt-0 mb-1">Revision #{{ $rev->revision_times }} — {{ optional($rev->user)->name }}</h6>
-                        <div class="text-muted small">Status: @php $rs=optional($rev->status)->status??'Unknown'; @endphp
-                            @if(str_contains(strtolower($rs),'requested'))<span class="badge badge-warning">{{ $rs }}</span>
-                            @elseif(str_contains(strtolower($rs),'revised'))<span class="badge badge-success">{{ $rs }}</span>
-                            @else<span class="badge badge-primary">{{ $rs }}</span>@endif
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h4 class="mb-1">{{ $cashAdvanceDraw->number }}</h4>
+                                <p class="mb-0 text-muted">Document Number: <strong>{{ $cashAdvanceDraw->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($cashAdvanceDraw->costCenter)->number }} - {{ optional($cashAdvanceDraw->costCenter)->name }}</strong></p>
+                            </div>
+                            <div>
+                                @php
+                                $statusText = optional($cashAdvanceDraw->status)->status ?? 'Unknown';
+                                @endphp
+                                @if(str_contains(strtolower($statusText), 'waiting'))
+                                <span class="badge badge-warning">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'approved'))
+                                <span class="badge badge-success">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'revision'))
+                                <span class="badge badge-danger">{{ $statusText }}</span>
+                                @else
+                                <span class="badge badge-primary">{{ $statusText }}</span>
+                                @endif
+                            </div>
                         </div>
-                        @if($rev->remark)<div class="mt-2 p-2 bg-light rounded"><strong>Revision Note:</strong><br>{{ $rev->remark }}</div>@endif
-                        @if($rev->revision_status_id === 1)
-                        <button class="btn btn-sm btn-primary mt-2" data-toggle="modal" data-target="#revisionModal{{ $rev->id }}"><i class="fas fa-upload"></i> Submit Revision</button>
-                        @endif
-                    </div></li>
-                    @endforeach</ul>@endif
-            </div></div></div>
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Approval Chain</h4></div><div class="card-body"><div class="timeline">
-                @forelse($approvalChain as $item)
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-start"><div><strong>{{ $item['role']->name }}</strong></div><div>
-                        @if($item['status']==='approved')<span class="badge badge-success">Approved</span>
-                        @elseif($item['status']==='rejected')<span class="badge badge-danger">Rejected</span>
-                        @else<span class="badge badge-secondary">Pending</span>@endif
-                    </div></div>
-                    <div class="text-muted small mt-2">
-                        @if($item['approval'])<div><strong>{{ optional($item['approval']->user)->name }}</strong></div>
-                        @if(!empty($item['approval']->remark))<div><strong>Remark:</strong> {{ $item['approval']->remark }}</div>@endif
-                        @if(isset($item['approval']->approval_at))<div>{{ \Carbon\Carbon::parse($item['approval']->approval_at)->format('d M Y H:i') }}</div>@endif
-                        @else<div class="text-muted">Waiting for approval...</div>@endif
-                    </div>
-                    @if(!$loop->last)<div class="mt-2" style="border-left:2px solid #dee2e6;margin-left:10px;height:20px;"></div>@endif
-                </div>
-                @empty<p class="text-muted">No approval chain available.</p>@endforelse
-            </div></div></div></div>
-        </div>
 
-        <div class="mt-3">
-            @if($canEdit)<a href="{{ route('user.cash-advance-draw.edit', $cashAdvanceDraw) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>@endif
-            <a href="{{ route('user.cash-advance-draw.index') }}" class="btn btn-light">Back</a>
+                        <hr />
+
+                        <h5>Submitted By</h5>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th style="width:200px">Employee ID</th>
+                                        <td>{{ optional($cashAdvanceDraw->user)->employee_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <td>{{ optional($cashAdvanceDraw->user)->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{{ optional($cashAdvanceDraw->user)->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Department</th>
+                                        <td>{{ optional(optional($cashAdvanceDraw->user)->department)->department }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Position</th>
+                                        <td>{{ optional(optional($cashAdvanceDraw->user)->position)->position }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h5>Uploaded Documents</h5>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <ul class="list-group">
+                                    @php
+                                    $files = [
+                                    'car_form' => 'CAR Form',
+                                    'proposal_or_monitor_budget' => 'Proposal or Monitoring Budget Estimation',
+                                    'budget_plan' => 'Budget Plan',
+                                    ];
+                                    @endphp
+
+                                    @foreach($files as $field => $label)
+                                    @if(!empty($cashAdvanceDraw->{$field}))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">{{ basename($cashAdvanceDraw->{$field}) }}</div>
+                                        </div>
+                                        <div>
+                                            <a href="{{ asset('storage/' . $cashAdvanceDraw->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                        </div>
+                                    </li>
+                                    @else
+                                    @if(in_array($field, ['car_form','proposal_or_monitor_budget','budget_plan']))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">Not uploaded</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted">—</span>
+                                        </div>
+                                    </li>
+                                    @endif
+                                    @endif
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        @php
+                                        $totalRevisions = $cashAdvanceDraw->revisions()->count();
+                                        $maxRevisions = 3;
+                                        @endphp
+                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})
+                                            @if($pendingRevisions->isNotEmpty())
+                                            <span class="badge badge-danger ml-2">{{ $pendingRevisions->count() }} Pending</span>
+                                            @endif
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        @if($pendingRevisions->isNotEmpty())
+                                        <div class="alert alert-warning mb-3">
+                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s) to address.
+                                        </div>
+                                        @endif
+
+                                        <ul class="list-unstyled activity-timeline">
+                                            @forelse($cashAdvanceDraw->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
+                                            <li class="media mb-3">
+                                                <div class="media-body">
+                                                    <div class="float-right text-muted small">{{ optional($rev->revision_at)->format('d M Y H:i') }}</div>
+                                                    <h6 class="mt-0 mb-1">Revision #{{ $rev->revision_times }} — {{ optional($rev->user)->name }}</h6>
+                                                    <div class="text-muted small">
+                                                        Status:
+                                                        @php $rStatus = optional($rev->status)->status ?? 'Unknown'; @endphp
+                                                        @if(str_contains(strtolower($rStatus), 'revision requested'))
+                                                        <span class="badge badge-warning">{{ $rStatus }}</span>
+                                                        @elseif(str_contains(strtolower($rStatus), 'revised'))
+                                                        <span class="badge badge-success">{{ $rStatus }}</span>
+                                                        @else
+                                                        <span class="badge badge-primary">{{ $rStatus }}</span>
+                                                        @endif
+                                                    </div>
+                                                    @if($rev->remark)
+                                                    <div class="mt-2 p-2 bg-light rounded">
+                                                        <strong>Revision Note:</strong><br>
+                                                        {{ $rev->remark }}
+                                                    </div>
+                                                    @endif
+
+                                                    @if($rev->revision_status_id == 1)
+                                                    <div class="mt-2">
+                                                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#revisionModal{{ $rev->id }}">
+                                                            <i class="fas fa-edit"></i> Revise Documents
+                                                        </button>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </li>
+                                            @empty
+                                            <li class="text-muted">No revisions yet.</li>
+                                            @endforelse
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Approval Chain</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="timeline">
+                                            @forelse($approvalChain as $item)
+                                            <div class="mb-4">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <strong>{{ $item['role']->name }}</strong>
+                                                    </div>
+                                                    <div>
+                                                        @if($item['status'] === 'approved')
+                                                        <span class="badge badge-success">Approved</span>
+                                                        @elseif($item['status'] === 'rejected')
+                                                        <span class="badge badge-danger">Rejected</span>
+                                                        @else
+                                                        <span class="badge badge-secondary">Pending</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="text-muted small mt-2">
+                                                    @if($item['approval'])
+                                                    <div><strong>{{ optional($item['approval']->user)->name }}</strong></div>
+                                                    @if(!empty($item['approval']->remark))
+                                                    <div><strong>Remark:</strong> {{ $item['approval']->remark }}</div>
+                                                    @endif
+                                                    @if(isset($item['approval']->approval_at))
+                                                    <div>{{ \Carbon\Carbon::parse($item['approval']->approval_at)->format('d M Y H:i') }}</div>
+                                                    @endif
+                                                    @else
+                                                    <div class="text-muted">Waiting for approval...</div>
+                                                    @endif
+                                                </div>
+                                                @if(!$loop->last)
+                                                <div class="mt-2" style="border-left: 2px solid #dee2e6; margin-left: 10px; height: 20px;"></div>
+                                                @endif
+                                            </div>
+                                            @empty
+                                            <p class="text-muted">No approval chain available.</p>
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <a href="{{ route('user.cash-advance-draw.index') }}" class="btn btn-light">Back</a>
+                            @if($canEdit)
+                            <a href="{{ route('user.cash-advance-draw.edit', $cashAdvanceDraw->id) }}" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Edit Document
+                            </a>
+                            @else
+                            <button class="btn btn-primary" disabled title="Cannot edit while document is in revision status or has revisions">
+                                <i class="fas fa-edit"></i> Edit Document (In Revision / Has Revisions)
+                            </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div></div></div></div></div>
+    </div>
 </section>
 
-@foreach($pendingRevisions as $rev)
-<div class="modal fade" id="revisionModal{{ $rev->id }}" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title">Submit Revision #{{ $rev->revision_times }}</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
-    <form action="{{ route('user.cash-advance-draw.submit-revision', [$cashAdvanceDraw, $rev]) }}" method="POST" enctype="multipart/form-data">@csrf
-        <div class="modal-body">
-            <p class="text-muted">Upload replacement files as needed:</p>
-            @foreach(['car_form'=>'CAR Form','proposal_or_monitor_budget'=>'Proposal / Monitor Budget','budget_plan'=>'Budget Plan',] as $field=>$fileLabel)
-            <div class="form-group"><label>{{ $fileLabel }}</label><input type="file" class="form-control-file" name="{{ $field }}"></div>
-            @endforeach
+<!-- Revision Modals -->
+@foreach($cashAdvanceDraw->revisions()->where('revision_status_id', 1)->get() as $revision)
+<div class="modal fade" id="revisionModal{{ $revision->id }}" tabindex="-1" role="dialog" aria-labelledby="revisionModalLabel{{ $revision->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="revisionModalLabel{{ $revision->id }}">
+                    Revise Documents - Revision #{{ $revision->revision_times }}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('user.cash-advance-draw.submit-revision', [$cashAdvanceDraw, $revision]) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-info mb-3">
+                        <strong>Revision Request:</strong><br>
+                        {{ $revision->remark }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="document_number">Document Number</label>
+                        <input type="text" class="form-control" id="document_number" name="document_number" value="{{ $cashAdvanceDraw->document_number }}">
+                    </div>
+
+                    <h6 class="mt-4 mb-3"><strong>Upload Revised Documents</strong></h6>
+                    <p class="text-muted small">Only upload files that have been revised. Leave blank to keep the current file.</p>
+
+                    @php
+                    $files = [
+                    'car_form' => 'CAR Form',
+                    'proposal_or_monitor_budget' => 'Proposal or Monitoring Budget Estimation',
+                    'budget_plan' => 'Budget Plan',
+                    ];
+                    @endphp
+
+                    <div class="row">
+                        @foreach(array_chunk($files, 2, true) as $chunk)
+                        @foreach($chunk as $field => $label)
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ $field }}">{{ $label }}</label>
+                                <small class="d-block text-muted mb-2">
+                                    @if(!empty($cashAdvanceDraw->{$field}))
+                                    Current: {{ basename($cashAdvanceDraw->{$field}) }}
+                                    @else
+                                    Not yet uploaded
+                                    @endif
+                                </small>
+                                <input type="file" class="form-control-file" id="{{ $field }}" name="{{ $field }}" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                            </div>
+                        </div>
+                        @endforeach
+                        @endforeach
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Submit Revision</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button><button type="submit" class="btn btn-primary">Submit Revision</button></div>
-    </form>
-</div></div></div>
+    </div>
+</div>
 @endforeach
+
 @endsection
+
 @push('scripts')
-<style>.activity-timeline li{list-style:none;}</style>
-@if(session()->has('success'))<script>iziToast.success({message:'{{ session()->get("success") }}',position:'topRight'});</script>@endif
-@if(session()->has('error'))<script>iziToast.warning({message:'{{ session()->get("error") }}',position:'topRight'});</script>@endif
+
+<style>
+    .activity-timeline li {
+        list-style: none;
+    }
+</style>
+
+@if(session()->has('success'))
+<script>
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
+@if($errors->any())
+@foreach($errors->all() as $error)
+<script>
+    iziToast.error({
+        message: '{{ $error }}',
+        position: 'topRight'
+    });
+</script>
+@endforeach
+@endif
+
+@if(session()->has('error'))
+<script>
+    iziToast.warning({
+        message: '{{ session()->get("error") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
 @endpush

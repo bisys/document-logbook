@@ -11,7 +11,7 @@
         <h1>Create Supplier Payment</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="#">All Supplier Payments</a></div>
+            <div class="breadcrumb-item"><a href="#">All Supplier Payment</a></div>
             <div class="breadcrumb-item">Create Supplier Payment</div>
         </div>
     </div>

@@ -11,7 +11,7 @@
         <h1>Supplier Payment Detail</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item"><a href="{{ route('user.supplier-payment.index') }}">Supplier Payments</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('user.supplier-payment.index') }}">Supplier Payment</a></div>
             <div class="breadcrumb-item">Detail</div>
         </div>
     </div>
@@ -234,7 +234,7 @@
                         </div>
 
                         <div class="mt-3">
-                            <a onclick="window.history.back()" class="btn btn-light">Back</a>
+                            <a href="{{ route('user.supplier-payment.index') }}" class="btn btn-light">Back</a>
                             @if($canEdit)
                             <a href="{{ route('user.supplier-payment.edit', $supplierPayment->id) }}" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Document
