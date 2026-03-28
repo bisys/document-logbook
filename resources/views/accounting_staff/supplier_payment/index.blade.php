@@ -31,7 +31,11 @@
                             @foreach($tabs as $key => $label)
                             <li class="nav-item">
                                 <a class="nav-link {{ $statusFilter === $key ? 'active' : '' }}" href="?status={{ $key }}">
-                                    {{ $label }} <span class="badge badge-primary">{{ $counts[$key] ?? 0 }}</span>
+                                    {{ $label }}
+                                    <span @if($key === 'waiting-revision' || $key === 'waiting-approval-staff' || $key === 'waiting-approval-manager' || $key === 'waiting-approval-gm') class="badge badge-warning">{{ $counts[$key] ?? 0 }}</span>
+                                    @elseif($key === 'fully-approved') <span class="badge badge-success">{{ $counts[$key] ?? 0 }}</span>
+                                    @else <span class="badge badge-primary">{{ $counts[$key] ?? 0 }}</span>
+                                    @endif
                                 </a>
                             </li>
                             @endforeach

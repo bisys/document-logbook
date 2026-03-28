@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -37,7 +38,7 @@ class AuthController extends Controller
                     Auth::logout();
                     return back()->with('error', 'Your account does not have a valid role. Please contact the administrator.');
             }
-
+        } else {
             return back()->with('error', 'Login failed. Please check your credentials.');
         }
     }
@@ -49,5 +50,34 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function changePasswordForm()
+    {
+        return view('auth.change-password');
+    }  
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:5|confirmed',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->with('error', 'Current password does not match.');
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with('success', 'Password changed successfully. Please login again.');
     }
 }

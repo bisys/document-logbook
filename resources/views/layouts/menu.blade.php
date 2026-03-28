@@ -1,14 +1,8 @@
 <ul class="sidebar-menu">
     <li class="menu-header">Dashboard</li>
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-        <ul class="dropdown-menu">
-            <li><a class="nav-link" href="index-0.html">General Dashboard</a></li>
-            <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
-        </ul>
-    </li>
+
     @if(auth()->user()->hasRole('admin'))
-    <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+    <li><a href="/admin/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Admin Dashboard</span></a></li>
     @if(auth()->user()->hasPermission('view-user'))
     <li class="menu-header">User Management</li>
     <li>
@@ -53,44 +47,88 @@
     @endif
 
     @if(auth()->user()->hasRole('accounting-staff'))
-    <li><a href="/accounting/dashboard">Accounting Dashboard</a></li>
-
-    <li class="menu-header">Document Submission</li>
+    <li><a href="/accounting/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Accounting Dashboard</span></a></li>
+    <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-staff.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
     </li>
-
-    <li><a href="/accounting/report">Report</a></li>
+    <li>
+        <a href="{{ route('accounting-staff.petty-cash.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Petty Cash</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-staff.cash-advance-draw.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Draw</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-staff.cash-advance-realization.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Realization</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-staff.international-trip.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>International Trip</span></a>
+    </li>
+    <li class="menu-header">Report</li>
+    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-fire"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('accounting-manager'))
-    <li><a href="/accounting/dashboard">Accounting Manager Dashboard</a></li>
-
-    <li class="menu-header">Document Submission</li>
+    <li><a href="/accounting/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Accounting Manager Dashboard</span></a></li>
+    <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-manager.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
     </li>
-
-    <li><a href="/accounting/report">Report</a></li>
+    <li>
+        <a href="{{ route('accounting-manager.petty-cash.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Petty Cash</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-manager.cash-advance-draw.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Draw</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-manager.cash-advance-realization.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Realization</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-manager.international-trip.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>International Trip</span></a>
+    </li>
+    <li class="menu-header">Report</li>
+    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-fire"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('accounting-gm'))
-    <li><a href="/accounting/gm/dashboard">Accounting General Manager Dashboard</a></li>
-
-    <li class="menu-header">Document Submission</li>
+    <li><a href="/accounting/gm/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Accounting General Manager Dashboard</span></a></li>
+    <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-gm.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
     </li>
-
-    <li><a href="/accounting/report">Report</a></li>
+    <li>
+        <a href="{{ route('accounting-gm.petty-cash.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Petty Cash</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-gm.cash-advance-draw.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Draw</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-gm.cash-advance-realization.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Realization</span></a>
+    </li>
+    <li>
+        <a href="{{ route('accounting-gm.international-trip.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>International Trip</span></a>
+    </li>
+    <li class="menu-header">Report</li>
+    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-fire"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('user'))
-    <li><a href="/user/dashboard">User Dashboard</a></li>
-
+    <li><a href="/user/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>User Dashboard</span></a></li>
     <li class="menu-header">Document Submission</li>
     <li>
         <a href="{{ route('user.supplier-payment.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Supplier Payments</span></a>
+    </li>
+    <li>
+        <a href="{{ route('user.petty-cash.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Petty Cash</span></a>
+    </li>
+    <li>
+        <a href="{{ route('user.cash-advance-draw.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Draw</span></a>
+    </li>
+    <li>
+        <a href="{{ route('user.cash-advance-realization.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Cash Advance Realization</span></a>
+    </li>
+    <li>
+        <a href="{{ route('user.international-trip.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>International Trip</span></a>
     </li>
     @endif
 </ul>
