@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <link rel="icon" type="image/png" href="{{ asset('assets/img/ITSPLOGO.png') }}">
   <title>DLS &mdash; Login Page</title>
 
   <!-- General CSS Files -->
@@ -24,7 +25,7 @@
       <div class="d-flex flex-wrap align-items-stretch">
         <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
           <div class="p-4 m-3">
-            <img src="../assets/img/stisla-fill.svg" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
+            <img src="../assets/img/ITSPLOGO.png" alt="logo" width="100" class="shadow-light rounded mb-5 mt-2">
             <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Document Logbook System</span></h4>
             @if(session('error'))
             <p class="text-danger mt-2">{{ session('error') }}</p>
@@ -68,7 +69,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="../assets/img/unsplash/login-bg.jpg">
+        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="../assets/img/ITSP-scaled.jpg">
           <div class="absolute-bottom-left index-2">
             <div class="text-light p-5 pb-2">
               <div class="mb-5 pb-3">
