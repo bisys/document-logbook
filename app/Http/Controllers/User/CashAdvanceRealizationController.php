@@ -11,6 +11,7 @@ use App\Models\Revision;
 use App\Models\DocumentStatus;
 use App\Models\CostCenter;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,10 +19,12 @@ use Illuminate\Support\Facades\DB;
 class CashAdvanceRealizationController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     public function index(Request $request)
@@ -91,7 +94,8 @@ class CashAdvanceRealizationController extends Controller
             return redirect()->back()->with('error', 'This Cash Advance Draw already has a realization.');
         }
 
-        DB::transaction(function () use ($request, $draw) {
+        $document = null;
+        DB::transaction(function () use ($request, $draw, &$document) {
             $data = $request->validated();
             $data['number'] = CashAdvanceRealization::generateNumber();
             $data['cash_advance_draw_id'] = $draw->id;
@@ -108,8 +112,12 @@ class CashAdvanceRealizationController extends Controller
                 }
             }
 
-            CashAdvanceRealization::create($data);
+            $document = CashAdvanceRealization::create($data);
         });
+
+        if ($document) {
+            $this->notificationService->notifyDocumentSubmitted($document);
+        }
 
         return redirect()->route('user.cash-advance-realization.index')->with('success', 'Cash Advance Realization created successfully.');
     }
@@ -227,6 +235,8 @@ class CashAdvanceRealizationController extends Controller
                 }
             }
         });
+
+        $this->notificationService->notifyRevisionSubmitted($cashAdvanceRealization);
 
         return redirect()->route('user.cash-advance-realization.show', $cashAdvanceRealization)->with('success', 'Revision submitted successfully.');
     }

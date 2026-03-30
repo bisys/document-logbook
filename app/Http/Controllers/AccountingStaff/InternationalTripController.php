@@ -9,6 +9,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +17,12 @@ use Illuminate\Support\Facades\DB;
 class InternationalTripController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     public function index(Request $request)
@@ -81,6 +84,8 @@ class InternationalTripController extends Controller
 
                 $status = DocumentStatus::where('slug', 'waiting-revision')->first();
                 if ($status) $internationalTrip->update(['document_status_id' => $status->id]);
+
+                $this->notificationService->notifyRevisionRequested($internationalTrip, $revision);
             });
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('success', 'Revision request added successfully.');
         } catch (\Exception $e) {
@@ -107,6 +112,7 @@ class InternationalTripController extends Controller
                 if ($nextStatus) $internationalTrip->update(['document_status_id' => $nextStatus->id]);
                 $internationalTrip->approvals()->save($approval);
             });
+            $this->notificationService->notifyDocumentApproved($internationalTrip, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('success', 'International Trip approved successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('error', $e->getMessage());
@@ -131,6 +137,7 @@ class InternationalTripController extends Controller
                 $rejectedStatus = DocumentStatus::where('slug', 'rejected')->first();
                 if ($rejectedStatus) $internationalTrip->update(['document_status_id' => $rejectedStatus->id]);
             });
+            $this->notificationService->notifyDocumentRejected($internationalTrip, Auth::user(), 'Accounting Staff', $validated['remark'], 1);
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('success', 'International Trip rejected successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('error', $e->getMessage());

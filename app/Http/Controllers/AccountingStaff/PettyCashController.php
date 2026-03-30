@@ -10,6 +10,7 @@ use App\Models\RevisionStatus;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\DB;
 class PettyCashController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     public function index(Request $request)
@@ -96,6 +99,8 @@ class PettyCashController extends Controller
                 if ($waittingRevisionStatus) {
                     $pettyCash->update(['document_status_id' => $waittingRevisionStatus->id]);
                 }
+
+                $this->notificationService->notifyRevisionRequested($pettyCash, $revision);
             });
 
             return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)->with('success', 'Revision request added successfully.');
@@ -138,6 +143,8 @@ class PettyCashController extends Controller
                 $pettyCash->approvals()->save($approval);
             });
 
+            $this->notificationService->notifyDocumentApproved($pettyCash, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
+
             return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)->with('success', 'Petty Cash approved successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)->with('error', $e->getMessage());
@@ -175,6 +182,8 @@ class PettyCashController extends Controller
                     $pettyCash->update(['document_status_id' => $rejectedStatus->id]);
                 }
             });
+
+            $this->notificationService->notifyDocumentRejected($pettyCash, Auth::user(), 'Accounting Staff', $validated['remark'], 1);
 
             return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)->with('success', 'Petty Cash rejected successfully.');
         } catch (\Exception $e) {

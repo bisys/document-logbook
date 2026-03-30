@@ -8,6 +8,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 class SupplierPaymentController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -148,6 +151,8 @@ class SupplierPaymentController extends Controller
             });
 
             // Show success message if approval is successfully created
+            $this->notificationService->notifyDocumentApproved($supplierPayment, Auth::user(), 'Accounting Manager', $validated['remark'] ?? null, 2);
+
             return redirect()->route('accounting-manager.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment approved by manager.');
         } catch (\Exception $e) {
@@ -205,6 +210,8 @@ class SupplierPaymentController extends Controller
             });
 
             // Show success message if rejection is successful created
+            $this->notificationService->notifyDocumentRejected($supplierPayment, Auth::user(), 'Accounting Manager', $validated['remark'], 2);
+
             return redirect()->route('accounting-manager.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment rejected successfully.');
         } catch (\Exception $e) {

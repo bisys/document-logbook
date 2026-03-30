@@ -8,6 +8,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 class SupplierPaymentController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -146,6 +149,8 @@ class SupplierPaymentController extends Controller
                 }
             });
 
+            $this->notificationService->notifyDocumentApproved($supplierPayment, Auth::user(), 'Accounting GM', $validated['remark'] ?? null, 3);
+
             return redirect()->route('accounting-gm.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment approved by GM.');
         } catch (\Exception $e) {
@@ -201,6 +206,8 @@ class SupplierPaymentController extends Controller
                     ]);
                 }
             });
+
+            $this->notificationService->notifyDocumentRejected($supplierPayment, Auth::user(), 'Accounting GM', $validated['remark'], 3);
 
             return redirect()->route('accounting-gm.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment rejected by GM.');

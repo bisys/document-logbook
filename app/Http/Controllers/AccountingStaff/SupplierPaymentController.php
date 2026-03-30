@@ -10,6 +10,7 @@ use App\Models\RevisionStatus;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\DB;
 class SupplierPaymentController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -156,6 +159,9 @@ class SupplierPaymentController extends Controller
                         'document_status_id' => $waittingRevisionStatus->id
                     ]);
                 }
+
+                // Send notification to document owner
+                $this->notificationService->notifyRevisionRequested($supplierPayment, $revision);
             });
 
             // Show success message if revision request is successfully created
@@ -236,6 +242,8 @@ class SupplierPaymentController extends Controller
             });
 
             // Show success message if approval is successful created
+            $this->notificationService->notifyDocumentApproved($supplierPayment, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
+
             return redirect()->route('accounting-staff.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment approved successfully.');
         } catch (\Exception $e) {
@@ -312,6 +320,8 @@ class SupplierPaymentController extends Controller
             });
 
             // Show success message if rejection is successful created
+            $this->notificationService->notifyDocumentRejected($supplierPayment, Auth::user(), 'Accounting Staff', $validated['remark'], 1);
+
             return redirect()->route('accounting-staff.supplier-payment.show', $supplierPayment)
                 ->with('success', 'Supplier payment rejected successfully.');
         } catch (\Exception $e) {

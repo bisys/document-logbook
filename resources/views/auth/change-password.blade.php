@@ -5,6 +5,9 @@
 @section('content')
 <section class="section">
     <div class="section-header">
+        <div class="section-header-back">
+            <a onclick="window.history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
         <h1>Change Password</h1>
     </div>
 

@@ -9,9 +9,16 @@ use App\Models\SupplierPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CostCenter;
+use App\Services\NotificationService;
 
 class SupplierPaymentController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -37,7 +44,8 @@ class SupplierPaymentController extends Controller
      */
     public function store(StoreSupplierPaymentRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $document = null;
+        DB::transaction(function () use ($request, &$document) {
             $data = $request->validated();
             $data['number'] = SupplierPayment::generateNumber();
             $data['user_id'] = Auth::user()->id;
@@ -69,8 +77,12 @@ class SupplierPaymentController extends Controller
                 }
             }
 
-            SupplierPayment::create($data);
+            $document = SupplierPayment::create($data);
         });
+
+        if ($document) {
+            $this->notificationService->notifyDocumentSubmitted($document);
+        }
 
         return redirect()->route('supplier-payment.index')->with('success', 'Supplier Payment created successfully.');
     }

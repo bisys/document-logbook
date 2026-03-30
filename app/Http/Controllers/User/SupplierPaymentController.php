@@ -11,6 +11,7 @@ use App\Models\Revision;
 use App\Models\RevisionStatus;
 use App\Models\DocumentStatus;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,10 +19,12 @@ use Illuminate\Support\Facades\DB;
 class SupplierPaymentController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -93,7 +96,8 @@ class SupplierPaymentController extends Controller
      */
     public function store(StoreSupplierPaymentRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $document = null;
+        DB::transaction(function () use ($request, &$document) {
             $data = $request->validated();
             $data['number'] = SupplierPayment::generateNumber();
             $data['user_id'] = Auth::user()->id;
@@ -125,8 +129,13 @@ class SupplierPaymentController extends Controller
                 }
             }
 
-            SupplierPayment::create($data);
+            $document = SupplierPayment::create($data);
         });
+
+        // Send email notification to accounting staff
+        if ($document) {
+            $this->notificationService->notifyDocumentSubmitted($document);
+        }
 
         return redirect()->route('user.supplier-payment.index')->with('success', 'Supplier Payment created successfully.');
     }
@@ -359,6 +368,9 @@ class SupplierPaymentController extends Controller
                 }
             }
         });
+
+        // Send email notification to accounting staff
+        $this->notificationService->notifyRevisionSubmitted($supplierPayment);
 
         return redirect()->route('user.supplier-payment.show', $supplierPayment)
             ->with('success', 'Revision submitted successfully.');

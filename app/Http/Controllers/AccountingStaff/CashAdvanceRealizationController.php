@@ -9,6 +9,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\DB;
 class CashAdvanceRealizationController extends Controller
 {
     protected $approvalService;
-    public function __construct(ApprovalService $approvalService) { $this->approvalService = $approvalService; }
+    protected $notificationService;
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService) { $this->approvalService = $approvalService; $this->notificationService = $notificationService; }
 
     public function index(Request $request)
     {
@@ -70,6 +72,8 @@ class CashAdvanceRealizationController extends Controller
                 $cashAdvanceRealization->revisions()->save($revision);
                 $status = DocumentStatus::where('slug', 'waiting-revision')->first();
                 if ($status) $cashAdvanceRealization->update(['document_status_id' => $status->id]);
+
+                $this->notificationService->notifyRevisionRequested($cashAdvanceRealization, $revision);
             });
             return redirect()->route('accounting-staff.cash-advance-realization.show', $cashAdvanceRealization)->with('success', 'Revision request added successfully.');
         } catch (\Exception $e) {
@@ -94,6 +98,7 @@ class CashAdvanceRealizationController extends Controller
                 if ($nextStatus) $cashAdvanceRealization->update(['document_status_id' => $nextStatus->id]);
                 $cashAdvanceRealization->approvals()->save($approval);
             });
+            $this->notificationService->notifyDocumentApproved($cashAdvanceRealization, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
             return redirect()->route('accounting-staff.cash-advance-realization.show', $cashAdvanceRealization)->with('success', 'Cash Advance Realization approved successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-staff.cash-advance-realization.show', $cashAdvanceRealization)->with('error', $e->getMessage());
@@ -116,6 +121,7 @@ class CashAdvanceRealizationController extends Controller
                 $rejectedStatus = DocumentStatus::where('slug', 'rejected')->first();
                 if ($rejectedStatus) $cashAdvanceRealization->update(['document_status_id' => $rejectedStatus->id]);
             });
+            $this->notificationService->notifyDocumentRejected($cashAdvanceRealization, Auth::user(), 'Accounting Staff', $validated['remark'], 1);
             return redirect()->route('accounting-staff.cash-advance-realization.show', $cashAdvanceRealization)->with('success', 'Cash Advance Realization rejected successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-staff.cash-advance-realization.show', $cashAdvanceRealization)->with('error', $e->getMessage());

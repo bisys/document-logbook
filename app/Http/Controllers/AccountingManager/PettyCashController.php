@@ -8,6 +8,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\DB;
 class PettyCashController extends Controller
 {
     protected $approvalService;
-    public function __construct(ApprovalService $approvalService) { $this->approvalService = $approvalService; }
+    protected $notificationService;
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService) { $this->approvalService = $approvalService; $this->notificationService = $notificationService; }
 
     public function index(Request $request)
     {
@@ -67,6 +69,7 @@ class PettyCashController extends Controller
                 if ($nextStatus) $pettyCash->update(['document_status_id' => $nextStatus->id]);
                 $pettyCash->approvals()->save($approval);
             });
+            $this->notificationService->notifyDocumentApproved($pettyCash, Auth::user(), 'Accounting Manager', $validated['remark'] ?? null, 2);
             return redirect()->route('accounting-manager.petty-cash.show', $pettyCash)->with('success', 'Petty Cash approved successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-manager.petty-cash.show', $pettyCash)->with('error', $e->getMessage());
@@ -88,6 +91,7 @@ class PettyCashController extends Controller
                 $rejectedStatus = DocumentStatus::where('slug', 'rejected')->first();
                 if ($rejectedStatus) $pettyCash->update(['document_status_id' => $rejectedStatus->id]);
             });
+            $this->notificationService->notifyDocumentRejected($pettyCash, Auth::user(), 'Accounting Manager', $validated['remark'], 2);
             return redirect()->route('accounting-manager.petty-cash.show', $pettyCash)->with('success', 'Petty Cash rejected successfully.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-manager.petty-cash.show', $pettyCash)->with('error', $e->getMessage());

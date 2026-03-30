@@ -8,6 +8,7 @@ use App\Models\Approval;
 use App\Models\DocumentStatus;
 use App\Models\ApprovalRole;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\DB;
 class CashAdvanceDrawController extends Controller
 {
     protected $approvalService;
-    public function __construct(ApprovalService $approvalService) { $this->approvalService = $approvalService; }
+    protected $notificationService;
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService) { $this->approvalService = $approvalService; $this->notificationService = $notificationService; }
 
     public function index(Request $request)
     {
@@ -67,6 +69,7 @@ class CashAdvanceDrawController extends Controller
                 if ($fullyApprovedStatus) $cashAdvanceDraw->update(['document_status_id' => $fullyApprovedStatus->id]);
                 $cashAdvanceDraw->approvals()->save($approval);
             });
+            $this->notificationService->notifyDocumentApproved($cashAdvanceDraw, Auth::user(), 'Accounting GM', $validated['remark'] ?? null, 3);
             return redirect()->route('accounting-gm.cash-advance-draw.show', $cashAdvanceDraw)->with('success', 'Cash Advance Draw fully approved.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-gm.cash-advance-draw.show', $cashAdvanceDraw)->with('error', $e->getMessage());
@@ -88,6 +91,7 @@ class CashAdvanceDrawController extends Controller
                 $rejectedStatus = DocumentStatus::where('slug', 'rejected')->first();
                 if ($rejectedStatus) $cashAdvanceDraw->update(['document_status_id' => $rejectedStatus->id]);
             });
+            $this->notificationService->notifyDocumentRejected($cashAdvanceDraw, Auth::user(), 'Accounting GM', $validated['remark'], 3);
             return redirect()->route('accounting-gm.cash-advance-draw.show', $cashAdvanceDraw)->with('success', 'Cash Advance Draw rejected.');
         } catch (\Exception $e) {
             return redirect()->route('accounting-gm.cash-advance-draw.show', $cashAdvanceDraw)->with('error', $e->getMessage());

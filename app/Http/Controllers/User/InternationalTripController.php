@@ -10,6 +10,7 @@ use App\Models\CostCenter;
 use App\Models\Revision;
 use App\Models\DocumentStatus;
 use App\Services\ApprovalService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\DB;
 class InternationalTripController extends Controller
 {
     protected $approvalService;
+    protected $notificationService;
 
-    public function __construct(ApprovalService $approvalService)
+    public function __construct(ApprovalService $approvalService, NotificationService $notificationService)
     {
         $this->approvalService = $approvalService;
+        $this->notificationService = $notificationService;
     }
 
     public function index(Request $request)
@@ -64,7 +67,8 @@ class InternationalTripController extends Controller
 
     public function store(StoreInternationalTripRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $document = null;
+        DB::transaction(function () use ($request, &$document) {
             $data = $request->validated();
             $data['number'] = InternationalTrip::generateNumber();
             $data['user_id'] = Auth::user()->id;
@@ -81,8 +85,12 @@ class InternationalTripController extends Controller
                 }
             }
 
-            InternationalTrip::create($data);
+            $document = InternationalTrip::create($data);
         });
+
+        if ($document) {
+            $this->notificationService->notifyDocumentSubmitted($document);
+        }
 
         return redirect()->route('user.international-trip.index')->with('success', 'International Trip created successfully.');
     }
@@ -206,6 +214,8 @@ class InternationalTripController extends Controller
                 }
             }
         });
+
+        $this->notificationService->notifyRevisionSubmitted($internationalTrip);
 
         return redirect()->route('user.international-trip.show', $internationalTrip)->with('success', 'Revision submitted successfully.');
     }
