@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\AccountingStaff\DashboardController as AccountingStaffDashboardController;
+use App\Http\Controllers\AccountingManager\DashboardController as AccountingManagerDashboardController;
+use App\Http\Controllers\AccountingGM\DashboardController as AccountingGMDashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\Admin\RoleController;
@@ -59,9 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
 
     Route::middleware(['role:admin'])->prefix('/admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        });
+        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
 
         Route::resource('/department', DepartmentController::class);
         Route::resource('/position', PositionController::class);
@@ -110,9 +113,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-staff'])->prefix('/accounting')->name('accounting-staff.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('accounting_staff.dashboard');
-        });
+        Route::get('/dashboard', [AccountingStaffDashboardController::class, 'index']);
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingStaffSupplierPaymentController::class, 'index'])->name('index');
@@ -156,9 +157,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-manager'])->prefix('/accounting-manager')->name('accounting-manager.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('accounting_manager.dashboard');
-        });
+        Route::get('/dashboard', [AccountingManagerDashboardController::class, 'index']);
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingManagerSupplierPaymentController::class, 'index'])->name('index');
@@ -197,9 +196,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-gm'])->prefix('/accounting-gm')->name('accounting-gm.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('accounting_gm.dashboard');
-        });
+        Route::get('/dashboard', [AccountingGMDashboardController::class, 'index']);
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingGMSupplierPaymentController::class, 'index'])->name('index');
@@ -238,9 +235,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:user'])->prefix('/user')->name('user.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('user.dashboard');
-        });
+        Route::get('/dashboard', [UserDashboardController::class, 'index']);
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [UserSupplierPaymentController::class, 'index'])->name('index');
