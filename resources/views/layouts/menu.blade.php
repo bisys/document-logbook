@@ -13,6 +13,18 @@
     <li>
         <a href="{{ route('admin.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
     </li>
+    <li>
+        <a href="{{ route('admin.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
+    </li>
+    <li>
+        <a href="{{ route('admin.cash-advance-draw.index') }}" class="nav-link"><i class="fas fa-hand-holding-usd"></i><span>Cash Advance Draw</span></a>
+    </li>
+    <li>
+        <a href="{{ route('admin.cash-advance-realization.index') }}" class="nav-link"><i class="fas fa-file-contract"></i><span>Cash Advance Realization</span></a>
+    </li>
+    <li>
+        <a href="{{ route('admin.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
+    </li>
     <li class="menu-header">Master Data</li>
     <li>
         <a href="{{ route('approval-role.index') }}" class="nav-link"><i class="fas fa-user-tag"></i><span>Approval Roles</span></a>

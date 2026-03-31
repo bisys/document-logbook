@@ -280,4 +280,34 @@
         list-style: none;
     }
 </style>
+
+@if(session()->has('success'))
+<script>
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
+@if($errors->any())
+@foreach($errors->all() as $error)
+<script>
+    iziToast.error({
+        message: '{{ $error }}',
+        position: 'topRight'
+    });
+</script>
+@endforeach
+@endif
+
+@if(session()->has('error'))
+<script>
+    iziToast.warning({
+        message: '{{ session()->get("error") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
 @endpush

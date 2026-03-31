@@ -1,106 +1,311 @@
 @extends('layouts.app')
-@section('title', 'Petty Cash Review - Admin')
+
+@section('title', 'Petty Cash Details - Admin')
+
 @section('content')
 <section class="section">
     <div class="section-header">
-        <div class="section-header-back"><a href="{{ route('admin.petty-cash.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a></div>
-        <h1>Petty Cash Review - Admin</h1>
+        <div class="section-header-back">
+            <a href="{{ route('admin.petty-cash.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
+        <h1>Petty Cash Details - Admin</h1>
+        <div class="section-header-breadcrumb">
+            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+            <div class="breadcrumb-item"><a href="{{ route('admin.petty-cash.index') }}">Petty Cash</a></div>
+            <div class="breadcrumb-item">Details</div>
+        </div>
     </div>
-    <div class="section-body"><div class="row"><div class="col-12"><div class="card"><div class="card-body">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-                <h4 class="mb-1">{{ $pettyCash->number }}</h4>
-                <p class="mb-0 text-muted">Document Number: <strong>{{ $pettyCash->document_number }}</strong></p>
-                <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($pettyCash->costCenter)->number ?? '' }} - {{ optional($pettyCash->costCenter)->name ?? '' }}</strong></p>
-            </div>
-            <div>
-                @php $statusText=optional($pettyCash->status)->status??'Unknown'; @endphp
-                @if(str_contains(strtolower($statusText),'waiting'))<span class="badge badge-warning">{{ $statusText }}</span>
-                @elseif(str_contains(strtolower($statusText),'approved'))<span class="badge badge-success">{{ $statusText }}</span>
-                @elseif(str_contains(strtolower($statusText),'rejected'))<span class="badge badge-danger">{{ $statusText }}</span>@endif
-            </div>
-        </div>
-        <hr/>
-        <h5>Submitted By</h5>
-        <div class="table-responsive mb-3"><table class="table table-sm table-bordered"><tbody>
-            <tr><th style="width:200px">Employee ID</th><td>{{ optional($pettyCash->user ?? $pettyCash)->employee_id ?? '-' }}</td></tr>
-            <tr><th>Name</th><td>{{ optional($pettyCash->user ?? $pettyCash)->name ?? '-' }}</td></tr>
-            <tr><th>Email</th><td>{{ optional($pettyCash->user ?? $pettyCash)->email ?? '-' }}</td></tr>
-            <tr><th>Department</th><td>{{ optional(optional($pettyCash->user ?? $pettyCash)->department)->department ?? '-' }}</td></tr>
-            <tr><th>Position</th><td>{{ optional(optional($pettyCash->user ?? $pettyCash)->position)->position ?? '-' }}</td></tr>
-        </tbody></table></div>
 
-        <h5>Uploaded Documents</h5>
-        <div class="row mb-4"><div class="col-12"><ul class="list-group">
-            @php $files=['pcr_form'=>'PCR Form','original_invoice'=>'Original Invoice','copy_invoice'=>'Copy Invoice','internal_memo_entertain'=>'Internal Memo Entertain','entertain_realization_form'=>'Entertain Realization Form','minutes_of_meeting'=>'Minutes Of Meeting','nominative_summary'=>'Nominative Summary','cic_form'=>'CIC Form','budget_plan'=>'Budget Plan',]; @endphp
-            @foreach($files as $field=>$fileLabel)
-            @if(!empty($pettyCash->{$field}))
-            <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">{{ basename($pettyCash->{$field}) }}</div></div><div><a href="{{ asset('storage/'.$pettyCash->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a></div></li>
-            @else
-            @if(in_array($field, ['pcr_form','original_invoice','copy_invoice','budget_plan']))
-            <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">Not uploaded</div></div><div><span class="text-muted">—</span></div></li>
-            @endif
-            @endif
-            @endforeach
-        </ul></div></div>
-
+    <div class="section-body">
         <div class="row">
-            <div class="col-md-6"><div class="card"><div class="card-header">@php $totalRevisions=$pettyCash->revisions()->count();$maxRevisions=3; @endphp
-                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
-                @if($pettyCash->revisions()->count()===0)<p class="text-muted">No revisions requested yet.</p>
-                @else<ul class="list-unstyled">
-                    @foreach($pettyCash->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
-                    <li class="media mb-3"><div class="media-body">
-                        <div class="float-right text-muted small">{{ optional($rev->revision_at)->format('d M Y H:i') }}</div>
-                        <h6 class="mt-0 mb-1">Revision #{{ $rev->revision_times }} — {{ optional($rev->user)->name }}</h6>
-                        <div class="text-muted small">Status: @php $rs=optional($rev->status)->status??'Unknown'; @endphp
-                            @if(str_contains(strtolower($rs),'requested'))<span class="badge badge-warning">{{ $rs }}</span>
-                            @elseif(str_contains(strtolower($rs),'revised'))<span class="badge badge-success">{{ $rs }}</span>
-                            @else<span class="badge badge-primary">{{ $rs }}</span>@endif
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h4 class="mb-1">{{ $pettyCash->number }}</h4>
+                                <p class="mb-0 text-muted">Document Number: <strong>{{ $pettyCash->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($pettyCash->costCenter)->number }} - {{ optional($pettyCash->costCenter)->name }}</strong></p>
+                            </div>
+                            <div>
+                                @php
+                                $statusText = optional($pettyCash->status)->status ?? 'Unknown';
+                                @endphp
+                                @if(str_contains(strtolower($statusText), 'waiting'))
+                                <span class="badge badge-warning">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'approved'))
+                                <span class="badge badge-success">{{ $statusText }}</span>
+                                @elseif(str_contains(strtolower($statusText), 'revision'))
+                                <span class="badge badge-danger">{{ $statusText }}</span>
+                                @else
+                                <span class="badge badge-primary">{{ $statusText }}</span>
+                                @endif
+                            </div>
                         </div>
-                        @if($rev->remark)<div class="mt-2 p-2 bg-light rounded"><strong>Revision Note:</strong><br>{{ $rev->remark }}</div>@endif
-                    </div></li>
-                    @endforeach</ul>@endif
-            </div></div></div>
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Approval Chain</h4></div><div class="card-body"><div class="timeline">
-                @forelse($approvalChain as $item)
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-start"><div><strong>{{ $item['role']->name }}</strong></div><div>
-                        @if($item['status']==='approved')<span class="badge badge-success">Approved</span>
-                        @elseif($item['status']==='rejected')<span class="badge badge-danger">Rejected</span>
-                        @else<span class="badge badge-secondary">Pending</span>@endif
-                    </div></div>
-                    <div class="text-muted small mt-2">
-                        @if($item['approval'])<div><strong>{{ optional($item['approval']->user)->name }}</strong></div>
-                        @if(!empty($item['approval']->remark))<div><strong>Remark:</strong> {{ $item['approval']->remark }}</div>@endif
-                        @if(isset($item['approval']->approval_at))<div>{{ \Carbon\Carbon::parse($item['approval']->approval_at)->format('d M Y H:i') }}</div>@endif
-                        @else<div class="text-muted">Waiting for approval...</div>@endif
-                    </div>
-                    @if(!$loop->last)<div class="mt-2" style="border-left:2px solid #dee2e6;margin-left:10px;height:20px;"></div>@endif
-                </div>
-                @empty<p class="text-muted">No approval chain available.</p>@endforelse
-            </div></div></div></div>
-        </div>
-                        <div class="mt-4"><div class="card"><div class="card-header"><h4>Admin Actions</h4></div>
-                        <div class="card-body">
-                            <form action="{{ route('admin.petty-cash.update-status', $pettyCash) }}" method="POST" class="form-inline">
-                                @csrf
-                                <select name="document_status_id" class="form-control mr-2">
-                                    @foreach(\App\Models\DocumentStatus::all() as $s)
-                                    <option value="{{ $s->id }}" {{ $pettyCash->document_status_id==$s->id?'selected':'' }}>{{ $s->status }}</option>
+
+                        <hr />
+
+                        <h5>Submitted By</h5>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th style="width:200px">Employee ID</th>
+                                        <td>{{ optional($pettyCash->user)->employee_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <td>{{ optional($pettyCash->user)->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{{ optional($pettyCash->user)->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Department</th>
+                                        <td>{{ optional(optional($pettyCash->user)->department)->department }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Position</th>
+                                        <td>{{ optional(optional($pettyCash->user)->position)->position }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h5>Uploaded Documents</h5>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <ul class="list-group">
+                                    @php
+                                    $files = [
+                                    'pcr_form' => 'PCR Form',
+                                    'original_invoice' => 'Original Invoice',
+                                    'copy_invoice' => 'Copy Invoice',
+                                    'budget_plan' => 'Budget Plan',
+                                    'internal_memo_entertain' => 'Internal Memo Entertain',
+                                    'entertain_realization_form' => 'Entertain Realization Form',
+                                    'minutes_of_meeting' => 'Minutes Of Meeting',
+                                    'nominative_summary' => 'Nominative Summary',
+                                    'cic_form' => 'CIC Form',
+                                    ];
+                                    @endphp
+
+                                    @foreach($files as $field => $label)
+                                    @if(!empty($pettyCash->{$field}))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">{{ basename($pettyCash->{$field}) }}</div>
+                                        </div>
+                                        <div>
+                                            <a href="{{ asset('storage/' . $pettyCash->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                        </div>
+                                    </li>
+                                    @else
+                                    @if(in_array($field, ['pcr_form','original_invoice','copy_invoice','budget_plan']))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">Not uploaded</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted">—</span>
+                                        </div>
+                                    </li>
+                                    @endif
+                                    @endif
                                     @endforeach
-                                </select>
-                                <input type="text" name="remark" class="form-control mr-2" placeholder="Remark (optional)">
-                                <button type="submit" class="btn btn-primary">Update Status</button>
-                            </form>
-                            <a href="{{ route('admin.petty-cash.index') }}" class="btn btn-light mt-2">Back</a>
-                        </div></div></div>
-    </div></div></div></div></div>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Revisions Summary</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        @if($pettyCash->revisions()->count() === 0)
+                                        <p class="text-muted">No revisions in this document.</p>
+                                        @else
+                                        <ul class="list-unstyled activity-timeline">
+                                            @foreach($pettyCash->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
+                                            <li class="media mb-3">
+                                                <div class="media-body">
+                                                    <div class="float-right text-muted small">{{ optional($rev->revision_at)->format('d M Y H:i') }}</div>
+                                                    <h6 class="mt-0 mb-1">Revision #{{ $rev->revision_times }} — {{ optional($rev->user)->name }}</h6>
+                                                    <div class="text-muted small">Status: {{ optional($rev->status)->status }}</div>
+                                                    @if($rev->remark)
+                                                    <div class="mt-1"><strong>Note:</strong> {{ $rev->remark }}</div>
+                                                    @endif
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Approval Chain</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        @php
+                                        $steps = ['Accounting Staff','Accounting Manager','Accounting GM'];
+                                        $approvals = $pettyCash->approvals()->with(['user','status','role'])->get();
+                                        @endphp
+
+                                        <div class="timeline">
+                                            @foreach($steps as $index => $step)
+                                            @php
+                                            $approval = $approvals->first(function($a) use ($step) {
+                                            if(isset($a->role) && is_object($a->role) && isset($a->role->name)){
+                                            return strtolower($a->role->name) === strtolower($step);
+                                            }
+                                            if(isset($a->approval_role) && is_string($a->approval_role)){
+                                            return strtolower($a->approval_role) === strtolower($step);
+                                            }
+                                            return false;
+                                            }) ?? $approvals->get($index) ?? null;
+                                            @endphp
+
+                                            <div class="mb-4">
+                                                <div class="d-flex justify-content-between">
+                                                    <div><strong>{{ $step }}</strong></div>
+                                                    <div>
+                                                        @if($approval)
+                                                        @php $aStatus = optional($approval->status)->status ?? null; @endphp
+                                                        @if($aStatus && str_contains(strtolower($aStatus), 'approved'))
+                                                        <span class="badge badge-success">{{ $aStatus }}</span>
+                                                        @elseif($aStatus && str_contains(strtolower($aStatus), 'rejected'))
+                                                        <span class="badge badge-danger">{{ $aStatus }}</span>
+                                                        @elseif($aStatus)
+                                                        <span class="badge badge-warning">{{ $aStatus }}</span>
+                                                        @else
+                                                        <span class="badge badge-secondary">Pending</span>
+                                                        @endif
+                                                        @else
+                                                        <span class="badge badge-secondary">Pending</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    @if($approval)
+                                                    {{ optional($approval->user)->name }}
+                                                    @if(isset($approval->approved_at)) — {{ optional($approval->approved_at)->format('d M Y H:i') }} @endif
+                                                    @if(!empty($approval->remark))<div class="mt-1">Remark: {{ $approval->remark }}</div>@endif
+                                                    @else
+                                                    <div class="mt-1">No action yet.</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Admin Actions</h4>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-info" data-toggle="modal" data-target="#updateStatusModal">
+                                        <i class="fas fa-cog"></i> Force Update Status
+                                    </button>
+
+                                    <a href="{{ route('admin.petty-cash.index') }}" class="btn btn-light">Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- Update Status Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStatusModalLabel">Force Update Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('admin.petty-cash.update-status', $pettyCash) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <p class="text-warning"><strong>⚠️ Warning:</strong> This will bypass the normal approval process.</p>
+                    <div class="form-group">
+                        <label for="document_status_id">New Status</label>
+                        <select class="form-control @error('document_status_id') is-invalid @enderror" id="document_status_id" name="document_status_id" required>
+                            <option value="">-- Select Status --</option>
+                            @foreach(\App\Models\DocumentStatus::all() as $status)
+                            <option value="{{ $status->id }}">{{ $status->status }}</option>
+                            @endforeach
+                        </select>
+                        @error('document_status_id')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="remark">Reason/Remark</label>
+                        <textarea class="form-control" id="remark" name="remark" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
+
 @push('scripts')
-<style>.activity-timeline li{list-style:none;}</style>
-@if(session()->has('success'))<script>iziToast.success({message:'{{ session()->get("success") }}',position:'topRight'});</script>@endif
-@if(session()->has('error'))<script>iziToast.warning({message:'{{ session()->get("error") }}',position:'topRight'});</script>@endif
+<style>
+    .activity-timeline li {
+        list-style: none;
+    }
+</style>
+
+@if(session()->has('success'))
+<script>
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
+@if($errors->any())
+@foreach($errors->all() as $error)
+<script>
+    iziToast.error({
+        message: '{{ $error }}',
+        position: 'topRight'
+    });
+</script>
+@endforeach
+@endif
+
+@if(session()->has('error'))
+<script>
+    iziToast.warning({
+        message: '{{ session()->get("error") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
 @endpush

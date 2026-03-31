@@ -120,9 +120,15 @@
 @endsection
 
 @push('scripts')
+<script src="/assets/js/page/modules-datatables.js"></script>
+
+@if(session()->has('success'))
 <script>
-    $(function() {
-        $('#table-1').dataTable();
+    iziToast.success({
+        message: '{{ session()->get("success") }}',
+        position: 'topRight'
     });
 </script>
+@endif
+
 @endpush
