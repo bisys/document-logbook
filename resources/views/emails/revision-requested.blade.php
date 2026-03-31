@@ -36,7 +36,7 @@
                                                 <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $documentType }}</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Document Number</td>
+                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Number</td>
                                                 <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $document->number }}</td>
                                             </tr>
                                             <tr>

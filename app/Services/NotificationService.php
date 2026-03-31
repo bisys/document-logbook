@@ -12,6 +12,8 @@ use App\Models\Revision;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\DocumentNotification;
 use Illuminate\Support\Str;
 
 class NotificationService
@@ -63,6 +65,14 @@ class NotificationService
                     Mail::to($staff->email)->queue(new DocumentSubmittedMail($document, $documentType, $url));
                 }
             }
+
+            Notification::send($staffUsers, new DocumentNotification([
+                'title' => 'New Document Submitted',
+                'message' => 'A new ' . $documentType . ' has been submitted for your review by ' . ($document->user->name ?? 'User') . '.',
+                'url' => $url,
+                'icon' => 'fas fa-file-alt',
+                'icon_bg' => 'bg-primary'
+            ]));
         } catch (\Exception $e) {
             Log::error('Failed to send document submitted notification: ' . $e->getMessage());
         }
@@ -80,10 +90,21 @@ class NotificationService
 
             $owner = $document->user;
 
-            if ($owner && $owner->email) {
+            if ($owner) {
                 $slug = Str::kebab(class_basename($document));
                 $url = route('user.' . $slug . '.show', $document->id);
-                Mail::to($owner->email)->queue(new RevisionRequestedMail($document, $documentType, $revision, $url));
+                
+                if ($owner->email) {
+                    Mail::to($owner->email)->queue(new RevisionRequestedMail($document, $documentType, $revision, $url));
+                }
+
+                Notification::send($owner, new DocumentNotification([
+                    'title' => 'Revision Requested',
+                    'message' => 'A revision has been requested for your ' . $documentType . '.',
+                    'url' => $url,
+                    'icon' => 'fas fa-edit',
+                    'icon_bg' => 'bg-warning'
+                ]));
             }
         } catch (\Exception $e) {
             Log::error('Failed to send revision requested notification: ' . $e->getMessage());
@@ -108,6 +129,14 @@ class NotificationService
                     Mail::to($staff->email)->queue(new RevisionSubmittedMail($document, $documentType, $url));
                 }
             }
+
+            Notification::send($staffUsers, new DocumentNotification([
+                'title' => 'Revision Submitted',
+                'message' => 'A revision for ' . $documentType . ' has been submitted by ' . ($document->user->name ?? 'User') . '.',
+                'url' => $url,
+                'icon' => 'fas fa-reply',
+                'icon_bg' => 'bg-info'
+            ]));
         } catch (\Exception $e) {
             Log::error('Failed to send revision submitted notification: ' . $e->getMessage());
         }
@@ -126,8 +155,8 @@ class NotificationService
             $recipients = collect();
 
             // Always notify the document owner
-            if ($owner && $owner->email) {
-                $recipients->push(['email' => $owner->email, 'role' => 'user']);
+            if ($owner) {
+                $recipients->push(['user' => $owner, 'role' => 'user']);
             }
 
             // Determine additional recipients based on approval level
@@ -135,17 +164,13 @@ class NotificationService
                 case 1: // Staff approved → notify accounting managers
                     $managers = $this->getUsersByRole('accounting-manager');
                     foreach ($managers as $manager) {
-                        if ($manager->email) {
-                            $recipients->push(['email' => $manager->email, 'role' => 'accounting-manager']);
-                        }
+                        $recipients->push(['user' => $manager, 'role' => 'accounting-manager']);
                     }
                     break;
                 case 2: // Manager approved → notify accounting GMs
                     $gms = $this->getUsersByRole('accounting-gm');
                     foreach ($gms as $gm) {
-                        if ($gm->email) {
-                            $recipients->push(['email' => $gm->email, 'role' => 'accounting-gm']);
-                        }
+                        $recipients->push(['user' => $gm, 'role' => 'accounting-gm']);
                     }
                     break;
                 case 3: // GM approved → only notify user (already added above)
@@ -154,9 +179,23 @@ class NotificationService
 
             // Send to all unique recipients
             $slug = Str::kebab(class_basename($document));
-            $recipients->unique('email')->each(function ($recipient) use ($document, $documentType, $approver, $approverRoleName, $remark, $slug) {
+            $recipients->unique(function ($item) {
+                return $item['user']->id;
+            })->each(function ($recipient) use ($document, $documentType, $approver, $approverRoleName, $remark, $slug) {
                 $url = route($recipient['role'] . '.' . $slug . '.show', $document->id);
-                Mail::to($recipient['email'])->queue(new DocumentApprovedMail($document, $documentType, $approver, $approverRoleName, $remark, $url));
+                $user = $recipient['user'];
+
+                if ($user->email) {
+                    Mail::to($user->email)->queue(new DocumentApprovedMail($document, $documentType, $approver, $approverRoleName, $remark, $url));
+                }
+
+                Notification::send($user, new DocumentNotification([
+                    'title' => 'Document Approved',
+                    'message' => 'The ' . $documentType . ' has been approved by ' . $approverRoleName . '.',
+                    'url' => $url,
+                    'icon' => 'fas fa-check-circle',
+                    'icon_bg' => 'bg-success'
+                ]));
             });
         } catch (\Exception $e) {
             Log::error('Failed to send document approved notification: ' . $e->getMessage());
@@ -176,8 +215,8 @@ class NotificationService
             $recipients = collect();
 
             // Always notify the document owner
-            if ($owner && $owner->email) {
-                $recipients->push(['email' => $owner->email, 'role' => 'user']);
+            if ($owner) {
+                $recipients->push(['user' => $owner, 'role' => 'user']);
             }
 
             // Determine additional recipients based on rejection level
@@ -185,17 +224,13 @@ class NotificationService
                 case 1: // Staff rejected → notify accounting managers
                     $managers = $this->getUsersByRole('accounting-manager');
                     foreach ($managers as $manager) {
-                        if ($manager->email) {
-                            $recipients->push(['email' => $manager->email, 'role' => 'accounting-manager']);
-                        }
+                        $recipients->push(['user' => $manager, 'role' => 'accounting-manager']);
                     }
                     break;
                 case 2: // Manager rejected → notify accounting GMs
                     $gms = $this->getUsersByRole('accounting-gm');
                     foreach ($gms as $gm) {
-                        if ($gm->email) {
-                            $recipients->push(['email' => $gm->email, 'role' => 'accounting-gm']);
-                        }
+                        $recipients->push(['user' => $gm, 'role' => 'accounting-gm']);
                     }
                     break;
                 case 3: // GM rejected → only notify user (already added above)
@@ -204,9 +239,23 @@ class NotificationService
 
             // Send to all unique recipients
             $slug = Str::kebab(class_basename($document));
-            $recipients->unique('email')->each(function ($recipient) use ($document, $documentType, $rejector, $rejectorRoleName, $remark, $slug) {
+            $recipients->unique(function ($item) {
+                return $item['user']->id;
+            })->each(function ($recipient) use ($document, $documentType, $rejector, $rejectorRoleName, $remark, $slug) {
                 $url = route($recipient['role'] . '.' . $slug . '.show', $document->id);
-                Mail::to($recipient['email'])->queue(new DocumentRejectedMail($document, $documentType, $rejector, $rejectorRoleName, $remark, $url));
+                $user = $recipient['user'];
+
+                if ($user->email) {
+                    Mail::to($user->email)->queue(new DocumentRejectedMail($document, $documentType, $rejector, $rejectorRoleName, $remark, $url));
+                }
+
+                Notification::send($user, new DocumentNotification([
+                    'title' => 'Document Rejected',
+                    'message' => 'The ' . $documentType . ' has been rejected by ' . $rejectorRoleName . '.',
+                    'url' => $url,
+                    'icon' => 'fas fa-times-circle',
+                    'icon_bg' => 'bg-danger'
+                ]));
             });
         } catch (\Exception $e) {
             Log::error('Failed to send document rejected notification: ' . $e->getMessage());
