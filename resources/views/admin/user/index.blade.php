@@ -172,6 +172,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" placeholder="Type here..." name="password" id="password">
+                        </div>
+                        <div class="form-text text-muted">
+                            Leave empty to keep the current password.
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="department_id">Department</label>
                         <select name="department_id" id="" class="form-control">
                             @foreach($departments as $department)

@@ -42,9 +42,6 @@
         <a href="{{ route('document-status.index') }}" class="nav-link"><i class="fas fa-info-circle"></i><span>Document Statuses</span></a>
     </li>
     <li>
-        <a href="{{ route('document-type.index') }}" class="nav-link"><i class="fas fa-file-alt"></i><span>Document Types</span></a>
-    </li>
-    <li>
         <a href="{{ route('permission.index') }}" class="nav-link"><i class="fas fa-lock"></i><span>Permissions</span></a>
     </li>
     <li>
@@ -148,3 +145,18 @@
     <li><a href="{{ route('user.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 </ul>
+
+@push('scripts')
+<!-- add active class to the current menu -->
+<script>
+    $(document).ready(function() {
+        var url = window.location.href;
+        $('.sidebar-menu a').each(function() {
+            if (this.href === url) {
+                $(this).addClass('active');
+                $(this).parent().addClass('active');
+            }
+        });
+    });
+</script>
+@endpush

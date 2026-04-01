@@ -89,10 +89,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // 
         $validator = Validator::make($request->all(), [
             'employee_id' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'password' => ['nullable', 'string', 'min:5'],
             'department_id' => ['required', 'exists:departments,id'],
             'position_id' => ['required', 'exists:positions,id'],
             'role_id' => ['required', 'exists:roles,id'],
@@ -106,6 +108,7 @@ class UserController extends Controller
             'employee_id' => $request->employee_id,
             'name' => $request->name,
             'email' => $request->email,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
             'department_id' => $request->department_id,
             'position_id' => $request->position_id,
             'role_id' => $request->role_id,
