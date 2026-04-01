@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\AccountingStaff\DashboardController as AccountingStaffDashboardController;
@@ -110,9 +111,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceRealization}', [AdminCashAdvanceRealizationController::class, 'show'])->name('show');
             Route::post('/{cashAdvanceRealization}/update-status', [AdminCashAdvanceRealizationController::class, 'updateStatus'])->name('update-status');
         });
+
+        Route::prefix('/report')->name('admin.report.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::post('/export', [ReportController::class, 'export'])->name('export');
+        });
     });
 
-    Route::middleware(['role:accounting-staff'])->prefix('/accounting')->name('accounting-staff.')->group(function () {
+    Route::middleware(['role:accounting-staff'])->prefix('/accounting-staff')->name('accounting-staff.')->group(function () {
         Route::get('/dashboard', [AccountingStaffDashboardController::class, 'index']);
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
@@ -154,6 +160,11 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceRealization}/approve', [AccountingStaffCashAdvanceRealizationController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceRealization}/reject', [AccountingStaffCashAdvanceRealizationController::class, 'reject'])->name('reject');
         });
+
+        Route::prefix('/report')->name('report.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::post('/export', [ReportController::class, 'export'])->name('export');
+        });
     });
 
     Route::middleware(['role:accounting-manager'])->prefix('/accounting-manager')->name('accounting-manager.')->group(function () {
@@ -193,6 +204,11 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceRealization}/approve', [AccountingManagerCashAdvanceRealizationController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceRealization}/reject', [AccountingManagerCashAdvanceRealizationController::class, 'reject'])->name('reject');
         });
+
+        Route::prefix('/report')->name('report.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::post('/export', [ReportController::class, 'export'])->name('export');
+        });
     });
 
     Route::middleware(['role:accounting-gm'])->prefix('/accounting-gm')->name('accounting-gm.')->group(function () {
@@ -231,6 +247,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceRealization}', [AccountingGMCashAdvanceRealizationController::class, 'show'])->name('show');
             Route::post('/{cashAdvanceRealization}/approve', [AccountingGMCashAdvanceRealizationController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceRealization}/reject', [AccountingGMCashAdvanceRealizationController::class, 'reject'])->name('reject');
+        });
+
+        Route::prefix('/report')->name('report.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::post('/export', [ReportController::class, 'export'])->name('export');
         });
     });
 
@@ -285,6 +306,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceRealization}/edit', [UserCashAdvanceRealizationController::class, 'edit'])->name('edit');
             Route::put('/{cashAdvanceRealization}', [UserCashAdvanceRealizationController::class, 'update'])->name('update');
             Route::post('/{cashAdvanceRealization}/{revision}/submit-revision', [UserCashAdvanceRealizationController::class, 'submitRevision'])->name('submit-revision');
+        });
+
+        Route::prefix('/report')->name('report.')->group(function () {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::post('/export', [ReportController::class, 'export'])->name('export');
         });
     });
 

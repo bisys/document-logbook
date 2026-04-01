@@ -15,8 +15,11 @@
             </div>
             <div>
                 @php $statusText=optional($pettyCash->status)->status??'Unknown'; @endphp
-                @if(str_contains(strtolower($statusText),'waiting'))<span class="badge badge-warning">{{ $statusText }}</span>
-                @elseif(str_contains(strtolower($statusText),'approved'))<span class="badge badge-success">{{ $statusText }}</span>
+                @if(str_contains(strtolower($statusText),'waiting approval staff'))<span class="badge badge-warning">{{ $statusText }}</span>
+                @elseif(str_contains(strtolower($statusText),'waiting approval manager'))<span class="badge badge-warning">{{ $statusText }}</span>
+                @elseif(str_contains(strtolower($statusText),'waiting approval gm'))<span class="badge badge-warning">{{ $statusText }}</span>
+                @elseif(str_contains(strtolower($statusText),'waiting revision'))<span class="badge badge-warning">{{ $statusText }}</span>
+                @elseif(str_contains(strtolower($statusText),'fully approved'))<span class="badge badge-success">{{ $statusText }}</span>
                 @elseif(str_contains(strtolower($statusText),'rejected'))<span class="badge badge-danger">{{ $statusText }}</span>@endif
             </div>
         </div>

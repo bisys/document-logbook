@@ -56,10 +56,12 @@
     <li>
         <a href="{{ route('role.index') }}" class="nav-link"><i class="fas fa-user-shield"></i><span>Roles</span></a>
     </li>
+    <li class="menu-header">Report</li>
+    <li><a href="{{ route('admin.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('accounting-staff'))
-    <li><a href="/accounting/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
+    <li><a href="/accounting-staff/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-staff.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
@@ -77,11 +79,11 @@
         <a href="{{ route('accounting-staff.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
     <li class="menu-header">Report</li>
-    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
+    <li><a href="{{ route('accounting-staff.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('accounting-manager'))
-    <li><a href="/accounting/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
+    <li><a href="/accounting-manager/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-manager.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
@@ -99,11 +101,11 @@
         <a href="{{ route('accounting-manager.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
     <li class="menu-header">Report</li>
-    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
+    <li><a href="{{ route('accounting-manager.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('accounting-gm'))
-    <li><a href="/accounting/gm/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
+    <li><a href="/accounting-gm/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
         <a href="{{ route('accounting-gm.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
@@ -121,7 +123,7 @@
         <a href="{{ route('accounting-gm.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
     <li class="menu-header">Report</li>
-    <li><a href="/accounting/report" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
+    <li><a href="{{ route('accounting-gm.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 
     @if(auth()->user()->hasRole('user'))
@@ -142,5 +144,7 @@
     <li>
         <a href="{{ route('user.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li class="menu-header">Report</li>
+    <li><a href="{{ route('user.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
 </ul>
