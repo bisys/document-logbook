@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
@@ -57,6 +58,20 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        if (Auth::user()->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        } elseif (Auth::user()->hasRole('accounting-staff')) {
+            return redirect()->route('accounting-staff.dashboard');
+        } elseif (Auth::user()->hasRole('accounting-manager')) {
+            return redirect()->route('accounting-manager.dashboard');
+        } elseif (Auth::user()->hasRole('accounting-gm')) {
+            return redirect()->route('accounting-gm.dashboard');
+        } else {
+            return redirect()->route('user.dashboard');
+        }
+    });
+    
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/change-password', [AuthController::class,'changePasswordForm'])->name('change-password');
     Route::post('/change-password', [AuthController::class,'changePassword'])->name('change-password');
@@ -65,7 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
 
     Route::middleware(['role:admin'])->prefix('/admin')->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
         Route::resource('/department', DepartmentController::class);
         Route::resource('/position', PositionController::class);
@@ -119,7 +134,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-staff'])->prefix('/accounting-staff')->name('accounting-staff.')->group(function () {
-        Route::get('/dashboard', [AccountingStaffDashboardController::class, 'index']);
+        Route::get('/dashboard', [AccountingStaffDashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingStaffSupplierPaymentController::class, 'index'])->name('index');
@@ -168,7 +183,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-manager'])->prefix('/accounting-manager')->name('accounting-manager.')->group(function () {
-        Route::get('/dashboard', [AccountingManagerDashboardController::class, 'index']);
+        Route::get('/dashboard', [AccountingManagerDashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingManagerSupplierPaymentController::class, 'index'])->name('index');
@@ -212,7 +227,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:accounting-gm'])->prefix('/accounting-gm')->name('accounting-gm.')->group(function () {
-        Route::get('/dashboard', [AccountingGMDashboardController::class, 'index']);
+        Route::get('/dashboard', [AccountingGMDashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [AccountingGMSupplierPaymentController::class, 'index'])->name('index');
@@ -256,7 +271,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['role:user'])->prefix('/user')->name('user.')->group(function () {
-        Route::get('/dashboard', [UserDashboardController::class, 'index']);
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('/supplier-payment')->name('supplier-payment.')->group(function () {
             Route::get('/', [UserSupplierPaymentController::class, 'index'])->name('index');

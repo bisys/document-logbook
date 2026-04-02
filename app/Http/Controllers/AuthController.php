@@ -25,15 +25,15 @@ class AuthController extends Controller
             // Redirect based on role
             switch ($role) {
                 case 'admin':
-                    return redirect('/admin/dashboard');
+                    return redirect()->route('admin.dashboard');
                 case 'accounting-staff':
-                    return redirect('/accounting-staff/dashboard');
+                    return redirect()->route('accounting-staff.dashboard');
                 case 'accounting-manager':
-                    return redirect('/accounting-manager/dashboard');
+                    return redirect()->route('accounting-manager.dashboard');
                 case 'accounting-gm':
-                    return redirect('/accounting-gm/dashboard');
+                    return redirect()->route('accounting-gm.dashboard');
                 case 'user':
-                    return redirect('/user/dashboard');
+                    return redirect()->route('user.dashboard');
                 default:
                     Auth::logout();
                     return back()->with('error', 'Your account does not have a valid role. Please contact the administrator.');
