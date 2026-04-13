@@ -329,4 +329,46 @@ class SupplierPaymentController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Record hardfile receipt for supplier payment
+     */
+    public function receiveHardfile(Request $request, SupplierPayment $supplierPayment)
+    {
+        try {
+            // Check if already received
+            if ($supplierPayment->hardfile_received_at) {
+                throw new \Exception('Hardfile has already been received for this document.');
+            }
+
+            // Check if document has been approved by accounting staff (sequence 1)
+            $staffRole = ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) {
+                throw new \Exception('Approval role not found.');
+            }
+
+            $staffApproval = $supplierPayment->approvals()
+                ->where('approval_role_id', $staffRole->id)
+                ->where('approval_status_id', 1) // approved
+                ->exists();
+
+            if (!$staffApproval) {
+                throw new \Exception('Cannot receive hardfile: document has not been approved by Accounting Staff yet.');
+            }
+
+            $supplierPayment->update([
+                'hardfile_received_at' => now(),
+                'hardfile_received_by' => Auth::id(),
+            ]);
+
+            // Send notification to document owner
+            $this->notificationService->notifyHardfileReceived($supplierPayment, Auth::user());
+
+            return redirect()->route('accounting-staff.supplier-payment.show', $supplierPayment)
+                ->with('success', 'Hardfile received successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.supplier-payment.show', $supplierPayment)
+                ->with('error', $e->getMessage());
+        }
+    }
 }

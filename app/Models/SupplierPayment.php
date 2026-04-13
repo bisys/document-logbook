@@ -26,8 +26,19 @@ class SupplierPayment extends Model
         'calculation_summary',
         'budget_plan',
         'document_status_id',
-        'edit_count'
+        'edit_count',
+        'hardfile_received_at',
+        'hardfile_received_by',
     ];
+
+    protected $casts = [
+        'hardfile_received_at' => 'datetime',
+    ];
+
+    public function hardfileReceivedByUser()
+    {
+        return $this->belongsTo(User::class, 'hardfile_received_by');
+    }
 
     public function user()
     {

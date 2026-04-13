@@ -52,6 +52,7 @@
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Status</th>
+                            <th>Hardfile</th>
                                         <th>Revisions</th>
                                         <th>Approvals</th>
                                         <th>Submitted At</th>

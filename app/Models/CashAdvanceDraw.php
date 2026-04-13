@@ -18,8 +18,19 @@ class CashAdvanceDraw extends Model
         'proposal_or_monitor_budget',
         'budget_plan',
         'document_status_id',
-        'edit_count'
+        'edit_count',
+        'hardfile_received_at',
+        'hardfile_received_by',
     ];
+
+    protected $casts = [
+        'hardfile_received_at' => 'datetime',
+    ];
+
+    public function hardfileReceivedByUser()
+    {
+        return $this->belongsTo(User::class, 'hardfile_received_by');
+    }
 
     public function realization()
     {

@@ -79,6 +79,7 @@
                                         <th>Approval By Manager</th>
                                         <th>Status</th>
                                         <th>Submitted At</th>
+                                        <th>Hardfile Received At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -129,6 +130,13 @@
                                             @endif
                                         </td>
                                         <td>{{ optional($cashAdvanceRealization->created_at)->format('d M Y H:i') }}</td>
+                                        <td>
+                                            @if($cashAdvanceRealization->hardfile_received_at)
+                                            {{ $cashAdvanceRealization->hardfile_received_at->format('d M Y H:i') }}
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('accounting-gm.cash-advance-realization.show', $cashAdvanceRealization) }}" class="btn btn-sm btn-primary">Review</a>
                                         </td>

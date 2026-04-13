@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Approved</title>
+    <title>Hardfile Received</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f6f9; padding: 30px 0;">
@@ -13,18 +13,18 @@
                     <!-- Header -->
                     <tr>
                         <td style="padding: 30px 40px; text-align: center;">
-                            <h1 style="color: #000000ff; margin: 0; font-size: 22px; font-weight: 600;">✅ Document Approved</h1>
+                            <h1 style="color: #000000ff; margin: 0; font-size: 22px; font-weight: 600;">📦 Hardfile Received</h1>
                         </td>
                     </tr>
                     <!-- Body -->
                     <tr>
                         <td style="padding: 30px 40px;">
                             <p style="color: #4a5568; font-size: 15px; line-height: 1.6; margin: 0 0 20px;">
-                                The following document has been <strong style="color: #276749;">approved</strong> by {{ $approverRoleName }}.
+                                Your document hardfile has been <strong style="color: #2b6cb0;">received</strong> by the Accounting Staff. Below are the details:
                             </p>
 
                             <!-- Document Info Card -->
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0fff4; border-radius: 6px; border-left: 4px solid #38a169; margin: 20px 0;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #ebf8ff; border-radius: 6px; border-left: 4px solid #3182ce; margin: 20px 0;">
                                 <tr>
                                     <td style="padding: 20px;">
                                         <table width="100%" cellpadding="4" cellspacing="0">
@@ -38,38 +38,20 @@
                                             </tr>
                                             <tr>
                                                 <td style="color: #718096; font-size: 13px; vertical-align: top;">Document Owner</td>
-                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $document->user->name }}</td>
+                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $document->user->name ?? '-' }}</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Approved By</td>
-                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $approver->name }} ({{ $approverRoleName }})</td>
+                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Received By</td>
+                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $receiver->name }} (Accounting Staff)</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Approval Date</td>
-                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ now()->format('M d, Y, H:i') }}</td>
+                                                <td style="color: #718096; font-size: 13px; vertical-align: top;">Received Date</td>
+                                                <td style="color: #2d3748; font-size: 13px; font-weight: 600;">{{ $document->hardfile_received_at ? $document->hardfile_received_at->format('M d, Y, H:i') : now()->format('M d, Y, H:i') }}</td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
                             </table>
-
-                            @if($remark)
-                            <!-- Remark Box -->
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0fff4; border-radius: 6px; margin: 20px 0;">
-                                <tr>
-                                    <td style="padding: 20px;">
-                                        <p style="color: #276749; font-size: 13px; font-weight: 600; margin: 0 0 8px;">💬 Remark:</p>
-                                        <p style="color: #4a5568; font-size: 14px; line-height: 1.6; margin: 0;">{{ $remark }}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                            @endif
-
-                            @if($approverRoleName == 'Accounting Staff' && (isset($recipientRole) && $recipientRole === 'user'))
-                            <p style="color: #4a5568; font-size: 15px; line-height: 1.6; margin: 20px 0;">
-                                You can now send the <strong>hardfile</strong> to Accounting Staff.
-                            </p>
-                            @endif
 
                             <p style="color: #4a5568; font-size: 15px; line-height: 1.6; margin: 20px 0;">
                                 Please login to the system to view the document details.

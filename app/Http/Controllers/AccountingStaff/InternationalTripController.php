@@ -143,4 +143,23 @@ class InternationalTripController extends Controller
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('error', $e->getMessage());
         }
     }
+
+    public function receiveHardfile(Request $request, InternationalTrip $internationalTrip)
+    {
+        try {
+            if ($internationalTrip->hardfile_received_at) {
+                throw new \Exception('Hardfile has already been received for this document.');
+            }
+            $staffRole = ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) throw new \Exception('Approval role not found.');
+            if (!$internationalTrip->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) {
+                throw new \Exception('Cannot receive hardfile: document has not been approved by Accounting Staff yet.');
+            }
+            $internationalTrip->update(['hardfile_received_at' => now(), 'hardfile_received_by' => Auth::id()]);
+            $this->notificationService->notifyHardfileReceived($internationalTrip, Auth::user());
+            return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('success', 'Hardfile received successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('error', $e->getMessage());
+        }
+    }
 }

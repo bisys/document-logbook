@@ -118,6 +118,29 @@
                             </div>
                         </div>
 
+                        {{-- Hardfile Receipt Status --}}
+                        @php
+                        $staffApproved = $cashAdvanceDraw->approvals()->whereHas('role', function($q) { $q->where('sequence', 1); })->where('approval_status_id', 1)->exists();
+                        @endphp
+                        @if($cashAdvanceDraw->hardfile_received_at)
+                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
+                        <div class="card-body">
+                            <div class="alert alert-success mb-0"><div class="d-flex align-items-center"><i class="fas fa-check-circle fa-2x mr-3"></i><div><strong>Hardfile Received</strong><br><span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($cashAdvanceDraw->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br><span class="text-muted" style="color: white !important;">Date: <strong>{{ $cashAdvanceDraw->hardfile_received_at->format('d M Y H:i') }}</strong></span></div></div></div>
+                        </div></div></div>
+                        @elseif($staffApproved)
+                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
+                        <div class="card-body">
+                            <div class="alert alert-warning mb-0"><i class="fas fa-clock mr-2"></i> Waiting for hardfile submission to Accounting Staff.</div>
+                        </div></div></div>
+                        @else
+                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
+                        <div class="card-body">
+                            <div class="alert alert-secondary mb-0">
+                                <i class="fas fa-info-circle mr-2"></i> Hardfile receipt can only be recorded after the document is approved by Accounting Staff.
+                            </div>
+                        </div></div></div>
+                        @endif
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">

@@ -7,6 +7,7 @@ use App\Mail\RevisionRequestedMail;
 use App\Mail\RevisionSubmittedMail;
 use App\Mail\DocumentApprovedMail;
 use App\Mail\DocumentRejectedMail;
+use App\Mail\HardfileReceivedMail;
 use App\Models\User;
 use App\Models\Revision;
 use Illuminate\Database\Eloquent\Model;
@@ -186,7 +187,7 @@ class NotificationService
                 $user = $recipient['user'];
 
                 if ($user->email) {
-                    Mail::to($user->email)->queue(new DocumentApprovedMail($document, $documentType, $approver, $approverRoleName, $remark, $url));
+                    Mail::to($user->email)->queue(new DocumentApprovedMail($document, $documentType, $approver, $approverRoleName, $remark, $url, $recipient['role']));
                 }
 
                 Notification::send($user, new DocumentNotification([
@@ -259,6 +260,37 @@ class NotificationService
             });
         } catch (\Exception $e) {
             Log::error('Failed to send document rejected notification: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Notify the document owner when accounting staff receives the hardfile
+     */
+    public function notifyHardfileReceived(Model $document, User $receiver): void
+    {
+        try {
+            $documentType = $this->getDocumentType($document);
+            $document->load('user');
+            $owner = $document->user;
+
+            if ($owner) {
+                $slug = Str::kebab(class_basename($document));
+                $url = route('user.' . $slug . '.show', $document->id);
+
+                if ($owner->email) {
+                    Mail::to($owner->email)->queue(new HardfileReceivedMail($document, $documentType, $receiver, $url));
+                }
+
+                Notification::send($owner, new DocumentNotification([
+                    'title' => 'Hardfile Received',
+                    'message' => 'Your ' . $documentType . ' hardfile has been received by ' . $receiver->name . '.',
+                    'url' => $url,
+                    'icon' => 'fas fa-box',
+                    'icon_bg' => 'bg-info'
+                ]));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send hardfile received notification: ' . $e->getMessage());
         }
     }
 }

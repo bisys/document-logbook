@@ -47,6 +47,41 @@
             @endforeach
         </ul></div></div>
 
+        {{-- Hardfile Receipt Section --}}
+        @php
+        $staffApproved = $cashAdvanceRealization->approvals()->whereHas('role', function($q) { $q->where('sequence', 1); })->where('approval_status_id', 1)->exists();
+        @endphp
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4>
+                </div>
+                <div class="card-body">
+                    @if($cashAdvanceRealization->hardfile_received_at)
+                        <div class="alert alert-success mb-0">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                <div>
+                                    <strong>Hardfile Received</strong><br>
+                                    <span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($cashAdvanceRealization->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br>
+                                    <span class="text-muted" style="color: white !important;">Date: <strong>{{ $cashAdvanceRealization->hardfile_received_at->format('d M Y H:i') }}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    @elseif($staffApproved)
+                        <p class="text-muted mb-3">Document has been approved. You can now record the hardfile receipt.</p>
+                        <button class="btn btn-info" data-toggle="modal" data-target="#receiveHardfileModal">
+                            <i class="fas fa-box"></i> Receive Hardfile
+                        </button>
+                    @else
+                        <div class="alert alert-secondary mb-0">
+                            <i class="fas fa-info-circle mr-2"></i> Hardfile receipt can only be recorded after the document is approved by Accounting Staff.
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6"><div class="card"><div class="card-header"><h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
                 @if($cashAdvanceRealization->revisions()->count()===0)<p class="text-muted">No revisions requested yet.</p>
@@ -120,6 +155,14 @@
     <form action="{{ route('accounting-staff.cash-advance-realization.reject', $cashAdvanceRealization) }}" method="POST">@csrf
         <div class="modal-body"><p class="text-danger"><strong>Warning:</strong> Rejecting this document cannot be undone.</p><div class="form-group"><label>Reason for Rejection</label><textarea class="form-control" name="remark" rows="4" required></textarea></div></div>
         <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button><button type="submit" class="btn btn-danger">Reject</button></div>
+    </form>
+</div></div></div>
+</div></div></div>
+<div class="modal fade" id="receiveHardfileModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title">Confirm Hardfile Receipt</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
+    <form action="{{ route('accounting-staff.cash-advance-realization.receive-hardfile', $cashAdvanceRealization) }}" method="POST">@csrf
+        <div class="modal-body"><div class="text-center mb-3"><i class="fas fa-box fa-3x text-info mb-3"></i><p>Are you sure you have received the hardfile for this document?</p><p class="text-muted small">This will record the current date and time as the hardfile receipt date.</p></div></div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button><button type="submit" class="btn btn-info">Confirm Receipt</button></div>
     </form>
 </div></div></div>
 @endsection

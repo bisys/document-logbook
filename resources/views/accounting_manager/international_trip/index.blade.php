@@ -76,6 +76,7 @@
                                         <th>Approval By Staff</th>
                                         <th>Status</th>
                                         <th>Submitted At</th>
+                                        <th>Hardfile Received At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -127,6 +128,13 @@
                                             @endif
                                         </td>
                                         <td>{{ optional($internationalTrip->created_at)->format('d M Y H:i') }}</td>
+                                        <td>
+                                            @if($internationalTrip->hardfile_received_at)
+                                            {{ $internationalTrip->hardfile_received_at->format('d M Y H:i') }}
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('accounting-manager.international-trip.show', $internationalTrip) }}" class="btn btn-sm btn-primary">Review</a>
                                         </td>

@@ -127,4 +127,23 @@ class CashAdvanceDrawController extends Controller
             return redirect()->route('accounting-staff.cash-advance-draw.show', $cashAdvanceDraw)->with('error', $e->getMessage());
         }
     }
+
+    public function receiveHardfile(Request $request, CashAdvanceDraw $cashAdvanceDraw)
+    {
+        try {
+            if ($cashAdvanceDraw->hardfile_received_at) {
+                throw new \Exception('Hardfile has already been received for this document.');
+            }
+            $staffRole = ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) throw new \Exception('Approval role not found.');
+            if (!$cashAdvanceDraw->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) {
+                throw new \Exception('Cannot receive hardfile: document has not been approved by Accounting Staff yet.');
+            }
+            $cashAdvanceDraw->update(['hardfile_received_at' => now(), 'hardfile_received_by' => Auth::id()]);
+            $this->notificationService->notifyHardfileReceived($cashAdvanceDraw, Auth::user());
+            return redirect()->route('accounting-staff.cash-advance-draw.show', $cashAdvanceDraw)->with('success', 'Hardfile received successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.cash-advance-draw.show', $cashAdvanceDraw)->with('error', $e->getMessage());
+        }
+    }
 }

@@ -19,16 +19,19 @@ class DocumentApprovedMail extends Mailable implements ShouldQueue
     public $approverRoleName;
     public $remark;
 
-        public $url;
-public function __construct(Model $document, string $documentType, User $approver, string $approverRoleName, ?string $remark = null, string $url)
+    public $url;
+    public $recipientRole;
+
+    public function __construct(Model $document, string $documentType, User $approver, string $approverRoleName, ?string $remark = null, string $url, string $recipientRole = 'user')
     {
         $this->document = $document;
         $this->documentType = $documentType;
         $this->approver = $approver;
         $this->approverRoleName = $approverRoleName;
         $this->remark = $remark;
-            $this->url = $url;
-}
+        $this->url = $url;
+        $this->recipientRole = $recipientRole;
+    }
 
     public function build()
     {

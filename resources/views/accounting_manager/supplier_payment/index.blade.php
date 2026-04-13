@@ -76,6 +76,7 @@
                                         <th>Approval By Staff</th>
                                         <th>Status</th>
                                         <th>Submitted At</th>
+                                        <th>Hardfile Received At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -127,6 +128,13 @@
                                             @endif
                                         </td>
                                         <td>{{ optional($payment->created_at)->format('d M Y H:i') }}</td>
+                                        <td>
+                                            @if($payment->hardfile_received_at)
+                                            {{ $payment->hardfile_received_at->format('d M Y H:i') }}
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ route('accounting-manager.supplier-payment.show', $payment) }}" class="btn btn-sm btn-primary">Review</a>
                                         </td>

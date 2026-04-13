@@ -190,4 +190,43 @@ class PettyCashController extends Controller
             return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Record hardfile receipt for petty cash
+     */
+    public function receiveHardfile(Request $request, PettyCash $pettyCash)
+    {
+        try {
+            if ($pettyCash->hardfile_received_at) {
+                throw new \Exception('Hardfile has already been received for this document.');
+            }
+
+            $staffRole = ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) {
+                throw new \Exception('Approval role not found.');
+            }
+
+            $staffApproval = $pettyCash->approvals()
+                ->where('approval_role_id', $staffRole->id)
+                ->where('approval_status_id', 1)
+                ->exists();
+
+            if (!$staffApproval) {
+                throw new \Exception('Cannot receive hardfile: document has not been approved by Accounting Staff yet.');
+            }
+
+            $pettyCash->update([
+                'hardfile_received_at' => now(),
+                'hardfile_received_by' => Auth::id(),
+            ]);
+
+            $this->notificationService->notifyHardfileReceived($pettyCash, Auth::user());
+
+            return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)
+                ->with('success', 'Hardfile received successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)
+                ->with('error', $e->getMessage());
+        }
+    }
 }
