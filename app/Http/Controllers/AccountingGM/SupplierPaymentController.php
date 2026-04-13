@@ -129,6 +129,10 @@ class SupplierPaymentController extends Controller
                     throw new \Exception('This document is not ready for your approval.');
                 }
 
+                if (empty($supplierPayment->hardfile_received_at)) {
+                    throw new \Exception('Approval failed: Accounting staff must confirm hardfile receipt first.');
+                }
+
                 // Create approval record
                 $approval = new Approval([
                     'user_id' => Auth::user()->id,

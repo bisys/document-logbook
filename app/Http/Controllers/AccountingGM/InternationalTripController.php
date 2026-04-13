@@ -62,6 +62,10 @@ class InternationalTripController extends Controller
                 if (!$userRole) throw new \Exception('Approval role not found.');
                 if ($this->approvalService->hasRejected($internationalTrip)) throw new \Exception('Document already rejected.');
                 if (!$this->approvalService->isValidApprovalSequence($internationalTrip, $userRole->id)) throw new \Exception('Not ready for your approval.');
+
+                if (empty($internationalTrip->hardfile_received_at)) {
+                    throw new \Exception('Approval failed: Accounting staff must confirm hardfile receipt first.');
+                }
                 if ($internationalTrip->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Already approved.');
 
                 $approval = new Approval(['user_id' => Auth::user()->id, 'approval_role_id' => $userRole->id, 'approval_status_id' => 1, 'remark' => $validated['remark'] ?? null, 'approval_at' => now()]);
