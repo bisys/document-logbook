@@ -229,4 +229,50 @@ class PettyCashController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Process payment and upload receipt
+     */
+    public function processPayment(Request $request, PettyCash $pettyCash)
+    {
+        $request->validate([
+            'payment_receipt' => 'required|file|mimes:png,jpg,jpeg,pdf|max:500',
+        ]);
+
+        try {
+            if ($pettyCash->is_paid) {
+                throw new \Exception('Payment has already been processed for this document.');
+            }
+
+            if (!$pettyCash->hardfile_received_at) {
+                throw new \Exception('Cannot process payment: hardfile receipt has not been recorded yet.');
+            }
+
+            $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
+            if (!$fullyApprovedStatus || $pettyCash->document_status_id !== $fullyApprovedStatus->id) {
+                throw new \Exception('Cannot process payment: document is not fully approved yet.');
+            }
+
+            if ($request->hasFile('payment_receipt')) {
+                $path = $request->file('payment_receipt')->store('payments/petty_cash', 'public');
+                
+                $pettyCash->update([
+                    'is_paid' => true,
+                    'paid_at' => now(),
+                    'paid_by' => Auth::id(),
+                    'payment_receipt_path' => $path,
+                ]);
+
+                if (method_exists($this->notificationService, 'notifyDocumentPaid')) {
+                    $this->notificationService->notifyDocumentPaid($pettyCash, Auth::user());
+                }
+            }
+
+            return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)
+                ->with('success', 'Payment processed successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.petty-cash.show', $pettyCash)
+                ->with('error', $e->getMessage());
+        }
+    }
 }

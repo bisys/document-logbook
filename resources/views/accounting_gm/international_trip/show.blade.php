@@ -54,14 +54,45 @@
         @if($internationalTrip->hardfile_received_at)
         <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
         <div class="card-body">
-            <div class="alert alert-success mb-0"><div class="d-flex align-items-center"><i class="fas fa-check-circle fa-2x mr-3"></i><div><strong>Hardfile Received</strong><br><span class="text-muted">Received by: <strong>{{ optional($internationalTrip->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br><span class="text-muted">Date: <strong>{{ $internationalTrip->hardfile_received_at->format('d M Y H:i') }}</strong></span></div></div></div>
+            <div class="alert alert-success mb-0"><div class="d-flex align-items-center"><i class="fas fa-check-circle fa-2x mr-3"></i><div><strong>Hardfile Received</strong><br><span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($internationalTrip->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br><span class="text-muted" style="color: white !important;">Date: <strong>{{ $internationalTrip->hardfile_received_at->format('d M Y H:i') }}</strong></span></div></div></div>
         </div></div></div>
         @elseif($staffApproved)
         <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
         <div class="card-body">
-            <div class="alert alert-warning mb-0"><i class="fas fa-clock mr-2"></i> Waiting for hardfile submission to Accounting Staff.</div>
+            <div class="alert alert-secondary mb-0"><i class="fas fa-clock mr-2"></i> Waiting for hardfile submission to Accounting Staff.</div>
         </div></div></div>
         @endif
+
+        {{-- Payment Receipt Status --}}
+        @php
+        $isFullyApproved = optional($internationalTrip->status)->slug === 'fully-approved';
+        @endphp
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-money-bill-wave mr-2"></i>Payment Receipt</h4>
+                </div>
+                <div class="card-body">
+                    @if($internationalTrip->is_paid)
+                        <div class="alert alert-success mb-0">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                <div>
+                                    <strong>Payment Processed</strong><br>
+                                    <span class="text-muted" style="color: white !important;">Processed by: <strong>{{ optional($internationalTrip->paidByUser)->name ?? '-' }}</strong></span><br>
+                                    <span class="text-muted" style="color: white !important;">Date: <strong>{{ optional($internationalTrip->paid_at)->format('d M Y H:i') }}</strong></span><br>
+                                    <a href="{{ asset('storage/'.$internationalTrip->payment_receipt_path) }}" target="_blank" class="btn btn-sm btn-light mt-2 text-dark">View Receipt</a>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="alert alert-secondary mb-0">
+                            <i class="fas fa-clock mr-2"></i> Payment has not been processed yet.
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-6"><div class="card"><div class="card-header">@php $totalRevisions=$internationalTrip->revisions()->count();$maxRevisions=3; @endphp

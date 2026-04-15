@@ -161,6 +161,42 @@
                             </div>
                         </div>
 
+                        {{-- Payment Receipt Section --}}
+                        @php
+                        $isFullyApproved = optional($supplierPayment->status)->slug === 'fully-approved';
+                        @endphp
+                        <div class="mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="fas fa-money-bill-wave mr-2"></i>Payment Receipt</h4>
+                                </div>
+                                <div class="card-body">
+                                    @if($supplierPayment->is_paid)
+                                        <div class="alert alert-success mb-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                                <div>
+                                                    <strong>Payment Processed</strong><br>
+                                                    <span class="text-muted" style="color: white !important;">Processed by: <strong>{{ optional($supplierPayment->paidByUser)->name ?? '-' }}</strong></span><br>
+                                                    <span class="text-muted" style="color: white !important;">Date: <strong>{{ optional($supplierPayment->paid_at)->format('d M Y H:i') }}</strong></span><br>
+                                                    <a href="{{ asset('storage/'.$supplierPayment->payment_receipt_path) }}" target="_blank" class="btn btn-sm btn-light mt-2 text-dark">View Receipt</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @elseif($supplierPayment->hardfile_received_at && $isFullyApproved)
+                                        <p class="text-muted mb-3">Document is fully approved and hardfile has been received. You can now process the payment.</p>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#processPaymentModal">
+                                            <i class="fas fa-money-bill-wave"></i> Process Payment
+                                        </button>
+                                    @else
+                                        <div class="alert alert-secondary mb-0">
+                                            <i class="fas fa-info-circle mr-2"></i> Payment can only be processed after the document is fully approved and hardfile is received.
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">
@@ -406,6 +442,37 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-info">Confirm Receipt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Process Payment Modal -->
+<div class="modal fade" id="processPaymentModal" tabindex="-1" role="dialog" aria-labelledby="processPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="processPaymentModalLabel">Process Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('accounting-staff.supplier-payment.process-payment', $supplierPayment) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-money-bill-wave fa-3x text-primary mb-3"></i>
+                        <p>Upload the payment transfer receipt to mark this document as paid.</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Receipt (Max 500KB, JPG/PNG/PDF)</label>
+                        <input type="file" name="payment_receipt" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Process Payment</button>
                 </div>
             </form>
         </div>

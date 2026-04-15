@@ -141,6 +141,34 @@
                         </div></div></div>
                         @endif
 
+                        {{-- Payment Receipt Status --}}
+                        <div class="mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="fas fa-money-bill-wave mr-2"></i>Payment Receipt</h4>
+                                </div>
+                                <div class="card-body">
+                                    @if($cashAdvanceDraw->is_paid)
+                                        <div class="alert alert-success mb-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                                <div>
+                                                    <strong>Payment Processed</strong><br>
+                                                    <span class="text-muted" style="color: white !important;">Processed by: <strong>{{ optional($cashAdvanceDraw->paidByUser)->name ?? '-' }}</strong></span><br>
+                                                    <span class="text-muted" style="color: white !important;">Date: <strong>{{ optional($cashAdvanceDraw->paid_at)->format('d M Y H:i') }}</strong></span><br>
+                                                    <a href="{{ asset('storage/'.$cashAdvanceDraw->payment_receipt_path) }}" target="_blank" class="btn btn-sm btn-light mt-2 text-dark">View Receipt</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="alert alert-secondary mb-0">
+                                            <i class="fas fa-clock mr-2"></i> Payment has not been processed yet.
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">

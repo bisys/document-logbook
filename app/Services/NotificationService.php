@@ -8,6 +8,7 @@ use App\Mail\RevisionSubmittedMail;
 use App\Mail\DocumentApprovedMail;
 use App\Mail\DocumentRejectedMail;
 use App\Mail\HardfileReceivedMail;
+use App\Mail\DocumentPaidMail;
 use App\Models\User;
 use App\Models\Revision;
 use Illuminate\Database\Eloquent\Model;
@@ -291,6 +292,37 @@ class NotificationService
             }
         } catch (\Exception $e) {
             Log::error('Failed to send hardfile received notification: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Notify the document owner when payment has been processed
+     */
+    public function notifyDocumentPaid(Model $document, User $processor): void
+    {
+        try {
+            $documentType = $this->getDocumentType($document);
+            $document->load('user');
+            $owner = $document->user;
+
+            if ($owner) {
+                $slug = Str::kebab(class_basename($document));
+                $url = route('user.' . $slug . '.show', $document->id);
+
+                if ($owner->email) {
+                    Mail::to($owner->email)->queue(new DocumentPaidMail($document, $documentType, $processor, $url));
+                }
+
+                Notification::send($owner, new DocumentNotification([
+                    'title' => 'Payment Processed',
+                    'message' => 'The payment for your ' . $documentType . ' has been processed by ' . $processor->name . '.',
+                    'url' => $url,
+                    'icon' => 'fas fa-money-bill-wave',
+                    'icon_bg' => 'bg-success'
+                ]));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send payment processed notification: ' . $e->getMessage());
         }
     }
 }

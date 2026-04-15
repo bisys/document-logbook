@@ -162,4 +162,50 @@ class InternationalTripController extends Controller
             return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Process payment and upload receipt
+     */
+    public function processPayment(Request $request, InternationalTrip $internationalTrip)
+    {
+        $request->validate([
+            'payment_receipt' => 'required|file|mimes:png,jpg,jpeg,pdf|max:500',
+        ]);
+
+        try {
+            if ($internationalTrip->is_paid) {
+                throw new \Exception('Payment has already been processed for this document.');
+            }
+
+            if (!$internationalTrip->hardfile_received_at) {
+                throw new \Exception('Cannot process payment: hardfile receipt has not been recorded yet.');
+            }
+
+            $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
+            if (!$fullyApprovedStatus || $internationalTrip->document_status_id !== $fullyApprovedStatus->id) {
+                throw new \Exception('Cannot process payment: document is not fully approved yet.');
+            }
+
+            if ($request->hasFile('payment_receipt')) {
+                $path = $request->file('payment_receipt')->store('payments/international_trip', 'public');
+                
+                $internationalTrip->update([
+                    'is_paid' => true,
+                    'paid_at' => now(),
+                    'paid_by' => Auth::id(),
+                    'payment_receipt_path' => $path,
+                ]);
+
+                if (method_exists($this->notificationService, 'notifyDocumentPaid')) {
+                    $this->notificationService->notifyDocumentPaid($internationalTrip, Auth::user());
+                }
+            }
+
+            return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)
+                ->with('success', 'Payment processed successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('accounting-staff.international-trip.show', $internationalTrip)
+                ->with('error', $e->getMessage());
+        }
+    }
 }

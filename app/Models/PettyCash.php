@@ -27,15 +27,26 @@ class PettyCash extends Model
         'edit_count',
         'hardfile_received_at',
         'hardfile_received_by',
+        'is_paid',
+        'paid_at',
+        'paid_by',
+        'payment_receipt_path',
     ];
 
     protected $casts = [
         'hardfile_received_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'is_paid' => 'boolean',
     ];
 
     public function hardfileReceivedByUser()
     {
         return $this->belongsTo(User::class, 'hardfile_received_by');
+    }
+
+    public function paidByUser()
+    {
+        return $this->belongsTo(User::class, 'paid_by');
     }
 
     public function user()

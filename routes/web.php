@@ -143,6 +143,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{supplierPayment}/approve', [AccountingStaffSupplierPaymentController::class, 'approve'])->name('approve');
             Route::post('/{supplierPayment}/reject', [AccountingStaffSupplierPaymentController::class, 'reject'])->name('reject');
             Route::post('/{supplierPayment}/receive-hardfile', [AccountingStaffSupplierPaymentController::class, 'receiveHardfile'])->name('receive-hardfile');
+            Route::post('/{supplierPayment}/process-payment', [AccountingStaffSupplierPaymentController::class, 'processPayment'])->name('process-payment');
         });
 
         Route::prefix('/petty-cash')->name('petty-cash.')->group(function () {
@@ -152,6 +153,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{pettyCash}/approve', [AccountingStaffPettyCashController::class, 'approve'])->name('approve');
             Route::post('/{pettyCash}/reject', [AccountingStaffPettyCashController::class, 'reject'])->name('reject');
             Route::post('/{pettyCash}/receive-hardfile', [AccountingStaffPettyCashController::class, 'receiveHardfile'])->name('receive-hardfile');
+            Route::post('/{pettyCash}/process-payment', [AccountingStaffPettyCashController::class, 'processPayment'])->name('process-payment');
         });
 
         Route::prefix('/international-trip')->name('international-trip.')->group(function () {
@@ -161,6 +163,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{internationalTrip}/approve', [AccountingStaffInternationalTripController::class, 'approve'])->name('approve');
             Route::post('/{internationalTrip}/reject', [AccountingStaffInternationalTripController::class, 'reject'])->name('reject');
             Route::post('/{internationalTrip}/receive-hardfile', [AccountingStaffInternationalTripController::class, 'receiveHardfile'])->name('receive-hardfile');
+            Route::post('/{internationalTrip}/process-payment', [AccountingStaffInternationalTripController::class, 'processPayment'])->name('process-payment');
         });
 
         Route::prefix('/cash-advance-draw')->name('cash-advance-draw.')->group(function () {
@@ -170,6 +173,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceDraw}/approve', [AccountingStaffCashAdvanceDrawController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceDraw}/reject', [AccountingStaffCashAdvanceDrawController::class, 'reject'])->name('reject');
             Route::post('/{cashAdvanceDraw}/receive-hardfile', [AccountingStaffCashAdvanceDrawController::class, 'receiveHardfile'])->name('receive-hardfile');
+            Route::post('/{cashAdvanceDraw}/process-payment', [AccountingStaffCashAdvanceDrawController::class, 'processPayment'])->name('process-payment');
         });
 
         Route::prefix('/cash-advance-realization')->name('cash-advance-realization.')->group(function () {
