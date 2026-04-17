@@ -10,7 +10,6 @@
         <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
                 <h4 class="mb-1">{{ $cashAdvanceRealization->number }}</h4>
-                <p class="mb-0 text-muted">Document Number: <strong>{{ optional($cashAdvanceRealization->draw)->document_number }}</strong></p>
                 <p class="mb-0 text-muted">Cost Center: <strong>{{ optional(optional($cashAdvanceRealization->draw)->costCenter)->number ?? '' }} - {{ optional(optional($cashAdvanceRealization->draw)->costCenter)->name ?? '' }}</strong></p>
             </div>
             <div>
@@ -24,6 +23,25 @@
             </div>
         </div>
         <hr/>
+        <h5>Cash Advance Draw</h5>
+            <div class="table-responsive mb-3">
+                <table class="table table-sm table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width:200px">Cash Advance Draw Number</th>
+                            <td>{{ optional($cashAdvanceRealization->draw)->number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Document Number</th>
+                            <td>{{ optional($cashAdvanceRealization->draw)->document_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Cost Center</th>
+                            <td>{{ optional($cashAdvanceRealization->costCenter)->number }} - {{ optional($cashAdvanceRealization->costCenter)->name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         <h5>Submitted By</h5>
         <div class="table-responsive mb-3"><table class="table table-sm table-bordered"><tbody>
             <tr><th style="width:200px">Employee ID</th><td>{{ optional($cashAdvanceRealization->draw->user ?? $cashAdvanceRealization->draw)->employee_id ?? '-' }}</td></tr>
