@@ -168,7 +168,7 @@
                                         </div>
                                     @else
                                         <div class="alert alert-secondary mb-0">
-                                            <i class="fas fa-clock mr-2"></i> Payment has not been processed yet.
+                                            <i class="fas fa-clock mr-2"></i> Payment can only be processed by Accounting Staff after the document is fully approved and hardfile is received.
                                         </div>
                                     @endif
                                 </div>
@@ -192,7 +192,7 @@
                                     <div class="card-body">
                                         @if($pendingRevisions->isNotEmpty())
                                         <div class="alert alert-warning mb-3">
-                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s) to address.
+                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s).
                                         </div>
                                         @endif
 

@@ -182,7 +182,7 @@
                                     <div class="card-body">
                                         @if($pendingRevisions->isNotEmpty())
                                         <div class="alert alert-warning mb-3">
-                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s) to address.
+                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s).
                                         </div>
                                         @endif
 

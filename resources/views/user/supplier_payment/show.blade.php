@@ -49,92 +49,80 @@
 
                         <hr />
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h4><i class="fas fa-user mr-2"></i>Submitted By</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive mb-3">
-                                    <table class="table table-sm table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <th style="width:200px">Employee ID</th>
-                                                <td>{{ optional($supplierPayment->user)->employee_id }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Name</th>
-                                                <td>{{ optional($supplierPayment->user)->name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Email</th>
-                                                <td>{{ optional($supplierPayment->user)->email }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Department</th>
-                                                <td>{{ optional(optional($supplierPayment->user)->department)->department }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Position</th>
-                                                <td>{{ optional(optional($supplierPayment->user)->position)->position }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                        <h5>Submitted By</h5>
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th style="width:200px">Employee ID</th>
+                                        <td>{{ optional($supplierPayment->user)->employee_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <td>{{ optional($supplierPayment->user)->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{{ optional($supplierPayment->user)->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Department</th>
+                                        <td>{{ optional(optional($supplierPayment->user)->department)->department }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Position</th>
+                                        <td>{{ optional(optional($supplierPayment->user)->position)->position }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h4><i class="fas fa-file-upload mr-2"></i>Uploaded Documents</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-4">
-                                    <div class="col-12">
-                                        <ul class="list-group">
-                                            @php
-                                            $files = [
-                                            'spr_form' => 'SPR Form',
-                                            'original_invoice' => 'Original Invoice',
-                                            'copy_invoice' => 'Copy Invoice',
-                                            'tax_invoice' => 'Tax Invoice',
-                                            'agreement' => 'Agreement',
-                                            'budget_plan' => 'Budget Plan',
-                                            'internal_memo_entertain' => 'Internal Memo Entertain',
-                                            'entertain_realization_form' => 'Entertain Realization Form',
-                                            'minutes_of_meeting' => 'Minutes Of Meeting',
-                                            'nominative_summary' => 'Nominative Summary',
-                                            'calculation_summary' => 'Calculation Summary',
-                                            ];
-                                            @endphp
+                        <h5>Uploaded Documents</h5>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <ul class="list-group">
+                                    @php
+                                    $files = [
+                                    'spr_form' => 'SPR Form',
+                                    'original_invoice' => 'Original Invoice',
+                                    'copy_invoice' => 'Copy Invoice',
+                                    'tax_invoice' => 'Tax Invoice',
+                                    'agreement' => 'Agreement',
+                                    'budget_plan' => 'Budget Plan',
+                                    'internal_memo_entertain' => 'Internal Memo Entertain',
+                                    'entertain_realization_form' => 'Entertain Realization Form',
+                                    'minutes_of_meeting' => 'Minutes Of Meeting',
+                                    'nominative_summary' => 'Nominative Summary',
+                                    'calculation_summary' => 'Calculation Summary',
+                                    ];
+                                    @endphp
 
-                                            @foreach($files as $field => $label)
-                                            @if(!empty($supplierPayment->{$field}))
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <strong>{{ $label }}</strong>
-                                                    <div class="text-muted small">{{ basename($supplierPayment->{$field}) }}</div>
-                                                </div>
-                                                <div>
-                                                    <a href="{{ asset('storage/' . $supplierPayment->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
-                                                </div>
-                                            </li>
-                                            @else
-                                            @if(in_array($field, ['spr_form','original_invoice','copy_invoice','tax_invoice','agreement','budget_plan']))
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <strong>{{ $label }}</strong>
-                                                    <div class="text-muted small">Not uploaded</div>
-                                                </div>
-                                                <div>
-                                                    <span class="text-muted">—</span>
-                                                </div>
-                                            </li>
-                                            @endif
-                                            @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
+                                    @foreach($files as $field => $label)
+                                    @if(!empty($supplierPayment->{$field}))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">{{ basename($supplierPayment->{$field}) }}</div>
+                                        </div>
+                                        <div>
+                                            <a href="{{ asset('storage/' . $supplierPayment->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                        </div>
+                                    </li>
+                                    @else
+                                    @if(in_array($field, ['spr_form','original_invoice','copy_invoice','tax_invoice','agreement','budget_plan']))
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ $label }}</strong>
+                                            <div class="text-muted small">Not uploaded</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted">—</span>
+                                        </div>
+                                    </li>
+                                    @endif
+                                    @endif
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                         
@@ -182,7 +170,7 @@
                                         </div>
                                     @else
                                         <div class="alert alert-secondary mb-0">
-                                            <i class="fas fa-clock mr-2"></i> Payment has not been processed yet.
+                                            <i class="fas fa-clock mr-2"></i> Payment can only be processed by Accounting Staff after the document is fully approved and hardfile is received.
                                         </div>
                                     @endif
                                 </div>
@@ -197,7 +185,7 @@
                                         $totalRevisions = $supplierPayment->revisions()->count();
                                         $maxRevisions = 3;
                                         @endphp
-                                        <h4><i class="fas fa-exclamation-circle mr-2"></i>({{ $totalRevisions }}/{{ $maxRevisions }})
+                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})
                                             @if($pendingRevisions->isNotEmpty())
                                             <span class="badge badge-danger ml-2">{{ $pendingRevisions->count() }} Pending</span>
                                             @endif
@@ -206,7 +194,7 @@
                                     <div class="card-body">
                                         @if($pendingRevisions->isNotEmpty())
                                         <div class="alert alert-warning mb-3">
-                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s) to address.
+                                            <strong>⚠️ Action Required:</strong> You have {{ $pendingRevisions->count() }} revision request(s).
                                         </div>
                                         @endif
 
@@ -254,7 +242,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4>
+                                        <h4>Approval Chain</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="timeline">

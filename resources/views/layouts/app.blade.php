@@ -13,6 +13,7 @@
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="/assets/modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/assets/modules/datatables.net-select-bs4/css/select.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/modules/izitoast/dist/css/iziToast.min.css">
     <link rel="stylesheet" href="/assets/modules/select2/dist/css/select2.min.css">
     <link rel="stylesheet" href="/assets/modules/bootstrap-daterangepicker/daterangepicker.css">
@@ -56,6 +57,7 @@
     <!-- JS Libraries -->
     <script src="/assets/modules/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="/assets/modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/modules/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
     <script src="/assets/modules/izitoast/dist/js/iziToast.min.js"></script>
     <script src="/assets/modules/sweetalert/dist/sweetalert.min.js"></script>
     <script src="/assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>

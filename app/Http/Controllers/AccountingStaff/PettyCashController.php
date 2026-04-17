@@ -275,4 +275,62 @@ class PettyCashController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    public function bulkApprove(Request $request)
+    {
+        $validated = $request->validate([
+            'document_ids' => 'required|array',
+            'document_ids.*' => 'exists:petty_cash,id',
+            'remark' => 'nullable|string|max:1000'
+        ]);
+
+        $successCount = 0;
+        $errors = [];
+
+        foreach ($validated['document_ids'] as $docId) {
+            try {
+                $pettyCash = PettyCash::findOrFail($docId);
+                                DB::transaction(function () use ($pettyCash, $validated) {
+                $pendingRevisions = $pettyCash->revisions()->where('revision_status_id', '!=', 2)->count();
+                if ($pendingRevisions > 0) {
+                throw new \Exception('Cannot approve while there are pending revisions.');
+                }
+
+                $userRole = ApprovalRole::where('sequence', 1)->first();
+                if (!$userRole) throw new \Exception('Approval role not found.');
+                if ($this->approvalService->hasRejected($pettyCash)) throw new \Exception('Approval process halted: document already rejected.');
+                if (!$this->approvalService->isValidApprovalSequence($pettyCash, $userRole->id)) throw new \Exception('This document is not ready for your approval or has already been processed.');
+
+                $alreadyApproved = $pettyCash->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists();
+                if ($alreadyApproved) throw new \Exception('This document is already approved by your role.');
+
+                $approval = new Approval([
+                'user_id' => Auth::user()->id,
+                'approval_role_id' => $userRole->id,
+                'approval_status_id' => 1,
+                'remark' => $validated['remark'] ?? null,
+                'approval_at' => now(),
+                ]);
+
+                $nextStatus = DocumentStatus::where('slug', 'waiting-approval-manager')->first();
+                if ($nextStatus) {
+                $pettyCash->update(['document_status_id' => $nextStatus->id]);
+                }
+                $pettyCash->approvals()->save($approval);
+                });
+
+                $this->notificationService->notifyDocumentApproved($pettyCash, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
+                $successCount++;
+            } catch (\Exception $e) {
+                $errors[] = "PettyCash ID {$docId}: " . $e->getMessage();
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errorMessage = "Approved {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        return redirect()->back()->with('success', "Successfully approved {$successCount} documents.");
+    }
 }

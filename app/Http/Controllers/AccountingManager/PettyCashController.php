@@ -101,4 +101,49 @@ class PettyCashController extends Controller
             return redirect()->route('accounting-manager.petty-cash.show', $pettyCash)->with('error', $e->getMessage());
         }
     }
+
+    public function bulkApprove(Request $request)
+    {
+        $validated = $request->validate([
+            'document_ids' => 'required|array',
+            'document_ids.*' => 'exists:petty_cash,id',
+            'remark' => 'nullable|string|max:1000'
+        ]);
+
+        $successCount = 0;
+        $errors = [];
+
+        foreach ($validated['document_ids'] as $docId) {
+            try {
+                $pettyCash = PettyCash::findOrFail($docId);
+                                DB::transaction(function () use ($pettyCash, $validated) {
+                $userRole = ApprovalRole::where('sequence', 2)->first();
+                if (!$userRole) throw new \Exception('Approval role not found.');
+                if ($this->approvalService->hasRejected($pettyCash)) throw new \Exception('Document already rejected.');
+                if (!$this->approvalService->isValidApprovalSequence($pettyCash, $userRole->id)) throw new \Exception('Not ready for your approval.');
+
+                if (empty($pettyCash->hardfile_received_at)) {
+                throw new \Exception('Approval failed: Accounting staff must confirm hardfile receipt first.');
+                }
+                if ($pettyCash->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Already approved by your role.');
+
+                $approval = new Approval(['user_id' => Auth::user()->id, 'approval_role_id' => $userRole->id, 'approval_status_id' => 1, 'remark' => $validated['remark'] ?? null, 'approval_at' => now()]);
+                $nextStatus = DocumentStatus::where('slug', 'waiting-approval-gm')->first();
+                if ($nextStatus) $pettyCash->update(['document_status_id' => $nextStatus->id]);
+                $pettyCash->approvals()->save($approval);
+                });
+                $this->notificationService->notifyDocumentApproved($pettyCash, Auth::user(), 'Accounting Manager', $validated['remark'] ?? null, 2);
+                $successCount++;
+            } catch (\Exception $e) {
+                $errors[] = "PettyCash ID {$docId}: " . $e->getMessage();
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errorMessage = "Approved {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        return redirect()->back()->with('success', "Successfully approved {$successCount} documents.");
+    }
 }

@@ -101,4 +101,49 @@ class CashAdvanceDrawController extends Controller
             return redirect()->route('accounting-gm.cash-advance-draw.show', $cashAdvanceDraw)->with('error', $e->getMessage());
         }
     }
+
+    public function bulkApprove(Request $request)
+    {
+        $validated = $request->validate([
+            'document_ids' => 'required|array',
+            'document_ids.*' => 'exists:cash_advance_draw,id',
+            'remark' => 'nullable|string|max:1000'
+        ]);
+
+        $successCount = 0;
+        $errors = [];
+
+        foreach ($validated['document_ids'] as $docId) {
+            try {
+                $cashAdvanceDraw = CashAdvanceDraw::findOrFail($docId);
+                                DB::transaction(function () use ($cashAdvanceDraw, $validated) {
+                $userRole = ApprovalRole::where('sequence', 3)->first();
+                if (!$userRole) throw new \Exception('Approval role not found.');
+                if ($this->approvalService->hasRejected($cashAdvanceDraw)) throw new \Exception('Document already rejected.');
+                if (!$this->approvalService->isValidApprovalSequence($cashAdvanceDraw, $userRole->id)) throw new \Exception('Not ready for your approval.');
+
+                if (empty($cashAdvanceDraw->hardfile_received_at)) {
+                throw new \Exception('Approval failed: Accounting staff must confirm hardfile receipt first.');
+                }
+                if ($cashAdvanceDraw->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Already approved.');
+
+                $approval = new Approval(['user_id' => Auth::user()->id, 'approval_role_id' => $userRole->id, 'approval_status_id' => 1, 'remark' => $validated['remark'] ?? null, 'approval_at' => now()]);
+                $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
+                if ($fullyApprovedStatus) $cashAdvanceDraw->update(['document_status_id' => $fullyApprovedStatus->id]);
+                $cashAdvanceDraw->approvals()->save($approval);
+                });
+                $this->notificationService->notifyDocumentApproved($cashAdvanceDraw, Auth::user(), 'Accounting GM', $validated['remark'] ?? null, 3);
+                $successCount++;
+            } catch (\Exception $e) {
+                $errors[] = "CashAdvanceDraw ID {$docId}: " . $e->getMessage();
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errorMessage = "Approved {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        return redirect()->back()->with('success', "Successfully approved {$successCount} documents.");
+    }
 }

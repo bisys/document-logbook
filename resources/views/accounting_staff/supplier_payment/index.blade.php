@@ -49,12 +49,26 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Document Queue</h4>
+                        <div class="card-header-action">
+                            <form id="bulk-approve-form" action="{{ route('accounting-staff.supplier-payment.bulk-approve') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="remark" id="bulk-remark">
+                                <div id="bulk-inputs"></div>
+                                <button type="button" class="btn btn-success" id="btn-bulk-approve" style="display: none;">Approve Selected (<span id="selected-count">0</span>)</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                                                <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                                            </div>
+                                        </th>
                                         <th>Document Number</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
@@ -68,6 +82,14 @@
                                 <tbody>
                                     @foreach($supplierPayments as $payment)
                                     <tr>
+                                        <td class="text-center">
+                                            @if(optional($payment->status)->slug === 'waiting-approval-staff')
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input doc-checkbox" id="checkbox-{{ $payment->id }}" value="{{ $payment->id }}">
+                                                <label for="checkbox-{{ $payment->id }}" class="custom-control-label">&nbsp;</label>
+                                            </div>
+                                            @endif
+                                        </td>
                                         <td>
                                             <strong>{{ $payment->number }}</strong><br>
                                             <small class="text-muted">{{ $payment->document_number }}</small>
@@ -133,4 +155,67 @@
     });
 </script>
 @endif
+
+@if(session()->has('error'))
+<script>
+    iziToast.warning({
+        message: '{{ session()->get("error") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
+<!-- Script for Bulk Approval -->
+<script>
+    $(document).ready(function() {
+        function updateBulkApproveButton() {
+            var selectedCount = $('.doc-checkbox:checked').length;
+            $('#selected-count').text(selectedCount);
+            if (selectedCount > 0) {
+                $('#btn-bulk-approve').show();
+            } else {
+                $('#btn-bulk-approve').hide();
+            }
+        }
+
+        $('#table-1').on('change', 'input[type="checkbox"]', function() {
+            setTimeout(updateBulkApproveButton, 50);
+        });
+
+        $('#btn-bulk-approve').click(function() {
+            var selectedIds = [];
+            $('.doc-checkbox:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) return;
+
+            swal({
+                title: 'Approve Selected Documents?',
+                text: 'You are about to approve ' + selectedIds.length + ' document(s). You can add an optional remark below:',
+                content: {
+                    element: "input",
+                    attributes: {
+                        placeholder: "Optional Remark",
+                        type: "text",
+                    },
+                },
+                icon: 'warning',
+                buttons: true,
+            })
+            .then((remark) => {
+                if (remark !== null) {
+                    $('#bulk-remark').val(remark);
+                    
+                    $('#bulk-inputs').empty();
+                    selectedIds.forEach(function(id) {
+                        $('#bulk-inputs').append('<input type="hidden" name="document_ids[]" value="' + id + '">');
+                    });
+                    
+                    $('#bulk-approve-form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endpush
