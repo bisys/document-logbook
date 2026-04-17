@@ -73,6 +73,28 @@
                             </div>
 
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Hardfile Status</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <select class="form-control selectric" name="hardfile_status">
+                                        <option value="all">All</option>
+                                        <option value="received">Received</option>
+                                        <option value="not_received">Not Received</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Payment Status</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <select class="form-control selectric" name="payment_status">
+                                        <option value="all">All</option>
+                                        <option value="paid">Paid</option>
+                                        <option value="not_paid">Not Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Start Date</label>
                                 <div class="col-sm-12 col-md-7">
                                     <input type="date" class="form-control" name="start_date">

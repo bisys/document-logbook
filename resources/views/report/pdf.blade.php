@@ -40,12 +40,15 @@
             <tr>
                 <th>No</th>
                 <th>Document Type</th>
+                <th>Number</th>
                 <th>Document Number</th>
                 <th>User Name</th>
                 <th>Department</th>
                 <th>Document Status</th>
                 <th>Has Revision</th>
                 <th>Created Date</th>
+                <th>Hardfile Received Date</th>
+                <th>Payment Status</th>
             </tr>
         </thead>
         <tbody>
@@ -53,12 +56,15 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $row['document_type'] }}</td>
+                <td>{{ $row['number'] }}</td>
                 <td>{{ $row['document_number'] }}</td>
                 <td>{{ $row['user_name'] }}</td>
                 <td>{{ $row['department'] }}</td>
                 <td>{{ $row['status'] }}</td>
                 <td>{{ $row['has_revision'] }}</td>
                 <td>{{ $row['created_at'] }}</td>
+                <td>{{ $row['hardfile_received_date'] }}</td>
+                <td>{{ $row['payment_receipt'] }}</td>
             </tr>
             @endforeach
         </tbody>

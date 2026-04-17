@@ -30,12 +30,15 @@ class ReportExport implements FromCollection, WithHeadings, WithMapping, ShouldA
         return [
             'No',
             'Document Type',
+            'Number',
             'Document Number',
             'User Name',
             'Department',
             'Document Status',
             'Has Revision',
             'Created Date',
+            'Hardfile Received Date',
+            'Payment Status',
         ];
     }
 
@@ -46,12 +49,15 @@ class ReportExport implements FromCollection, WithHeadings, WithMapping, ShouldA
         return [
             $index++,
             $row['document_type'],
+            $row['number'],
             $row['document_number'],
             $row['user_name'],
             $row['department'],
             $row['status'],
             $row['has_revision'],
             $row['created_at'],
+            $row['hardfile_received_date'],
+            $row['payment_receipt'],
         ];
     }
 

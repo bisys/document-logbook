@@ -43,6 +43,8 @@ class ReportController extends Controller
             'department_id' => 'nullable',
             'document_status_id' => 'nullable',
             'has_revision' => 'nullable|in:all,yes,no',
+            'hardfile_status' => 'nullable|in:all,received,not_received',
+            'payment_status' => 'nullable|in:all,paid,not_paid',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
@@ -123,6 +125,29 @@ class ReportController extends Controller
                     return $item->revisions->count() === 0;
                 });
             }
+
+            // Apply Hardfile Status filter
+            if ($request->hardfile_status === 'received') {
+                $items = $items->filter(function($item) {
+                    return !is_null($item->hardfile_received_at);
+                });
+            } elseif ($request->hardfile_status === 'not_received') {
+                $items = $items->filter(function($item) {
+                    return is_null($item->hardfile_received_at);
+                });
+            }
+
+            // Apply Payment Status filter
+            if ($request->payment_status === 'paid') {
+                $items = $items->filter(function($item) {
+                    // We check if the attribute exists; if it doesn't, this doc doesn't have a payment state, so it's filtered out
+                    return array_key_exists('is_paid', $item->getAttributes()) && $item->is_paid;
+                });
+            } elseif ($request->payment_status === 'not_paid') {
+                $items = $items->filter(function($item) {
+                    return array_key_exists('is_paid', $item->getAttributes()) && !$item->is_paid;
+                });
+            }
             
             // Apply Department filter
             if ($request->department_id && $request->department_id !== 'all') {
@@ -133,14 +158,27 @@ class ReportController extends Controller
 
             foreach ($items as $item) {
                 $typeName = ucwords(str_replace('-', ' ', $slug));
+                
+                $paymentReceipt = 'N/A';
+                if (array_key_exists('is_paid', $item->getAttributes())) {
+                    if ($item->is_paid) {
+                        $paymentReceipt = 'Paid' . ($item->paid_at ? ' (' . $item->paid_at->format('Y-m-d H:i:s') . ')' : '');
+                    } else {
+                        $paymentReceipt = 'Not Paid';
+                    }
+                }
+
                 $results[] = [
                     'document_type' => $typeName,
-                    'document_number' => $item->number ?? '-',
+                    'number' => $item->number ?? '-',
+                    'document_number' => $item->document_number ?? '-',
                     'user_name' => $item->user->name ?? '-',
                     'department' => $item->user->department->department ?? '-',
                     'status' => $item->status->status ?? '-',
                     'created_at' => $item->created_at->format('Y-m-d H:i:s'),
                     'has_revision' => $item->revisions->count() > 0 ? 'Yes' : 'No',
+                    'hardfile_received_date' => $item->hardfile_received_at ? $item->hardfile_received_at->format('Y-m-d H:i:s') : '-',
+                    'payment_receipt' => $paymentReceipt,
                 ];
             }
         }
