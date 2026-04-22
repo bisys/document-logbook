@@ -15,16 +15,17 @@ class StorePettyCashRequest extends FormRequest
     {
         return [
             'cost_center_id' => 'required|exists:cost_centers,id',
-            'pcr_form' => 'required|file|mimes:pdf|max:500',
+            'pcr_form' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
             'document_number' => 'required|string|max:255|unique:petty_cash,document_number',
-            'original_invoice' => 'required|file|mimes:pdf|max:500',
-            'copy_invoice' => 'required|file|mimes:pdf|max:500',
-            'internal_memo_entertain' => 'sometimes|file|mimes:pdf|max:500',
-            'entertain_realization_form' => 'sometimes|file|mimes:pdf|max:500',
-            'minutes_of_meeting' => 'sometimes|file|mimes:pdf|max:500',
-            'nominative_summary' => 'sometimes|file|mimes:pdf|max:500',
-            'cic_form' => 'sometimes|file|mimes:pdf|max:500',
-            'budget_plan' => 'required|file|mimes:pdf|max:500',
+            'original_invoice' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'copy_invoice' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'tax_invoice' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'internal_memo_entertain' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'entertain_realization_form' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'minutes_of_meeting' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'nominative_summary' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'cic_form' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'budget_plan' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
         ];
     }
 }

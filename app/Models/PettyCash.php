@@ -17,6 +17,7 @@ class PettyCash extends Model
         'document_number',
         'original_invoice',
         'copy_invoice',
+        'tax_invoice',
         'internal_memo_entertain',
         'entertain_realization_form',
         'minutes_of_meeting',

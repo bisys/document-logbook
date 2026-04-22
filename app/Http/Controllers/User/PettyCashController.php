@@ -76,7 +76,7 @@ class PettyCashController extends Controller
             $data['document_number'] = $request->input('document_number');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
-            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'tax_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -155,7 +155,7 @@ class PettyCashController extends Controller
             $currentEditCount = $pettyCash->edit_count ?? 0;
             $newEditCount = $currentEditCount + 1;
 
-            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'tax_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -182,20 +182,21 @@ class PettyCashController extends Controller
         }
 
         $validated = $request->validate([
-            'pcr_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'pcr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
             'document_number' => 'nullable|string',
-            'original_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'copy_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'nominative_summary' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'cic_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'budget_plan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
         ]);
 
         DB::transaction(function () use ($pettyCash, $revision, $validated) {
-            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
+            foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'tax_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan'] as $fileField) {
                 if (isset($validated[$fileField])) {
                     $file = $validated[$fileField];
                     $extension = $file->getClientOriginalExtension();

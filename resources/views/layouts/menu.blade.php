@@ -11,7 +11,7 @@
     @endif
     <li class="menu-header">Document Management</li>
     <li>
-        <a href="{{ route('admin.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
+        <a href="{{ route('admin.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payment</span></a>
     </li>
     <li>
         <a href="{{ route('admin.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
@@ -61,7 +61,7 @@
     <li><a href="/accounting-staff/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
-        <a href="{{ route('accounting-staff.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
+        <a href="{{ route('accounting-staff.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payment</span></a>
     </li>
     <li>
         <a href="{{ route('accounting-staff.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
@@ -83,7 +83,7 @@
     <li><a href="/accounting-manager/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
-        <a href="{{ route('accounting-manager.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
+        <a href="{{ route('accounting-manager.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payment</span></a>
     </li>
     <li>
         <a href="{{ route('accounting-manager.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
@@ -105,7 +105,7 @@
     <li><a href="/accounting-gm/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Approval</li>
     <li>
-        <a href="{{ route('accounting-gm.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
+        <a href="{{ route('accounting-gm.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payment</span></a>
     </li>
     <li>
         <a href="{{ route('accounting-gm.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
@@ -127,7 +127,7 @@
     <li><a href="/user/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
     <li class="menu-header">Document Submission</li>
     <li>
-        <a href="{{ route('user.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payments</span></a>
+        <a href="{{ route('user.supplier-payment.index') }}" class="nav-link"><i class="fas fa-file-invoice-dollar"></i><span>Supplier Payment</span></a>
     </li>
     <li>
         <a href="{{ route('user.petty-cash.index') }}" class="nav-link"><i class="fas fa-wallet"></i><span>Petty Cash</span></a>
@@ -147,14 +147,31 @@
 </ul>
 
 @push('scripts')
-<!-- add active class to the current menu -->
+<!-- add active class to the current menu and its inheritant URL -->
 <script>
     $(document).ready(function() {
         var url = window.location.href;
+        
+        // Loop through all menu links
         $('.sidebar-menu a').each(function() {
-            if (this.href === url) {
+            // Convert href attribute to string for reliable comparison
+            var linkHref = $(this).attr('href');
+            if (typeof linkHref !== 'string') {
+                return; // Skip if href is not a string
+            }
+
+            // Clean up href by removing hash fragment if present
+            var cleanLinkHref = linkHref.split('#')[0];
+            
+            // Check if the current URL contains or matches the link's href
+            // Use startsWith to match sub-routes (e.g., /user/petty-cash/123 matches /user/petty-cash)
+            if (url.startsWith(cleanLinkHref)) {
+                // Add active class to the anchor tag
                 $(this).addClass('active');
-                $(this).parent().addClass('active');
+                
+                // Add active class to parent <li> elements (for <ul> with class menu-item or nav-item)
+                // This will handle multiple levels of nested lists
+                $(this).parents('li').addClass('active');
             }
         });
     });

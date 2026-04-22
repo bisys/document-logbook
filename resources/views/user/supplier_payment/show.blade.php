@@ -341,9 +341,9 @@
                     'spr_form' => 'SPR Form',
                     'original_invoice' => 'Original Invoice',
                     'copy_invoice' => 'Copy Invoice',
+                    'budget_plan' => 'Budget Plan',
                     'tax_invoice' => 'Tax Invoice',
                     'agreement' => 'Agreement',
-                    'budget_plan' => 'Budget Plan',
                     'internal_memo_entertain' => 'Internal Memo Entertain',
                     'entertain_realization_form' => 'Entertain Realization Form',
                     'minutes_of_meeting' => 'Minutes Of Meeting',
@@ -365,7 +365,7 @@
                                     Not yet uploaded
                                     @endif
                                 </small>
-                                <input type="file" class="form-control-file" id="{{ $field }}" name="{{ $field }}" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                <input type="file" class="form-control-file" id="{{ $field }}" name="{{ $field }}" accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png">
                             </div>
                         </div>
                         @endforeach
