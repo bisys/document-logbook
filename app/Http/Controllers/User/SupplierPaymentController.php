@@ -301,18 +301,18 @@ class SupplierPaymentController extends Controller
         }
 
         $validated = $request->validate([
-            'spr_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'spr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
             'document_number' => 'nullable|string',
-            'original_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'copy_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'tax_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'agreement' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'nominative_summary' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'calculation_summary' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'budget_plan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'agreement' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'calculation_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
         ]);
 
         DB::transaction(function () use ($supplierPayment, $revision, $validated) {

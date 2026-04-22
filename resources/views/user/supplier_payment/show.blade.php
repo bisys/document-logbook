@@ -86,9 +86,9 @@
                                     'spr_form' => 'SPR Form',
                                     'original_invoice' => 'Original Invoice',
                                     'copy_invoice' => 'Copy Invoice',
+                                    'budget_plan' => 'Budget Plan',
                                     'tax_invoice' => 'Tax Invoice',
                                     'agreement' => 'Agreement',
-                                    'budget_plan' => 'Budget Plan',
                                     'internal_memo_entertain' => 'Internal Memo Entertain',
                                     'entertain_realization_form' => 'Entertain Realization Form',
                                     'minutes_of_meeting' => 'Minutes Of Meeting',
@@ -109,7 +109,7 @@
                                         </div>
                                     </li>
                                     @else
-                                    @if(in_array($field, ['spr_form','original_invoice','copy_invoice','tax_invoice','agreement','budget_plan']))
+                                    @if(in_array($field, ['spr_form','original_invoice','copy_invoice','budget_plan']))
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <strong>{{ $label }}</strong>

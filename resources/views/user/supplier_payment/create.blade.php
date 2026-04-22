@@ -75,16 +75,6 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tax Invoice*</label>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="custom-file">
-                                        <input type="file" name="tax_invoice" class="custom-file-input" id="tax-invoice" required>
-                                        <label class="custom-file-label">Choose File</label>
-                                    </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Budget Plan*</label>
                                 <div class="col-sm-12 col-md-7">
                                     <div class="custom-file">
@@ -95,10 +85,20 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Agreement / Quotation*</label>
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tax Invoice</label>
                                 <div class="col-sm-12 col-md-7">
                                     <div class="custom-file">
-                                        <input type="file" name="agreement" class="custom-file-input" id="agreement" required>
+                                        <input type="file" name="tax_invoice" class="custom-file-input" id="tax-invoice">
+                                        <label class="custom-file-label">Choose File</label>
+                                    </div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Agreement / Quotation</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="custom-file">
+                                        <input type="file" name="agreement" class="custom-file-input" id="agreement">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
                                     <div class="form-text text-muted">The file must have a maximum size of 500KB</div>

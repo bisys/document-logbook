@@ -125,30 +125,6 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tax Invoice*</label>
-                                <div class="col-sm-12 col-md-7">
-                                    @if(!empty($supplierPayment->tax_invoice))
-                                    <div class="card card-sm mb-2 bg-light">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <small class="text-muted">Current File:</small><br>
-                                                    <strong>{{ basename($supplierPayment->tax_invoice) }}</strong>
-                                                </div>
-                                                <a href="{{ asset('storage/' . $supplierPayment->tax_invoice) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <small class="text-muted">Upload a new file to replace it (optional)</small>
-                                    @endif
-                                    <div class="custom-file">
-                                        <input type="file" name="tax_invoice" class="custom-file-input" id="tax-invoice" {{ empty($supplierPayment->tax_invoice) ? 'required' : '' }}>
-                                        <label class="custom-file-label">{{ empty($supplierPayment->tax_invoice) ? 'Choose File' : 'Replace File (Optional)' }}</label>
-                                    </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Budget Plan*</label>
                                 <div class="col-sm-12 col-md-7">
                                     @if(!empty($supplierPayment->budget_plan))
@@ -173,7 +149,31 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Agreement / Quotation*</label>
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tax Invoice</label>
+                                <div class="col-sm-12 col-md-7">
+                                    @if(!empty($supplierPayment->tax_invoice))
+                                    <div class="card card-sm mb-2 bg-light">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <small class="text-muted">Current File:</small><br>
+                                                    <strong>{{ basename($supplierPayment->tax_invoice) }}</strong>
+                                                </div>
+                                                <a href="{{ asset('storage/' . $supplierPayment->tax_invoice) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">Upload a new file to replace it (optional)</small>
+                                    @endif
+                                    <div class="custom-file">
+                                        <input type="file" name="tax_invoice" class="custom-file-input" id="tax-invoice">
+                                        <label class="custom-file-label">Choose File</label>
+                                    </div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Agreement / Quotation</label>
                                 <div class="col-sm-12 col-md-7">
                                     @if(!empty($supplierPayment->agreement))
                                     <div class="card card-sm mb-2 bg-light">
@@ -190,8 +190,8 @@
                                     <small class="text-muted">Upload a new file to replace it (optional)</small>
                                     @endif
                                     <div class="custom-file">
-                                        <input type="file" name="agreement" class="custom-file-input" id="agreement" {{ empty($supplierPayment->agreement) ? 'required' : '' }}>
-                                        <label class="custom-file-label">{{ empty($supplierPayment->agreement) ? 'Choose File' : 'Replace File (Optional)' }}</label>
+                                        <input type="file" name="agreement" class="custom-file-input" id="agreement">
+                                        <label class="custom-file-label">Choose File</label>
                                     </div>
                                     <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
                                 </div>
