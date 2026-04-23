@@ -76,7 +76,7 @@ class InternationalTripController extends Controller
             $data['document_number'] = $request->input('document_number');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
-            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan'] as $fileField) {
+            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -153,7 +153,7 @@ class InternationalTripController extends Controller
             $currentEditCount = $internationalTrip->edit_count ?? 0;
             $newEditCount = $currentEditCount + 1;
 
-            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan'] as $fileField) {
+            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -180,18 +180,19 @@ class InternationalTripController extends Controller
         }
 
         $validated = $request->validate([
-            'itar_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'itar_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
             'document_number' => 'nullable|string',
-            'internal_memo' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'summary_bussiness_trip' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'overseas_allowance_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'bussiness_trip_allowance' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'rate' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'budget_plan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'internal_memo' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'summary_bussiness_trip' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'overseas_allowance_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'bussiness_trip_allowance' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'rate' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
         ]);
 
         DB::transaction(function () use ($internationalTrip, $revision, $validated) {
-            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan'] as $fileField) {
+            foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan', 'other_document'] as $fileField) {
                 if (isset($validated[$fileField])) {
                     $file = $validated[$fileField];
                     $extension = $file->getClientOriginalExtension();

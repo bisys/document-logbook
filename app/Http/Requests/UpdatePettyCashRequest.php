@@ -26,6 +26,7 @@ class UpdatePettyCashRequest extends FormRequest
             'nominative_summary' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
             'cic_form' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
             'budget_plan' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
         ];
     }
 }

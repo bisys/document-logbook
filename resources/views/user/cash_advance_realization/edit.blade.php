@@ -252,6 +252,30 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Other Document</label>
+                                <div class="col-sm-12 col-md-7">
+                                    @if(!empty($cashAdvanceRealization->other_document))
+                                    <div class="card card-sm mb-2 bg-light">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <small class="text-muted">Current File:</small><br>
+                                                    <strong>{{ basename($cashAdvanceRealization->other_document) }}</strong>
+                                                </div>
+                                                <a href="{{ asset('storage/' . $cashAdvanceRealization->other_document) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">Upload a new file to replace it (optional)</small>
+                                    @endif
+                                    <div class="custom-file">
+                                        <input type="file" name="other_document" class="custom-file-input" id="other-document">
+                                        <label class="custom-file-label">Choose File</label>
+                                    </div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                                 <div class="col-sm-12 col-md-7">
                                     <button type="submit" class="btn btn-primary">Submit</button>

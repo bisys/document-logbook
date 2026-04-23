@@ -103,7 +103,7 @@ class CashAdvanceRealizationController extends Controller
             $data['cost_center_id'] = $draw->cost_center_id;
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -177,7 +177,7 @@ class CashAdvanceRealizationController extends Controller
             $currentEditCount = $cashAdvanceRealization->edit_count ?? 0;
             $newEditCount = $currentEditCount + 1;
 
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -204,19 +204,20 @@ class CashAdvanceRealizationController extends Controller
         }
 
         $validated = $request->validate([
-            'car_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'original_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'copy_invoice' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'nominative_summary' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'cic_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'transfer_evidence' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'transfer_evidence' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
         ]);
 
         DB::transaction(function () use ($cashAdvanceRealization, $revision, $validated) {
-            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence'] as $fileField) {
+            foreach (['car_form', 'original_invoice', 'copy_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'transfer_evidence', 'other_document'] as $fileField) {
                 if (isset($validated[$fileField])) {
                     $file = $validated[$fileField];
                     $extension = $file->getClientOriginalExtension();

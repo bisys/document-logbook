@@ -25,6 +25,7 @@ class SupplierPayment extends Model
         'nominative_summary',
         'calculation_summary',
         'budget_plan',
+        'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',

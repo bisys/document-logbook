@@ -25,7 +25,7 @@
                         <h4>Cash Advance Realization Form</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('user.cash-advance-realization.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('user.cash-advance-realization.store') }}" method="POST" enctype="multipart/form-data" id="form">
                             @csrf
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Cash Advance Draw*</label>
@@ -33,7 +33,7 @@
                                     <select class="form-control selectric" name="cash_advance_draw_id" required>
                                         <option value="">-- Select Fully Approved Cash Advance Draw --</option>
                                         @foreach($availableDraws as $draw)
-                                        <option value="{{ $draw->id }}">Number : <b>{{ $draw->number }}</b> - Document Number : <b>{{ $draw->document_number }}</b></option>
+                                        <option value="{{ $draw->id }}" @if(old('cash_advance_draw_id') == $draw->id) selected @endif>Number : <b>{{ $draw->number }}</b> - Document Number : <b>{{ $draw->document_number }}</b></option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -129,6 +129,16 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Other Document</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="custom-file">
+                                        <input type="file" name="other_document" class="custom-file-input" id="other-document">
+                                        <label class="custom-file-label">Choose File</label>
+                                    </div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                                 <div class="col-sm-12 col-md-7">
                                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -155,6 +165,13 @@
                 label.textContent = fileName;
             }
         });
+    });
+
+    // Prevent multiple click submit
+    $('#form').on('submit', function() {
+        var submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true);
+        submitButton.html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
     });
 </script>
 

@@ -94,6 +94,7 @@
                                     'minutes_of_meeting' => 'Minutes Of Meeting',
                                     'nominative_summary' => 'Nominative Summary',
                                     'calculation_summary' => 'Calculation Summary',
+                                    'other_document' => 'Other Document',
                                     ];
                                     @endphp
 
@@ -182,7 +183,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4>
+                                        <h4><i class="fas fa-exclamation-circle mr-2"></i>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4>
                                     </div>
                                     <div class="card-body">
                                         @if($totalRevisions === 0)
@@ -223,7 +224,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Full Approval Chain</h4>
+                                        <h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="timeline">

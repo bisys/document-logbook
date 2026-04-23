@@ -94,6 +94,7 @@
                                     'minutes_of_meeting' => 'Minutes Of Meeting',
                                     'nominative_summary' => 'Nominative Summary',
                                     'calculation_summary' => 'Calculation Summary',
+                                    'other_document' => 'Other Document',
                                     ];
                                     @endphp
 
@@ -201,7 +202,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4>
+                                        <h4><i class="fas fa-exclamation-circle mr-2"></i>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4>
                                     </div>
                                     <div class="card-body">
                                         @if($totalRevisions === 0)
@@ -241,7 +242,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Approval Chain</h4>
+                                        <h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="timeline">
@@ -341,7 +342,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('accounting-staff.supplier-payment.add-revision', $supplierPayment) }}" method="POST">
+            <form action="{{ route('accounting-staff.supplier-payment.add-revision', $supplierPayment) }}" method="POST" id="form-revision">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -486,6 +487,22 @@
         list-style: none;
     }
 </style>
+
+{{-- Prevent multiple click submit on modal form --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form-revision');
+        if (form) {
+            form.addEventListener('submit', function () {
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                }
+            });
+        }
+    });
+</script>
 
 @if(session()->has('success'))
 <script>

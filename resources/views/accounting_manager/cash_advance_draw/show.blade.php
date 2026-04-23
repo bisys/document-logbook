@@ -35,7 +35,7 @@
 
         <h5>Uploaded Documents</h5>
         <div class="row mb-4"><div class="col-12"><ul class="list-group">
-            @php $files=['car_form'=>'CAR Form','proposal_or_monitor_budget'=>'Proposal / Monitor Budget','budget_plan'=>'Budget Plan',]; @endphp
+            @php $files=['car_form'=>'CAR Form','proposal_or_monitor_budget'=>'Proposal / Monitor Budget','budget_plan'=>'Budget Plan','other_document'=>'Other Document']; @endphp
             @foreach($files as $field=>$fileLabel)
             @if(!empty($cashAdvanceDraw->{$field}))
             <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">{{ basename($cashAdvanceDraw->{$field}) }}</div></div><div><a href="{{ asset('storage/'.$cashAdvanceDraw->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a></div></li>
@@ -96,7 +96,7 @@
 
         <div class="row">
             <div class="col-md-6"><div class="card"><div class="card-header">@php $totalRevisions=$cashAdvanceDraw->revisions()->count();$maxRevisions=3; @endphp
-                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
+                                        <h4><i class="fas fa-exclamation-circle mr-2"></i>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
                 @if($cashAdvanceDraw->revisions()->count()===0)<p class="text-muted">No revisions requested yet.</p>
                 @else<ul class="list-unstyled">
                     @foreach($cashAdvanceDraw->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
@@ -112,7 +112,7 @@
                     </div></li>
                     @endforeach</ul>@endif
             </div></div></div>
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Approval Chain</h4></div><div class="card-body"><div class="timeline">
+            <div class="col-md-6"><div class="card"><div class="card-header"><h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4></div><div class="card-body"><div class="timeline">
                 @forelse($approvalChain as $item)
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-start"><div><strong>{{ $item['role']->name }}</strong></div><div>

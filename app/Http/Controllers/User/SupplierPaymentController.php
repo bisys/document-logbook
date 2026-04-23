@@ -119,6 +119,7 @@ class SupplierPaymentController extends Controller
                     'minutes_of_meeting',
                     'nominative_summary',
                     'calculation_summary',
+                    'other_document',
                 ] as $fileField
             ) {
                 if ($request->hasFile($fileField)) {
@@ -256,7 +257,8 @@ class SupplierPaymentController extends Controller
                     'minutes_of_meeting',
                     'nominative_summary',
                     'calculation_summary',
-                    'budget_plan'
+                    'budget_plan',
+                    'other_document'
                 ] as $fileField
             ) {
                 if ($request->hasFile($fileField)) {
@@ -301,18 +303,19 @@ class SupplierPaymentController extends Controller
         }
 
         $validated = $request->validate([
-            'spr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'spr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
             'document_number' => 'nullable|string',
-            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'agreement' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'calculation_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
-            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'agreement' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'calculation_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
         ]);
 
         DB::transaction(function () use ($supplierPayment, $revision, $validated) {
@@ -329,7 +332,8 @@ class SupplierPaymentController extends Controller
                     'minutes_of_meeting',
                     'nominative_summary',
                     'calculation_summary',
-                    'budget_plan'
+                    'budget_plan',
+                    'other_document'
                 ] as $fileField
             ) {
                 if (isset($validated[$fileField])) {

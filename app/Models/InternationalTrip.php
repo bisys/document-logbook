@@ -21,6 +21,7 @@ class InternationalTrip extends Model
         'bussiness_trip_allowance',
         'rate',
         'budget_plan',
+        'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',

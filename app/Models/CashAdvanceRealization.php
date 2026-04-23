@@ -23,6 +23,7 @@ class CashAdvanceRealization extends Model
         'nominative_summary',
         'cic_form',
         'transfer_evidence',
+        'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',

@@ -15,10 +15,11 @@ class UpdateCashAdvanceDrawRequest extends FormRequest
     {
         return [
             'cost_center_id' => 'required|exists:cost_centers,id',
-            'car_form' => 'sometimes|file|mimes:pdf|max:500',
+            'car_form' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
             'document_number' => 'required|string|max:255|unique:cash_advance_draw,document_number,' . $this->route('cashAdvanceDraw')->id,
-            'proposal_or_monitor_budget' => 'sometimes|file|mimes:pdf|max:500',
-            'budget_plan' => 'sometimes|file|mimes:pdf|max:500',
+            'proposal_or_monitor_budget' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'budget_plan' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
         ];
     }
 }

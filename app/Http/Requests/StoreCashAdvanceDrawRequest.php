@@ -15,10 +15,11 @@ class StoreCashAdvanceDrawRequest extends FormRequest
     {
         return [
             'cost_center_id' => 'required|exists:cost_centers,id',
-            'car_form' => 'required|file|mimes:pdf|max:500',
+            'car_form' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
             'document_number' => 'required|string|max:255|unique:cash_advance_draw,document_number',
-            'proposal_or_monitor_budget' => 'required|file|mimes:pdf|max:500',
-            'budget_plan' => 'required|file|mimes:pdf|max:500',
+            'proposal_or_monitor_budget' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'budget_plan' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
         ];
     }
 }

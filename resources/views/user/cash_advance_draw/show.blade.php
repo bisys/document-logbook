@@ -86,6 +86,7 @@
                                     'car_form' => 'CAR Form',
                                     'proposal_or_monitor_budget' => 'Proposal or Monitoring Budget Estimation',
                                     'budget_plan' => 'Budget Plan',
+                                    'other_document' => 'Other Document',
                                     ];
                                     @endphp
 
@@ -177,7 +178,7 @@
                                         $totalRevisions = $cashAdvanceDraw->revisions()->count();
                                         $maxRevisions = 3;
                                         @endphp
-                                        <h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})
+                                        <h4><i class="fas fa-exclamation-circle mr-2"></i>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})
                                             @if($pendingRevisions->isNotEmpty())
                                             <span class="badge badge-danger ml-2">{{ $pendingRevisions->count() }} Pending</span>
                                             @endif
@@ -234,7 +235,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Approval Chain</h4>
+                                        <h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="timeline">
@@ -333,6 +334,7 @@
                     'car_form' => 'CAR Form',
                     'proposal_or_monitor_budget' => 'Proposal or Monitoring Budget Estimation',
                     'budget_plan' => 'Budget Plan',
+                    'other_document' => 'Other Document',
                     ];
                     @endphp
 
@@ -349,7 +351,7 @@
                                     Not yet uploaded
                                     @endif
                                 </small>
-                                <input type="file" class="form-control-file" id="{{ $field }}" name="{{ $field }}" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                <input type="file" class="form-control-file" id="{{ $field }}" name="{{ $field }}" accept=".pdf,.xls,.xlsx,.jpg,.jpeg,.png">
                             </div>
                         </div>
                         @endforeach

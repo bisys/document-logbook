@@ -36,6 +36,7 @@ class StoreSupplierPaymentRequest extends FormRequest
             'nominative_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
             'calculation_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
             'budget_plan' => 'required|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'other_document' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
         ];
     }
 }

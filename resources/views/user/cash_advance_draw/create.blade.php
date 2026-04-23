@@ -25,12 +25,12 @@
                         <h4>Cash Advance Draw Form</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('user.cash-advance-draw.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('user.cash-advance-draw.store') }}" method="POST" enctype="multipart/form-data" id="form">
                             @csrf
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Document Number*</label>
                                 <div class="col-sm-12 col-md-7">
-                                    <input type="text" class="form-control" name="document_number" required>
+                                    <input type="text" class="form-control" name="document_number" value="{{ old('document_number') }}" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -39,7 +39,7 @@
                                     <select class="form-control selectric" name="cost_center_id" required>
                                         <option value="">-- Select Cost Center --</option>
                                         @foreach($costCenters as $costCenter)
-                                        <option value="{{ $costCenter->id }}">{{ $costCenter->number }} - {{ $costCenter->name }}</option>
+                                        <option value="{{ $costCenter->id }}" @if(old('cost_center_id') == $costCenter->id) selected @endif>{{ $costCenter->number }} - {{ $costCenter->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -75,6 +75,16 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Other Document</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="custom-file">
+                                        <input type="file" name="other_document" class="custom-file-input" id="other-document">
+                                        <label class="custom-file-label">Choose File</label>
+                                    </div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                                 <div class="col-sm-12 col-md-7">
                                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -101,6 +111,13 @@
                 label.textContent = fileName;
             }
         });
+    });
+
+    // Prevent multiple click submit
+    $('#form').on('submit', function() {
+        var submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true);
+        submitButton.html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
     });
 </script>
 

@@ -17,6 +17,7 @@ class CashAdvanceDraw extends Model
         'document_number',
         'proposal_or_monitor_budget',
         'budget_plan',
+        'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',

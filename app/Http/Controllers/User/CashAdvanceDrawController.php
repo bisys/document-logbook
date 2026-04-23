@@ -76,7 +76,7 @@ class CashAdvanceDrawController extends Controller
             $data['document_number'] = $request->input('document_number');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
-            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -153,7 +153,7 @@ class CashAdvanceDrawController extends Controller
             $currentEditCount = $cashAdvanceDraw->edit_count ?? 0;
             $newEditCount = $currentEditCount + 1;
 
-            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan', 'other_document'] as $fileField) {
                 if ($request->hasFile($fileField)) {
                     $file = $request->file($fileField);
                     $extension = $file->getClientOriginalExtension();
@@ -180,14 +180,15 @@ class CashAdvanceDrawController extends Controller
         }
 
         $validated = $request->validate([
-            'car_form' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
             'document_number' => 'nullable|string',
-            'proposal_or_monitor_budget' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
-            'budget_plan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx',
+            'proposal_or_monitor_budget' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
         ]);
 
         DB::transaction(function () use ($cashAdvanceDraw, $revision, $validated) {
-            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan'] as $fileField) {
+            foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan', 'other_document'] as $fileField) {
                 if (isset($validated[$fileField])) {
                     $file = $validated[$fileField];
                     $extension = $file->getClientOriginalExtension();

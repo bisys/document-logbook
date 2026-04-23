@@ -24,6 +24,7 @@ class PettyCash extends Model
         'nominative_summary',
         'cic_form',
         'budget_plan',
+        'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',

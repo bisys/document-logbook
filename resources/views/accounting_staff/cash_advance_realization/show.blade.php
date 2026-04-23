@@ -53,7 +53,7 @@
 
         <h5>Uploaded Documents</h5>
         <div class="row mb-4"><div class="col-12"><ul class="list-group">
-            @php $files=['car_form'=>'CAR Form','original_invoice'=>'Original Invoice','copy_invoice'=>'Copy Invoice','internal_memo_entertain'=>'Internal Memo Entertain','entertain_realization_form'=>'Entertain Realization Form','minutes_of_meeting'=>'Minutes Of Meeting','nominative_summary'=>'Nominative Summary','cic_form'=>'CIC Form','budget_plan'=>'Budget Plan',]; @endphp
+            @php $files=['car_form'=>'CAR Form','original_invoice'=>'Original Invoice','copy_invoice'=>'Copy Invoice','internal_memo_entertain'=>'Internal Memo Entertain','entertain_realization_form'=>'Entertain Realization Form','minutes_of_meeting'=>'Minutes Of Meeting','nominative_summary'=>'Nominative Summary','cic_form'=>'CIC Form','budget_plan'=>'Budget Plan','other_document'=>'Other Document']; @endphp
             @foreach($files as $field=>$fileLabel)
             @if(!empty($cashAdvanceRealization->{$field}))
             <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">{{ basename($cashAdvanceRealization->{$field}) }}</div></div><div><a href="{{ asset('storage/'.$cashAdvanceRealization->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a></div></li>
@@ -101,7 +101,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
+            <div class="col-md-6"><div class="card"><div class="card-header"><h4><i class="fas fa-exclamation-circle mr-2"></i>Revisions ({{ $totalRevisions }}/{{ $maxRevisions }})</h4></div><div class="card-body">
                 @if($cashAdvanceRealization->revisions()->count()===0)<p class="text-muted">No revisions requested yet.</p>
                 @else<ul class="list-unstyled">
                     @foreach($cashAdvanceRealization->revisions()->with(['user','status'])->orderByDesc('revision_at')->get() as $rev)
@@ -117,7 +117,7 @@
                     </div></li>
                     @endforeach</ul>@endif
             </div></div></div>
-            <div class="col-md-6"><div class="card"><div class="card-header"><h4>Approval Chain</h4></div><div class="card-body"><div class="timeline">
+            <div class="col-md-6"><div class="card"><div class="card-header"><h4><i class="fas fa-check-circle mr-2"></i>Approval Chain</h4></div><div class="card-body"><div class="timeline">
                 @forelse($approvalChain as $item)
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-start"><div><strong>{{ $item['role']->name }}</strong></div><div>
@@ -156,7 +156,7 @@
 </section>
 <div class="modal fade" id="addRevisionModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
     <div class="modal-header"><h5 class="modal-title">Request Revision</h5><button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
-    <form action="{{ route('accounting-staff.cash-advance-realization.add-revision', $cashAdvanceRealization) }}" method="POST">@csrf
+    <form action="{{ route('accounting-staff.cash-advance-realization.add-revision', $cashAdvanceRealization) }}" method="POST" id="form-revision">@csrf
         <div class="modal-body"><div class="form-group"><label>Revision Note</label><textarea class="form-control" name="remark" rows="4" required></textarea></div></div>
         <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button><button type="submit" class="btn btn-warning">Request Revision</button></div>
     </form>
@@ -186,6 +186,23 @@
 @endsection
 @push('scripts')
 <style>.activity-timeline li{list-style:none;}</style>
+
+{{-- Prevent multiple click submit on modal form --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form-revision');
+        if (form) {
+            form.addEventListener('submit', function () {
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                }
+            });
+        }
+    });
+</script>
+
 @if(session()->has('success'))<script>iziToast.success({message:'{{ session()->get("success") }}',position:'topRight'});</script>@endif
 @if(session()->has('error'))<script>iziToast.warning({message:'{{ session()->get("error") }}',position:'topRight'});</script>@endif
 @endpush
