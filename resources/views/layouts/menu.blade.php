@@ -75,6 +75,10 @@
     <li>
         <a href="{{ route('accounting-staff.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li class="menu-header">Upload Document</li>
+    <li>
+        <a href="{{ route('accounting-staff.signed-cash-advance-draws.create') }}" class="nav-link"><i class="fas fa-upload"></i><span>Signed Cash Advance Draw</span></a>
+    </li>
     <li class="menu-header">Report</li>
     <li><a href="{{ route('accounting-staff.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
@@ -140,6 +144,10 @@
     </li>
     <li>
         <a href="{{ route('user.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
+    </li>
+    <li class="menu-header">Download Document</li>
+    <li>
+        <a href="{{ route('user.signed-cash-advance-draws.index') }}" class="nav-link"><i class="fas fa-download"></i><span>Signed Cash Advance Draw</span></a>
     </li>
     <li class="menu-header">Report</li>
     <li><a href="{{ route('user.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>

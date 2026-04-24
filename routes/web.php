@@ -47,6 +47,7 @@ use App\Http\Controllers\AccountingGM\PettyCashController as AccountingGMPettyCa
 use App\Http\Controllers\AccountingGM\InternationalTripController as AccountingGMInternationalTripController;
 use App\Http\Controllers\AccountingGM\CashAdvanceDrawController as AccountingGMCashAdvanceDrawController;
 use App\Http\Controllers\AccountingGM\CashAdvanceRealizationController as AccountingGMCashAdvanceRealizationController;
+use App\Http\Controllers\SignedCashAdvanceDrawController;
 
 // Route::get('/', function () {
 //     return view('dashboard');
@@ -193,6 +194,11 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/report')->name('report.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
             Route::post('/export', [ReportController::class, 'export'])->name('export');
+        });
+
+        Route::prefix('/signed-cash-advance-draws')->name('signed-cash-advance-draws.')->group(function () {
+            Route::get('/create', [SignedCashAdvanceDrawController::class, 'create'])->name('create');
+            Route::post('/', [SignedCashAdvanceDrawController::class, 'store'])->name('store');
         });
     });
 
@@ -350,6 +356,10 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/report')->name('report.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
             Route::post('/export', [ReportController::class, 'export'])->name('export');
+        });
+
+        Route::prefix('/signed-cash-advance-draws')->name('signed-cash-advance-draws.')->group(function () {
+            Route::get('/', [SignedCashAdvanceDrawController::class, 'index'])->name('index');
         });
     });
 
