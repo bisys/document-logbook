@@ -29,7 +29,6 @@
                             'all' => 'All',
                             'waiting-approval-staff' => 'Waiting Approval Staff',
                             'waiting-approval-manager' => 'Waiting Approval Manager',
-                            'waiting-approval-gm' => 'Waiting Approval GM',
                             'waiting-revision' => 'Waiting Revision',
                             'fully-approved' => 'Fully Approved',
                             ];

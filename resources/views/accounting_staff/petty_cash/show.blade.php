@@ -35,7 +35,7 @@
 
         <h5>Uploaded Documents</h5>
         <div class="row mb-4"><div class="col-12"><ul class="list-group">
-            @php $files=['pcr_form'=>'PCR Form','original_invoice'=>'Original Invoice','copy_invoice'=>'Copy Invoice','internal_memo_entertain'=>'Internal Memo Entertain','entertain_realization_form'=>'Entertain Realization Form','minutes_of_meeting'=>'Minutes Of Meeting','nominative_summary'=>'Nominative Summary','cic_form'=>'CIC Form','budget_plan'=>'Budget Plan','other_document'=>'Other Document']; @endphp
+            @php $files=['pcr_form'=>'PCR Form','original_invoice'=>'Original Invoice','copy_invoice'=>'Copy Invoice', 'tax_invoice'=>'Tax Invoice', 'internal_memo_entertain'=>'Internal Memo Entertain','entertain_realization_form'=>'Entertain Realization Form','minutes_of_meeting'=>'Minutes Of Meeting','nominative_summary'=>'Nominative Summary','cic_form'=>'CIC Form','budget_plan'=>'Budget Plan','other_document'=>'Other Document']; @endphp
             @foreach($files as $field=>$fileLabel)
             @if(!empty($pettyCash->{$field}))
             <li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>{{ $fileLabel }}</strong><div class="text-muted small">{{ basename($pettyCash->{$field}) }}</div></div><div><a href="{{ asset('storage/'.$pettyCash->{$field}) }}" target="_blank" class="btn btn-sm btn-outline-primary">View</a></div></li>

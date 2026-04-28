@@ -93,6 +93,7 @@
                                         <th>Status</th>
                                         <th>Submitted At</th>
                                         <th>Hardfile Received At</th>
+                                        <th>Payment Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -154,6 +155,21 @@
                                             @else
                                             -
                                             @endif
+                                        </td>
+                                        <td>
+                                            @if($payment->is_paid)
+                                            <span class="badge badge-success">Paid</span>
+                                            @else
+                                            <span class="badge badge-warning">Not Paid</span>
+                                            @endif
+                                            <br>
+                                            <small class="text-muted">
+                                            @if($payment->is_paid)
+                                            {{ $payment->paid_at->format('d M Y H:i') }}
+                                            @else
+                                            -
+                                            @endif
+                                            </small>
                                         </td>
                                         <td>
                                             <a href="{{ route('accounting-gm.supplier-payment.show', $payment) }}" class="btn btn-sm btn-primary">Review</a>

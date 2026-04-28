@@ -23,7 +23,6 @@
                             'all' => 'All',
                             'waiting-approval-staff' => 'Waiting Approval Staff',
                             'waiting-approval-manager' => 'Waiting Approval Manager',
-                            'waiting-approval-gm' => 'Waiting Approval GM',
                             'waiting-revision' => 'Waiting Revision',
                             'fully-approved' => 'Fully Approved',
                             ];
@@ -76,6 +75,7 @@
                                         <th>Status</th>
                                         <th>Submitted At</th>
                                         <th>Hardfile Received At</th>
+                                        <th>Payment Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -127,6 +127,21 @@
                                             @else
                                             -
                                             @endif
+                                        </td>
+                                        <td>
+                                            @if($pettyCash->is_paid)
+                                            <span class="badge badge-success">Paid</span>
+                                            @else
+                                            <span class="badge badge-warning">Not Paid</span>
+                                            @endif
+                                            <br>
+                                            <small class="text-muted">
+                                            @if($pettyCash->is_paid)
+                                            {{ $pettyCash->paid_at->format('d M Y H:i') }}
+                                            @else
+                                            -
+                                            @endif
+                                            </small>
                                         </td>
                                         <td>
                                             <a href="{{ route('accounting-staff.petty-cash.show', $pettyCash) }}" class="btn btn-sm btn-primary">Review</a>

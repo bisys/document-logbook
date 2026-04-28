@@ -169,13 +169,7 @@ class NotificationService
                         $recipients->push(['user' => $manager, 'role' => 'accounting-manager']);
                     }
                     break;
-                case 2: // Manager approved → notify accounting GMs
-                    $gms = $this->getUsersByRole('accounting-gm');
-                    foreach ($gms as $gm) {
-                        $recipients->push(['user' => $gm, 'role' => 'accounting-gm']);
-                    }
-                    break;
-                case 3: // GM approved → only notify user (already added above)
+                case 2: // Manager approved → only notify user (already added above)
                     break;
             }
 
@@ -229,13 +223,7 @@ class NotificationService
                         $recipients->push(['user' => $manager, 'role' => 'accounting-manager']);
                     }
                     break;
-                case 2: // Manager rejected → notify accounting GMs
-                    $gms = $this->getUsersByRole('accounting-gm');
-                    foreach ($gms as $gm) {
-                        $recipients->push(['user' => $gm, 'role' => 'accounting-gm']);
-                    }
-                    break;
-                case 3: // GM rejected → only notify user (already added above)
+                case 2: // Manager rejected → only notify user (already added above)
                     break;
             }
 

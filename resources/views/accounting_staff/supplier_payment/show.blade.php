@@ -110,7 +110,7 @@
                                         </div>
                                     </li>
                                     @else
-                                    @if(in_array($field, ['spr_form','original_invoice','copy_invoice','tax_invoice','agreement','budget_plan']))
+                                    @if(in_array($field, ['spr_form','original_invoice','copy_invoice','budget_plan']))
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <strong>{{ $label }}</strong>

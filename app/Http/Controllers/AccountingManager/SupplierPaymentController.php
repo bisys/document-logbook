@@ -142,12 +142,12 @@ class SupplierPaymentController extends Controller
                     'approval_at' => now(),
                 ]);
 
-                // Update document status to next approval stage
-                $nextStatusSlug = 'waiting-approval-gm'; // Next status after manager approval
-                $nextStatus = DocumentStatus::where('slug', $nextStatusSlug)->first();
-                if ($nextStatus) {
+                // Update document status to fully approved (final approval)
+                $fullyApprovedSlug = 'fully-approved';
+                $fullyApprovedStatus = DocumentStatus::where('slug', $fullyApprovedSlug)->first();
+                if ($fullyApprovedStatus) {
                     $supplierPayment->update([
-                        'document_status_id' => $nextStatus->id
+                        'document_status_id' => $fullyApprovedStatus->id
                     ]);
                 }
 
