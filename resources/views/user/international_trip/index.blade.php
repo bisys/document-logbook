@@ -68,6 +68,7 @@
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Document Number</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
@@ -82,6 +83,9 @@
                                 <tbody>
                                     @foreach($internationalTrips as $internationalTrip)
                                     <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <td>
                                             <strong>{{ $internationalTrip->number }}</strong><br>
                                             <small class="text-muted">{{ $internationalTrip->document_number }}</small>

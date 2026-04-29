@@ -147,12 +147,11 @@ class CashAdvanceRealizationController extends Controller
         }
     }
 
-    public function bulkApprove(Request $request)
+    public function bulkReceiveHardfile(Request $request)
     {
         $validated = $request->validate([
             'document_ids' => 'required|array',
             'document_ids.*' => 'exists:cash_advance_realization,id',
-            'remark' => 'nullable|string|max:1000'
         ]);
 
         $successCount = 0;
@@ -161,31 +160,42 @@ class CashAdvanceRealizationController extends Controller
         foreach ($validated['document_ids'] as $docId) {
             try {
                 $cashAdvanceRealization = CashAdvanceRealization::findOrFail($docId);
-                                DB::transaction(function () use ($cashAdvanceRealization, $validated) {
-                if ($cashAdvanceRealization->revisions()->where('revision_status_id', '!=', 2)->count() > 0) throw new \Exception('Cannot approve while there are pending revisions.');
-                $userRole = ApprovalRole::where('sequence', 1)->first();
-                if (!$userRole) throw new \Exception('Approval role not found.');
-                if ($this->approvalService->hasRejected($cashAdvanceRealization)) throw new \Exception('Approval process halted: document already rejected.');
-                if (!$this->approvalService->isValidApprovalSequence($cashAdvanceRealization, $userRole->id)) throw new \Exception('Not ready for your approval.');
-                if ($cashAdvanceRealization->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Already approved by your role.');
+                
+                if ($cashAdvanceRealization->hardfile_received_at) {
+                    throw new \Exception('Hardfile has already been received.');
+                }
 
-                $approval = new Approval(['user_id' => Auth::user()->id, 'approval_role_id' => $userRole->id, 'approval_status_id' => 1, 'remark' => $validated['remark'] ?? null, 'approval_at' => now()]);
-                $nextStatus = DocumentStatus::where('slug', 'waiting-approval-manager')->first();
-                if ($nextStatus) $cashAdvanceRealization->update(['document_status_id' => $nextStatus->id]);
-                $cashAdvanceRealization->approvals()->save($approval);
-                });
-                $this->notificationService->notifyDocumentApproved($cashAdvanceRealization, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
+                $staffRole = ApprovalRole::where('sequence', 1)->first();
+                if (!$staffRole) {
+                    throw new \Exception('Approval role not found.');
+                }
+
+                $staffApproval = $cashAdvanceRealization->approvals()
+                    ->where('approval_role_id', $staffRole->id)
+                    ->where('approval_status_id', 1)
+                    ->exists();
+
+                if (!$staffApproval) {
+                    throw new \Exception('Document has not been approved by Accounting Staff yet.');
+                }
+
+                $cashAdvanceRealization->update([
+                    'hardfile_received_at' => now(),
+                    'hardfile_received_by' => Auth::id(),
+                ]);
+
+                $this->notificationService->notifyHardfileReceived($cashAdvanceRealization, Auth::user());
                 $successCount++;
             } catch (\Exception $e) {
-                $errors[] = "CashAdvanceRealization ID {$docId}: " . $e->getMessage();
+                $errors[] = "ID {$docId}: " . $e->getMessage();
             }
         }
 
         if (count($errors) > 0) {
-            $errorMessage = "Approved {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            $errorMessage = "Received hardfile for {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
             return redirect()->back()->with('error', $errorMessage);
         }
 
-        return redirect()->back()->with('success', "Successfully approved {$successCount} documents.");
+        return redirect()->back()->with('success', "Successfully received hardfile for {$successCount} documents.");
     }
 }

@@ -145,7 +145,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{supplierPayment}/reject', [AccountingStaffSupplierPaymentController::class, 'reject'])->name('reject');
             Route::post('/{supplierPayment}/receive-hardfile', [AccountingStaffSupplierPaymentController::class, 'receiveHardfile'])->name('receive-hardfile');
             Route::post('/{supplierPayment}/process-payment', [AccountingStaffSupplierPaymentController::class, 'processPayment'])->name('process-payment');
-            Route::post('/bulk-approve', [AccountingStaffSupplierPaymentController::class, 'bulkApprove'])->name('bulk-approve');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffSupplierPaymentController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
         Route::prefix('/petty-cash')->name('petty-cash.')->group(function () {
@@ -156,7 +156,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{pettyCash}/reject', [AccountingStaffPettyCashController::class, 'reject'])->name('reject');
             Route::post('/{pettyCash}/receive-hardfile', [AccountingStaffPettyCashController::class, 'receiveHardfile'])->name('receive-hardfile');
             Route::post('/{pettyCash}/process-payment', [AccountingStaffPettyCashController::class, 'processPayment'])->name('process-payment');
-            Route::post('/bulk-approve', [AccountingStaffPettyCashController::class, 'bulkApprove'])->name('bulk-approve');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffPettyCashController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
         Route::prefix('/international-trip')->name('international-trip.')->group(function () {
@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{internationalTrip}/reject', [AccountingStaffInternationalTripController::class, 'reject'])->name('reject');
             Route::post('/{internationalTrip}/receive-hardfile', [AccountingStaffInternationalTripController::class, 'receiveHardfile'])->name('receive-hardfile');
             Route::post('/{internationalTrip}/process-payment', [AccountingStaffInternationalTripController::class, 'processPayment'])->name('process-payment');
-            Route::post('/bulk-approve', [AccountingStaffInternationalTripController::class, 'bulkApprove'])->name('bulk-approve');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffInternationalTripController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
         Route::prefix('/cash-advance-draw')->name('cash-advance-draw.')->group(function () {
@@ -178,7 +178,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceDraw}/reject', [AccountingStaffCashAdvanceDrawController::class, 'reject'])->name('reject');
             Route::post('/{cashAdvanceDraw}/receive-hardfile', [AccountingStaffCashAdvanceDrawController::class, 'receiveHardfile'])->name('receive-hardfile');
             Route::post('/{cashAdvanceDraw}/process-payment', [AccountingStaffCashAdvanceDrawController::class, 'processPayment'])->name('process-payment');
-            Route::post('/bulk-approve', [AccountingStaffCashAdvanceDrawController::class, 'bulkApprove'])->name('bulk-approve');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffCashAdvanceDrawController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
         Route::prefix('/cash-advance-realization')->name('cash-advance-realization.')->group(function () {
@@ -188,7 +188,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceRealization}/approve', [AccountingStaffCashAdvanceRealizationController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceRealization}/reject', [AccountingStaffCashAdvanceRealizationController::class, 'reject'])->name('reject');
             Route::post('/{cashAdvanceRealization}/receive-hardfile', [AccountingStaffCashAdvanceRealizationController::class, 'receiveHardfile'])->name('receive-hardfile');
-            Route::post('/bulk-approve', [AccountingStaffCashAdvanceRealizationController::class, 'bulkApprove'])->name('bulk-approve');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffCashAdvanceRealizationController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
         Route::prefix('/report')->name('report.')->group(function () {

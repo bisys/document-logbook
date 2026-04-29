@@ -102,6 +102,21 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Quick Actions</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <a href="{{ route('accounting-staff.signed-cash-advance-draws.create') }}" class="btn btn-primary btn-lg btn-block"><i class="fas fa-upload"></i> Upload Signed Cash Advance Draw</a>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <a href="{{ route('accounting-staff.report.index') }}" class="btn btn-info btn-lg btn-block"><i class="fas fa-file"></i> Generate Report (PDF/Excel)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

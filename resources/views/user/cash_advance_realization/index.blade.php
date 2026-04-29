@@ -68,6 +68,7 @@
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Document Number</th>
                                         <th>Linked Cash Advance Draw</th>
                                         <th>Submitted By</th>
@@ -82,6 +83,9 @@
                                 <tbody>
                                     @foreach($cashAdvanceRealizations as $cashAdvanceRealization)
                                     <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <td>
                                             <strong>{{ $cashAdvanceRealization->number }}</strong>
                                         </td>

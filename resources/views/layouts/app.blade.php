@@ -38,7 +38,7 @@
 
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2026 <div class="bullet"></div> Developed By <a href="mailto:it-04@thaisummit.co.id">it-04@thaisummit.co.id</a>
+                    Copyright &copy; 2026 <div class="bullet"></div> Developed By <a href="mailto:it-04@thaisummit.co.id">SYD-IT Department</a>
                 </div>
                 <div class="footer-right">
                 </div>

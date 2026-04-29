@@ -68,6 +68,7 @@
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Document Number</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
@@ -82,6 +83,9 @@
                                 <tbody>
                                     @foreach($supplierPayments as $payment)
                                     <tr>
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
                                         <td>
                                             <strong>{{ $payment->number }}</strong><br>
                                             <small class="text-muted">{{ $payment->document_number }}</small>

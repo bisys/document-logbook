@@ -418,12 +418,11 @@ class SupplierPaymentController extends Controller
         }
     }
 
-    public function bulkApprove(Request $request)
+    public function bulkReceiveHardfile(Request $request)
     {
         $validated = $request->validate([
             'document_ids' => 'required|array',
             'document_ids.*' => 'exists:supplier_payment,id',
-            'remark' => 'nullable|string|max:1000'
         ]);
 
         $successCount = 0;
@@ -432,77 +431,45 @@ class SupplierPaymentController extends Controller
         foreach ($validated['document_ids'] as $docId) {
             try {
                 $supplierPayment = SupplierPayment::findOrFail($docId);
-                                DB::transaction(function () use ($supplierPayment, $validated) {
-                // Check if there are pending revisions
-                $pendingRevisions = $supplierPayment->revisions()
-                ->where('revision_status_id', '!=', 2) // Not 'revised' status
-                ->count();
-
-                if ($pendingRevisions > 0) {
-                throw new \Exception('Cannot approve while there are pending revisions.');
+                
+                // Check if already received
+                if ($supplierPayment->hardfile_received_at) {
+                    throw new \Exception('Hardfile has already been received.');
                 }
 
-                // Get current user's approval role
-                $userRole = ApprovalRole::where('sequence', 1)->first(); // Accounting staff = sequence 1
-
-                if (!$userRole) {
-                throw new \Exception('Approval role not found.');
+                // Check if document has been approved by accounting staff (sequence 1)
+                $staffRole = ApprovalRole::where('sequence', 1)->first();
+                if (!$staffRole) {
+                    throw new \Exception('Approval role not found.');
                 }
 
-                // Make sure no rejection has already occurred elsewhere
-                if ($this->approvalService->hasRejected($supplierPayment)) {
-                throw new \Exception('Approval process halted: document already rejected.');
+                $staffApproval = $supplierPayment->approvals()
+                    ->where('approval_role_id', $staffRole->id)
+                    ->where('approval_status_id', 1) // approved
+                    ->exists();
+
+                if (!$staffApproval) {
+                    throw new \Exception('Document has not been approved by Accounting Staff yet.');
                 }
 
-                // Validate that this is the correct sequence for approval
-                if (!$this->approvalService->isValidApprovalSequence($supplierPayment, $userRole->id)) {
-                throw new \Exception('This document is not ready for your approval or has already been processed.');
-                }
-
-                // check if this document is already approved by this role
-                $alreadyApproved = $supplierPayment->approvals()
-                ->where('approval_role_id', $userRole->id)
-                ->where('approval_status_id', 1) // approved
-                ->exists();
-
-                if ($alreadyApproved) {
-                throw new \Exception('This document is already approved by your role.');
-                }
-
-                // Create approval record
-                $approval = new Approval([
-                'user_id' => Auth::user()->id,
-                'approval_role_id' => $userRole->id,
-                'approval_status_id' => 1, // 'approved' status
-                'remark' => $validated['remark'] ?? null,
-                'approval_at' => now(),
-                ]);
-
-                // Update document status to next approval stage
-                $nextStatusSlug = 'waiting-approval-manager'; // Next status after staff approval
-                $nextStatus = DocumentStatus::where('slug', $nextStatusSlug)->first();
-                if ($nextStatus) {
                 $supplierPayment->update([
-                'document_status_id' => $nextStatus->id
+                    'hardfile_received_at' => now(),
+                    'hardfile_received_by' => Auth::id(),
                 ]);
-                }
 
-                $supplierPayment->approvals()->save($approval);
-                });
-
-                // Show success message if approval is successful created
-                $this->notificationService->notifyDocumentApproved($supplierPayment, Auth::user(), 'Accounting Staff', $validated['remark'] ?? null, 1);
+                // Send notification to document owner
+                $this->notificationService->notifyHardfileReceived($supplierPayment, Auth::user());
                 $successCount++;
             } catch (\Exception $e) {
-                $errors[] = "SupplierPayment ID {$docId}: " . $e->getMessage();
+                $errors[] = "ID {$docId}: " . $e->getMessage();
             }
         }
 
         if (count($errors) > 0) {
-            $errorMessage = "Approved {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            $errorMessage = "Received hardfile for {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
             return redirect()->back()->with('error', $errorMessage);
         }
 
-        return redirect()->back()->with('success', "Successfully approved {$successCount} documents.");
+        return redirect()->back()->with('success', "Successfully received hardfile for {$successCount} documents.");
     }
 }
