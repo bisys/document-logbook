@@ -97,7 +97,7 @@ class InternationalTripController extends Controller
 
     public function show(InternationalTrip $internationalTrip)
     {
-        if ($internationalTrip->user_id !== Auth::user()->id) {
+        if ($internationalTrip->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -112,7 +112,7 @@ class InternationalTripController extends Controller
 
     public function edit(InternationalTrip $internationalTrip)
     {
-        if ($internationalTrip->user_id !== Auth::user()->id) {
+        if ($internationalTrip->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -130,7 +130,7 @@ class InternationalTripController extends Controller
 
     public function update(UpdateInternationalTripRequest $request, InternationalTrip $internationalTrip)
     {
-        if ($internationalTrip->user_id !== Auth::user()->id) {
+        if ($internationalTrip->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -171,11 +171,11 @@ class InternationalTripController extends Controller
 
     public function submitRevision(Request $request, InternationalTrip $internationalTrip, Revision $revision)
     {
-        if ($internationalTrip->user_id !== Auth::user()->id) {
+        if ($internationalTrip->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        if ($revision->revisable_id !== $internationalTrip->id || $revision->revisable_type !== InternationalTrip::class) {
+        if ($revision->revisable_id != $internationalTrip->id || $revision->revisable_type != InternationalTrip::class) {
             abort(403);
         }
 

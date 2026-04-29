@@ -97,7 +97,7 @@ class PettyCashController extends Controller
 
     public function show(PettyCash $pettyCash)
     {
-        if ($pettyCash->user_id !== Auth::user()->id) {
+        if ($pettyCash->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -114,7 +114,7 @@ class PettyCashController extends Controller
 
     public function edit(PettyCash $pettyCash)
     {
-        if ($pettyCash->user_id !== Auth::user()->id) {
+        if ($pettyCash->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -132,7 +132,7 @@ class PettyCashController extends Controller
 
     public function update(UpdatePettyCashRequest $request, PettyCash $pettyCash)
     {
-        if ($pettyCash->user_id !== Auth::user()->id) {
+        if ($pettyCash->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -173,11 +173,11 @@ class PettyCashController extends Controller
 
     public function submitRevision(Request $request, PettyCash $pettyCash, Revision $revision)
     {
-        if ($pettyCash->user_id !== Auth::user()->id) {
+        if ($pettyCash->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        if ($revision->revisable_id !== $pettyCash->id || $revision->revisable_type !== PettyCash::class) {
+        if ($revision->revisable_id != $pettyCash->id || $revision->revisable_type != PettyCash::class) {
             abort(403);
         }
 

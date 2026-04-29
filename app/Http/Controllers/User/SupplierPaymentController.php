@@ -147,7 +147,7 @@ class SupplierPaymentController extends Controller
     public function show(SupplierPayment $supplierPayment)
     {
         // Check if user owns this supplier payment
-        if ($supplierPayment->user_id !== Auth::user()->id) {
+        if ($supplierPayment->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -189,7 +189,7 @@ class SupplierPaymentController extends Controller
     public function edit(SupplierPayment $supplierPayment)
     {
         // Check if user owns this supplier payment and document has revisions
-        if ($supplierPayment->user_id !== Auth::user()->id) {
+        if ($supplierPayment->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -216,7 +216,7 @@ class SupplierPaymentController extends Controller
     public function update(UpdateSupplierPaymentRequest $request, SupplierPayment $supplierPayment)
     {
         // Check if user owns this supplier payment
-        if ($supplierPayment->user_id !== Auth::user()->id) {
+        if ($supplierPayment->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -293,12 +293,12 @@ class SupplierPaymentController extends Controller
     public function submitRevision(Request $request, SupplierPayment $supplierPayment, Revision $revision)
     {
         // Check if user owns this supplier payment
-        if ($supplierPayment->user_id !== Auth::user()->id) {
+        if ($supplierPayment->user_id != Auth::user()->id) {
             abort(403);
         }
 
         // Check if revision belongs to this supplier payment
-        if ($revision->revisable_id !== $supplierPayment->id || $revision->revisable_type !== SupplierPayment::class) {
+        if ($revision->revisable_id != $supplierPayment->id || $revision->revisable_type != SupplierPayment::class) {
             abort(403);
         }
 

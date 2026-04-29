@@ -82,11 +82,11 @@ class CashAdvanceRealizationController extends Controller
         $draw = CashAdvanceDraw::findOrFail($request->input('cash_advance_draw_id'));
         $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
 
-        if ($draw->user_id !== Auth::user()->id) {
+        if ($draw->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        if ($draw->document_status_id !== ($fullyApprovedStatus->id ?? 0)) {
+        if ($draw->document_status_id != ($fullyApprovedStatus->id ?? 0)) {
             return redirect()->back()->with('error', 'Cash Advance Draw must be fully approved before creating realization.');
         }
 
@@ -125,7 +125,7 @@ class CashAdvanceRealizationController extends Controller
     public function show(CashAdvanceRealization $cashAdvanceRealization)
     {
         // Check ownership via draw
-        if ($cashAdvanceRealization->draw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceRealization->draw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -140,7 +140,7 @@ class CashAdvanceRealizationController extends Controller
 
     public function edit(CashAdvanceRealization $cashAdvanceRealization)
     {
-        if ($cashAdvanceRealization->draw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceRealization->draw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -157,7 +157,7 @@ class CashAdvanceRealizationController extends Controller
 
     public function update(UpdateCashAdvanceRealizationRequest $request, CashAdvanceRealization $cashAdvanceRealization)
     {
-        if ($cashAdvanceRealization->draw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceRealization->draw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -195,11 +195,11 @@ class CashAdvanceRealizationController extends Controller
 
     public function submitRevision(Request $request, CashAdvanceRealization $cashAdvanceRealization, Revision $revision)
     {
-        if ($cashAdvanceRealization->draw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceRealization->draw->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        if ($revision->revisable_id !== $cashAdvanceRealization->id || $revision->revisable_type !== CashAdvanceRealization::class) {
+        if ($revision->revisable_id != $cashAdvanceRealization->id || $revision->revisable_type != CashAdvanceRealization::class) {
             abort(403);
         }
 

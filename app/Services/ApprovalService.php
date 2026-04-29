@@ -104,7 +104,7 @@ class ApprovalService
         // Check if approval status is 'approved'
         // Assuming approval_status_id 1 = approved, 2 = rejected, etc
         // You may need to adjust based on your ApprovalStatus table values
-        return $approval->approval_status_id === 1;
+        return $approval->approval_status_id == 1;
     }
 
     /**
@@ -126,7 +126,7 @@ class ApprovalService
         }
 
         // This role can only approve if it's the next role in sequence
-        return $nextApprovalRole->id === $approvalRoleId;
+        return $nextApprovalRole->id == $approvalRoleId;
     }
 
     /**
@@ -159,7 +159,7 @@ class ApprovalService
             $chain[] = [
                 'role' => $role,
                 'approval' => $approval,
-                'status' => $approval ? ($approval->approval_status_id === 1 ? 'approved' : 'rejected') : 'pending',
+                'status' => $approval ? ($approval->approval_status_id == 1 ? 'approved' : 'rejected') : 'pending',
                 'sequence' => $role->sequence
             ];
         }

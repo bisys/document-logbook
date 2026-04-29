@@ -97,7 +97,7 @@ class CashAdvanceDrawController extends Controller
 
     public function show(CashAdvanceDraw $cashAdvanceDraw)
     {
-        if ($cashAdvanceDraw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceDraw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -112,7 +112,7 @@ class CashAdvanceDrawController extends Controller
 
     public function edit(CashAdvanceDraw $cashAdvanceDraw)
     {
-        if ($cashAdvanceDraw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceDraw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -130,7 +130,7 @@ class CashAdvanceDrawController extends Controller
 
     public function update(UpdateCashAdvanceDrawRequest $request, CashAdvanceDraw $cashAdvanceDraw)
     {
-        if ($cashAdvanceDraw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceDraw->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -171,11 +171,11 @@ class CashAdvanceDrawController extends Controller
 
     public function submitRevision(Request $request, CashAdvanceDraw $cashAdvanceDraw, Revision $revision)
     {
-        if ($cashAdvanceDraw->user_id !== Auth::user()->id) {
+        if ($cashAdvanceDraw->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        if ($revision->revisable_id !== $cashAdvanceDraw->id || $revision->revisable_type !== CashAdvanceDraw::class) {
+        if ($revision->revisable_id != $cashAdvanceDraw->id || $revision->revisable_type != CashAdvanceDraw::class) {
             abort(403);
         }
 
