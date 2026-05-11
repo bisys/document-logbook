@@ -88,16 +88,16 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6 mb-3">
-                            <a href="{{ route('accounting-staff.supplier-payment.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-primary btn-lg btn-block"><i class="fas fa-eye"></i> SP (Pending)</a>
+                            <a href="{{ route('accounting-staff.supplier-payment.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-primary btn-lg btn-block"><i class="fas fa-eye"></i> SPR (Pending)</a>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <a href="{{ route('accounting-staff.petty-cash.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-info btn-lg btn-block"><i class="fas fa-eye"></i> PC (Pending)</a>
+                            <a href="{{ route('accounting-staff.petty-cash.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-info btn-lg btn-block"><i class="fas fa-eye"></i> PCR (Pending)</a>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <a href="{{ route('accounting-staff.cash-advance-draw.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-warning btn-lg btn-block"><i class="fas fa-eye"></i> CA Draw (Pending)</a>
+                            <a href="{{ route('accounting-staff.cash-advance-draw.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-warning btn-lg btn-block"><i class="fas fa-eye"></i> CAR Draw (Pending)</a>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <a href="{{ route('accounting-staff.cash-advance-realization.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-success btn-lg btn-block"><i class="fas fa-eye"></i> CA Realization (Pending)</a>
+                            <a href="{{ route('accounting-staff.cash-advance-realization.index', ['status' => 'waiting-approval-staff']) }}" class="btn btn-success btn-lg btn-block"><i class="fas fa-eye"></i> CAR Realization (Pending)</a>
                         </div>
                     </div>
                 </div>

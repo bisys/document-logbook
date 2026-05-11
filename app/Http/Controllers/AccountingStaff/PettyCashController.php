@@ -249,7 +249,7 @@ class PettyCashController extends Controller
             }
 
             $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
-            if (!$fullyApprovedStatus || $pettyCash->document_status_id !== $fullyApprovedStatus->id) {
+            if (!$fullyApprovedStatus || $pettyCash->document_status_id != $fullyApprovedStatus->id) {
                 throw new \Exception('Cannot process payment: document is not fully approved yet.');
             }
 

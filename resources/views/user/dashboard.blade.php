@@ -109,7 +109,7 @@
                             <a href="{{ route('user.petty-cash.create') }}" class="btn btn-info btn-lg btn-block"><i class="fas fa-plus"></i> New Petty Cash</a>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <a href="{{ route('user.cash-advance-draw.create') }}" class="btn btn-warning btn-lg btn-block"><i class="fas fa-plus"></i> New CA Draw</a>
+                            <a href="{{ route('user.cash-advance-draw.create') }}" class="btn btn-warning btn-lg btn-block"><i class="fas fa-plus"></i> New CAR Draw</a>
                         </div>
                         <div class="col-sm-6 mb-3">
                             <a href="{{ route('user.international-trip.create') }}" class="btn btn-success btn-lg btn-block"><i class="fas fa-plus"></i> New Int. Trip</a>

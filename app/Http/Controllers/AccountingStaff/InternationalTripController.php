@@ -182,7 +182,7 @@ class InternationalTripController extends Controller
             }
 
             $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
-            if (!$fullyApprovedStatus || $internationalTrip->document_status_id !== $fullyApprovedStatus->id) {
+            if (!$fullyApprovedStatus || $internationalTrip->document_status_id != $fullyApprovedStatus->id) {
                 throw new \Exception('Cannot process payment: document is not fully approved yet.');
             }
 
