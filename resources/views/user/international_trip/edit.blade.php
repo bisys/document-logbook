@@ -32,7 +32,7 @@
                             <span class="badge badge-info ml-2">Cost Center: {{ optional($internationalTrip->costCenter)->number }}</span>
                         </div>
 
-                        <form action="{{ route('user.international-trip.update', $internationalTrip->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('user.international-trip.update', $internationalTrip->id) }}" method="POST" enctype="multipart/form-data" id="edit-form">
                             @csrf
                             @method('PUT')
                             <div class="form-group row mb-4">
@@ -271,6 +271,13 @@
                 label.textContent = fileName;
             }
         });
+    });
+
+    // Prevent multiple click submit
+    $('#edit-form').on('submit', function() {
+        var submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true);
+        submitButton.html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
     });
 </script>
 

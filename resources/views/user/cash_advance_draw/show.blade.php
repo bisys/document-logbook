@@ -313,7 +313,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('user.cash-advance-draw.submit-revision', [$cashAdvanceDraw, $revision]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user.cash-advance-draw.submit-revision', [$cashAdvanceDraw, $revision]) }}" method="POST" enctype="multipart/form-data" id="revision-form">
                 @csrf
                 <div class="modal-body">
                     <div class="alert alert-info mb-3">
@@ -377,6 +377,14 @@
         list-style: none;
     }
 </style>
+
+<script>
+    $('#revision-form').on('submit', function() {
+        var submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true);
+        submitButton.html('<i class="fas fa-spinner fa-spin"></i> Submitting...');
+    });
+</script>
 
 @if(session()->has('success'))
 <script>
