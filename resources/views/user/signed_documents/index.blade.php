@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Signed Cash Advance Draws')
+@section('title', 'Signed Documents')
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Signed Cash Advance Draws</h1>
+        <h1>Signed Documents</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item">Signed Cash Advance Draws</div>
+            <div class="breadcrumb-item">Signed Documents</div>
         </div>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">List File Signed Cash Advance Draw</h2>
+        <h2 class="section-title">List File Signed Document</h2>
         <p class="section-lead">
-            Download Cash Advance Draw that already signed by accounting Dept.
+            Download Signed Document that already signed by accounting Dept.
         </p>
 
         <div class="row">

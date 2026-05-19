@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Upload Signed Cash Advance Draw')
+@section('title', 'Upload Signed Document')
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Upload Signed Cash Advance Draw</h1>
+        <h1>Upload Signed Document</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-            <div class="breadcrumb-item">Upload Signed Cash Advance Draw</div>
+            <div class="breadcrumb-item">Upload Signed Document</div>
         </div>
     </div>
 
     <div class="section-body">
         <h2 class="section-title">Upload File</h2>
         <p class="section-lead">
-            Upload Cash Advance Draw that already full signed by Accounting Dept. You can upload multiple files at once.
+            Upload Signed Document that already full signed by Accounting Dept. You can upload multiple files at once.
         </p>
 
         <div class="row">
@@ -25,10 +25,18 @@
                         <h4>Upload Form</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('accounting-staff.signed-cash-advance-draws.store') }}" method="POST" enctype="multipart/form-data" id="form-upload">
+                        <form action="{{ route('accounting-staff.signed-documents.store') }}" method="POST" enctype="multipart/form-data" id="form-upload">
                             @csrf
                             <div class="form-group">
-                                <label>Pilih File PDF</label>
+                                <label>Document Type</label>
+                                <select name="document_type" class="form-control" required>
+                                    <option value="">-- Select Document Type --</option>
+                                    <option value="cash_advance_draw">Cash Advance Draw</option>
+                                    <option value="international_trip">International Trip</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Choose PDF File</label>
                                 <input type="file" name="files[]" class="form-control" accept=".pdf" multiple required>
                                 <small class="form-text text-muted">Allowed format: PDF. Max 500KB per file. You can select multiple files at once.</small>
                             </div>

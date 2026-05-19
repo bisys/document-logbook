@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SignedCashAdvanceDraw extends Model
+class SignedDocument extends Model
 {
     protected $fillable = [
         'file_name',

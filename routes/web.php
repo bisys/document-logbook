@@ -52,7 +52,7 @@ use App\Http\Controllers\AccountingGM\InternationalTripController as AccountingG
 use App\Http\Controllers\AccountingGM\CashAdvanceDrawController as AccountingGMCashAdvanceDrawController;
 use App\Http\Controllers\AccountingGM\CashAdvanceRealizationController as AccountingGMCashAdvanceRealizationController;
 use App\Http\Controllers\AccountingGM\InternationalTripRealizationController as AccountingGMInternationalTripRealizationController;
-use App\Http\Controllers\SignedCashAdvanceDrawController;
+use App\Http\Controllers\SignedDocumentController;
 
 // Route::get('/', function () {
 //     return view('dashboard');
@@ -217,9 +217,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/export', [ReportController::class, 'export'])->name('export');
         });
 
-        Route::prefix('/signed-cash-advance-draws')->name('signed-cash-advance-draws.')->group(function () {
-            Route::get('/create', [SignedCashAdvanceDrawController::class, 'create'])->name('create');
-            Route::post('/', [SignedCashAdvanceDrawController::class, 'store'])->name('store');
+        Route::prefix('/signed-documents')->name('signed-documents.')->group(function () {
+            Route::get('/create', [SignedDocumentController::class, 'create'])->name('create');
+            Route::post('/', [SignedDocumentController::class, 'store'])->name('store');
         });
     });
 
@@ -405,8 +405,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/export', [ReportController::class, 'export'])->name('export');
         });
 
-        Route::prefix('/signed-cash-advance-draws')->name('signed-cash-advance-draws.')->group(function () {
-            Route::get('/', [SignedCashAdvanceDrawController::class, 'index'])->name('index');
+        Route::prefix('/signed-documents')->name('signed-documents.')->group(function () {
+            Route::get('/', [SignedDocumentController::class, 'index'])->name('index');
         });
     });
 
