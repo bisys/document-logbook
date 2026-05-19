@@ -27,26 +27,31 @@ use App\Http\Controllers\Admin\PettyCashController as AdminPettyCashController;
 use App\Http\Controllers\Admin\InternationalTripController as AdminInternationalTripController;
 use App\Http\Controllers\Admin\CashAdvanceDrawController as AdminCashAdvanceDrawController;
 use App\Http\Controllers\Admin\CashAdvanceRealizationController as AdminCashAdvanceRealizationController;
+use App\Http\Controllers\Admin\InternationalTripRealizationController as AdminInternationalTripRealizationController;
 use App\Http\Controllers\User\SupplierPaymentController as UserSupplierPaymentController;
 use App\Http\Controllers\User\PettyCashController as UserPettyCashController;
 use App\Http\Controllers\User\InternationalTripController as UserInternationalTripController;
 use App\Http\Controllers\User\CashAdvanceDrawController as UserCashAdvanceDrawController;
 use App\Http\Controllers\User\CashAdvanceRealizationController as UserCashAdvanceRealizationController;
+use App\Http\Controllers\User\InternationalTripRealizationController as UserInternationalTripRealizationController;
 use App\Http\Controllers\AccountingStaff\SupplierPaymentController as AccountingStaffSupplierPaymentController;
 use App\Http\Controllers\AccountingStaff\PettyCashController as AccountingStaffPettyCashController;
 use App\Http\Controllers\AccountingStaff\InternationalTripController as AccountingStaffInternationalTripController;
 use App\Http\Controllers\AccountingStaff\CashAdvanceDrawController as AccountingStaffCashAdvanceDrawController;
 use App\Http\Controllers\AccountingStaff\CashAdvanceRealizationController as AccountingStaffCashAdvanceRealizationController;
+use App\Http\Controllers\AccountingStaff\InternationalTripRealizationController as AccountingStaffInternationalTripRealizationController;
 use App\Http\Controllers\AccountingManager\SupplierPaymentController as AccountingManagerSupplierPaymentController;
 use App\Http\Controllers\AccountingManager\PettyCashController as AccountingManagerPettyCashController;
 use App\Http\Controllers\AccountingManager\InternationalTripController as AccountingManagerInternationalTripController;
 use App\Http\Controllers\AccountingManager\CashAdvanceDrawController as AccountingManagerCashAdvanceDrawController;
 use App\Http\Controllers\AccountingManager\CashAdvanceRealizationController as AccountingManagerCashAdvanceRealizationController;
+use App\Http\Controllers\AccountingManager\InternationalTripRealizationController as AccountingManagerInternationalTripRealizationController;
 use App\Http\Controllers\AccountingGM\SupplierPaymentController as AccountingGMSupplierPaymentController;
 use App\Http\Controllers\AccountingGM\PettyCashController as AccountingGMPettyCashController;
 use App\Http\Controllers\AccountingGM\InternationalTripController as AccountingGMInternationalTripController;
 use App\Http\Controllers\AccountingGM\CashAdvanceDrawController as AccountingGMCashAdvanceDrawController;
 use App\Http\Controllers\AccountingGM\CashAdvanceRealizationController as AccountingGMCashAdvanceRealizationController;
+use App\Http\Controllers\AccountingGM\InternationalTripRealizationController as AccountingGMInternationalTripRealizationController;
 use App\Http\Controllers\SignedCashAdvanceDrawController;
 
 // Route::get('/', function () {
@@ -128,6 +133,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceRealization}/update-status', [AdminCashAdvanceRealizationController::class, 'updateStatus'])->name('update-status');
         });
 
+        Route::prefix('/international-trip-realization')->name('admin.international-trip-realization.')->group(function () {
+            Route::get('/', [AdminInternationalTripRealizationController::class, 'index'])->name('index');
+            Route::get('/{internationalTripRealization}', [AdminInternationalTripRealizationController::class, 'show'])->name('show');
+            Route::post('/{internationalTripRealization}/update-status', [AdminInternationalTripRealizationController::class, 'updateStatus'])->name('update-status');
+        });
+
         Route::prefix('/report')->name('admin.report.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
             Route::post('/export', [ReportController::class, 'export'])->name('export');
@@ -191,6 +202,16 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/bulk-receive-hardfile', [AccountingStaffCashAdvanceRealizationController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
         });
 
+        Route::prefix('/international-trip-realization')->name('international-trip-realization.')->group(function () {
+            Route::get('/', [AccountingStaffInternationalTripRealizationController::class, 'index'])->name('index');
+            Route::get('/{internationalTripRealization}', [AccountingStaffInternationalTripRealizationController::class, 'show'])->name('show');
+            Route::post('/{internationalTripRealization}/add-revision', [AccountingStaffInternationalTripRealizationController::class, 'addRevision'])->name('add-revision');
+            Route::post('/{internationalTripRealization}/approve', [AccountingStaffInternationalTripRealizationController::class, 'approve'])->name('approve');
+            Route::post('/{internationalTripRealization}/reject', [AccountingStaffInternationalTripRealizationController::class, 'reject'])->name('reject');
+            Route::post('/{internationalTripRealization}/receive-hardfile', [AccountingStaffInternationalTripRealizationController::class, 'receiveHardfile'])->name('receive-hardfile');
+            Route::post('/bulk-receive-hardfile', [AccountingStaffInternationalTripRealizationController::class, 'bulkReceiveHardfile'])->name('bulk-receive-hardfile');
+        });
+
         Route::prefix('/report')->name('report.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
             Route::post('/export', [ReportController::class, 'export'])->name('export');
@@ -245,6 +266,14 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/bulk-approve', [AccountingManagerCashAdvanceRealizationController::class, 'bulkApprove'])->name('bulk-approve');
         });
 
+        Route::prefix('/international-trip-realization')->name('international-trip-realization.')->group(function () {
+            Route::get('/', [AccountingManagerInternationalTripRealizationController::class, 'index'])->name('index');
+            Route::get('/{internationalTripRealization}', [AccountingManagerInternationalTripRealizationController::class, 'show'])->name('show');
+            Route::post('/{internationalTripRealization}/approve', [AccountingManagerInternationalTripRealizationController::class, 'approve'])->name('approve');
+            Route::post('/{internationalTripRealization}/reject', [AccountingManagerInternationalTripRealizationController::class, 'reject'])->name('reject');
+            Route::post('/bulk-approve', [AccountingManagerInternationalTripRealizationController::class, 'bulkApprove'])->name('bulk-approve');
+        });
+
         Route::prefix('/report')->name('report.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
             Route::post('/export', [ReportController::class, 'export'])->name('export');
@@ -292,6 +321,14 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{cashAdvanceRealization}/approve', [AccountingGMCashAdvanceRealizationController::class, 'approve'])->name('approve');
             Route::post('/{cashAdvanceRealization}/reject', [AccountingGMCashAdvanceRealizationController::class, 'reject'])->name('reject');
             Route::post('/bulk-approve', [AccountingGMCashAdvanceRealizationController::class, 'bulkApprove'])->name('bulk-approve');
+        });
+
+        Route::prefix('/international-trip-realization')->name('international-trip-realization.')->group(function () {
+            Route::get('/', [AccountingGMInternationalTripRealizationController::class, 'index'])->name('index');
+            Route::get('/{internationalTripRealization}', [AccountingGMInternationalTripRealizationController::class, 'show'])->name('show');
+            Route::post('/{internationalTripRealization}/approve', [AccountingGMInternationalTripRealizationController::class, 'approve'])->name('approve');
+            Route::post('/{internationalTripRealization}/reject', [AccountingGMInternationalTripRealizationController::class, 'reject'])->name('reject');
+            Route::post('/bulk-approve', [AccountingGMInternationalTripRealizationController::class, 'bulkApprove'])->name('bulk-approve');
         });
 
         Route::prefix('/report')->name('report.')->group(function () {
@@ -351,6 +388,16 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceRealization}/edit', [UserCashAdvanceRealizationController::class, 'edit'])->name('edit');
             Route::put('/{cashAdvanceRealization}', [UserCashAdvanceRealizationController::class, 'update'])->name('update');
             Route::post('/{cashAdvanceRealization}/{revision}/submit-revision', [UserCashAdvanceRealizationController::class, 'submitRevision'])->name('submit-revision');
+        });
+
+        Route::prefix('/international-trip-realization')->name('international-trip-realization.')->group(function () {
+            Route::get('/', [UserInternationalTripRealizationController::class, 'index'])->name('index');
+            Route::get('/create', [UserInternationalTripRealizationController::class, 'create'])->name('create');
+            Route::post('/', [UserInternationalTripRealizationController::class, 'store'])->name('store');
+            Route::get('/{internationalTripRealization}', [UserInternationalTripRealizationController::class, 'show'])->name('show');
+            Route::get('/{internationalTripRealization}/edit', [UserInternationalTripRealizationController::class, 'edit'])->name('edit');
+            Route::put('/{internationalTripRealization}', [UserInternationalTripRealizationController::class, 'update'])->name('update');
+            Route::post('/{internationalTripRealization}/{revision}/submit-revision', [UserInternationalTripRealizationController::class, 'submitRevision'])->name('submit-revision');
         });
 
         Route::prefix('/report')->name('report.')->group(function () {

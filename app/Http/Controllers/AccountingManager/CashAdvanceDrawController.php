@@ -134,8 +134,14 @@ class CashAdvanceDrawController extends Controller
                 if ($cashAdvanceDraw->approvals()->where('approval_role_id', $userRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Already approved by your role.');
 
                 $approval = new Approval(['user_id' => Auth::user()->id, 'approval_role_id' => $userRole->id, 'approval_status_id' => 1, 'remark' => $validated['remark'] ?? null, 'approval_at' => now()]);
-                $nextStatus = DocumentStatus::where('slug', 'waiting-approval-gm')->first();
-                if ($nextStatus) $cashAdvanceDraw->update(['document_status_id' => $nextStatus->id]);
+                // Update document status to fully approved (final approval)
+                $fullyApprovedSlug = 'fully-approved';
+                $fullyApprovedStatus = DocumentStatus::where('slug', $fullyApprovedSlug)->first();
+                if ($fullyApprovedStatus) {
+                    $cashAdvanceDraw->update([
+                        'document_status_id' => $fullyApprovedStatus->id
+                    ]);
+                }
                 $cashAdvanceDraw->approvals()->save($approval);
                 });
                 $this->notificationService->notifyDocumentApproved($cashAdvanceDraw, Auth::user(), 'Accounting Manager', $validated['remark'] ?? null, 2);

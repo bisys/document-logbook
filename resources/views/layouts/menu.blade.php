@@ -25,6 +25,9 @@
     <li>
         <a href="{{ route('admin.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li>
+        <a href="{{ route('admin.international-trip-realization.index') }}" class="nav-link"><i class="fas fa-plane-arrival"></i><span>International Trip Realization</span></a>
+    </li>
     <li class="menu-header">Master Data</li>
     <li>
         <a href="{{ route('approval-role.index') }}" class="nav-link"><i class="fas fa-user-tag"></i><span>Approval Roles</span></a>
@@ -75,6 +78,9 @@
     <li>
         <a href="{{ route('accounting-staff.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li>
+        <a href="{{ route('accounting-staff.international-trip-realization.index') }}" class="nav-link"><i class="fas fa-plane-arrival"></i><span>International Trip Realization</span></a>
+    </li>
     <li class="menu-header">Upload Document</li>
     <li>
         <a href="{{ route('accounting-staff.signed-cash-advance-draws.create') }}" class="nav-link"><i class="fas fa-upload"></i><span>Signed Cash Advance Draw</span></a>
@@ -101,6 +107,9 @@
     <li>
         <a href="{{ route('accounting-manager.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li>
+        <a href="{{ route('accounting-manager.international-trip-realization.index') }}" class="nav-link"><i class="fas fa-plane-arrival"></i><span>International Trip Realization</span></a>
+    </li>
     <li class="menu-header">Report</li>
     <li><a href="{{ route('accounting-manager.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
@@ -123,6 +132,9 @@
     <li>
         <a href="{{ route('accounting-gm.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
     </li>
+    <li>
+        <a href="{{ route('accounting-gm.international-trip-realization.index') }}" class="nav-link"><i class="fas fa-plane-arrival"></i><span>International Trip Realization</span></a>
+    </li>
     <li class="menu-header">Report</li>
     <li><a href="{{ route('accounting-gm.report.index') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Report</span></a></li>
     @endif
@@ -144,6 +156,9 @@
     </li>
     <li>
         <a href="{{ route('user.international-trip.index') }}" class="nav-link"><i class="fas fa-plane"></i><span>International Trip</span></a>
+    </li>
+    <li>
+        <a href="{{ route('user.international-trip-realization.index') }}" class="nav-link"><i class="fas fa-plane-arrival"></i><span>International Trip Realization</span></a>
     </li>
     <li class="menu-header">Download Document</li>
     <li>
@@ -173,7 +188,13 @@
             
             // Check if the current URL contains or matches the link's href
             // Use startsWith to match sub-routes (e.g., /user/petty-cash/123 matches /user/petty-cash)
-            if (url.startsWith(cleanLinkHref)) {
+            // We append boundaries like '/', '?', or '#' to avoid partial matches (e.g., international-trip matching international-trip-realization)
+            var isMatch = url === cleanLinkHref || 
+                          url.startsWith(cleanLinkHref + '/') || 
+                          url.startsWith(cleanLinkHref + '?') || 
+                          url.startsWith(cleanLinkHref + '#');
+
+            if (isMatch) {
                 // Add active class to the anchor tag
                 $(this).addClass('active');
                 

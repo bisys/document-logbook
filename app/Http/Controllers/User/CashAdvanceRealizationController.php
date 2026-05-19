@@ -64,10 +64,11 @@ class CashAdvanceRealizationController extends Controller
 
     public function create()
     {
-        // Only show fully-approved Cash Advance Draws that don't have a realization yet
+        // Only show fully-approved Cash Advance Draws that don't have a realization yet and already paid
         $fullyApprovedStatus = DocumentStatus::where('slug', 'fully-approved')->first();
         $availableDraws = CashAdvanceDraw::where('user_id', Auth::user()->id)
             ->where('document_status_id', $fullyApprovedStatus->id ?? 0)
+            ->where('is_paid', true)
             ->doesntHave('realization')
             ->with('costCenter')
             ->get();

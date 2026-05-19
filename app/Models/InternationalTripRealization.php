@@ -5,37 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class InternationalTrip extends Model
+class InternationalTripRealization extends Model
 {
-    protected $table = 'international_trip';
+    protected $table = 'international_trip_realization';
 
     protected $fillable = [
+        'international_trip_id',
         'number',
         'user_id',
         'cost_center_id',
-        'itar_form',
-        'document_number',
-        'internal_memo',
-        'summary_bussiness_trip',
-        'overseas_allowance_form',
-        'bussiness_trip_allowance',
-        'rate',
-        'budget_plan',
+        'transfer_evidence',
         'other_document',
         'document_status_id',
         'edit_count',
         'hardfile_received_at',
         'hardfile_received_by',
-        'is_paid',
-        'paid_at',
-        'paid_by',
-        'payment_receipt_path',
     ];
 
     protected $casts = [
         'hardfile_received_at' => 'datetime',
-        'paid_at' => 'datetime',
-        'is_paid' => 'boolean',
     ];
 
     public function hardfileReceivedByUser()
@@ -43,24 +31,39 @@ class InternationalTrip extends Model
         return $this->belongsTo(User::class, 'hardfile_received_by');
     }
 
-    public function paidByUser()
+    public function trip()
     {
-        return $this->belongsTo(User::class, 'paid_by');
+        return $this->belongsTo(InternationalTrip::class, 'international_trip_id');
     }
 
-    public function realization()
-    {
-        return $this->hasOne(InternationalTripRealization::class, 'international_trip_id');
-    }
-
+    /**
+     * Get user through the linked International Trip
+     */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(
+            User::class,
+            InternationalTrip::class,
+            'id', // Foreign key on international_trip
+            'id', // Foreign key on users
+            'international_trip_id', // Local key on international_trip_realization
+            'user_id' // Local key on international_trip
+        );
     }
 
+    /**
+     * Get cost center through the linked International Trip
+     */
     public function costCenter()
     {
-        return $this->belongsTo(CostCenter::class);
+        return $this->hasOneThrough(
+            CostCenter::class,
+            InternationalTrip::class,
+            'id',
+            'id',
+            'international_trip_id',
+            'cost_center_id'
+        );
     }
 
     public function status()
@@ -80,7 +83,7 @@ class InternationalTrip extends Model
 
     public static function generateNumber()
     {
-        $prefix = 'ITAR';
+        $prefix = 'ITARR';
         $today = Carbon::now()->format('dmY');
 
         $last = self::whereDate('created_at', Carbon::today())
