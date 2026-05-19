@@ -11,6 +11,7 @@ use App\Models\PettyCash;
 use App\Models\CashAdvanceDraw;
 use App\Models\CashAdvanceRealization;
 use App\Models\InternationalTrip;
+use App\Models\InternationalTripRealization;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportExport;
@@ -26,6 +27,7 @@ class ReportController extends Controller
             (object)['id' => 'supplier-payment', 'name' => 'Supplier Payment'],
             (object)['id' => 'petty-cash', 'name' => 'Petty Cash'],
             (object)['id' => 'international-trip', 'name' => 'International Trip'],
+            (object)['id' => 'international-trip-realization', 'name' => 'International Trip Realization'],
             (object)['id' => 'cash-advance-draw', 'name' => 'Cash Advance Draw'],
             (object)['id' => 'cash-advance-realization', 'name' => 'Cash Advance Realization'],
         ];
@@ -75,6 +77,7 @@ class ReportController extends Controller
             'supplier-payment' => SupplierPayment::class,
             'petty-cash' => PettyCash::class,
             'international-trip' => InternationalTrip::class,
+            'international-trip-realization' => InternationalTripRealization::class,
             'cash-advance-draw' => CashAdvanceDraw::class,
             'cash-advance-realization' => CashAdvanceRealization::class,
         ];
@@ -88,6 +91,16 @@ class ReportController extends Controller
             }
             
             $query = $modelClass::with(['user.department', 'status', 'revisions']);
+            
+            if (method_exists($modelClass, 'realization')) {
+                $query->with('realization');
+            }
+            if (method_exists($modelClass, 'draw')) {
+                $query->with('draw');
+            }
+            if (method_exists($modelClass, 'trip')) {
+                $query->with('trip');
+            }
             
             // Scope by role: user can only see their own
             if ($role === 'user') {
@@ -168,10 +181,30 @@ class ReportController extends Controller
                     }
                 }
 
+                $linkedDocument = 'N/A';
+                if ($modelClass === CashAdvanceDraw::class && $item->realization) {
+                    $linkedDocNumber = $item->realization->number ?? '-';
+                    $linkedDocDocNumber = $item->realization->document_number ?? '-';
+                    $linkedDocument = $linkedDocNumber . ' - ' . $linkedDocDocNumber;
+                } elseif ($modelClass === CashAdvanceRealization::class && $item->draw) {
+                    $linkedDocNumber = $item->draw->number ?? '-';
+                    $linkedDocDocNumber = $item->draw->document_number ?? '-';
+                    $linkedDocument = $linkedDocNumber . ' - ' . $linkedDocDocNumber;
+                } elseif ($modelClass === InternationalTrip::class && $item->realization) {
+                    $linkedDocNumber = $item->realization->number ?? '-';
+                    $linkedDocDocNumber = $item->realization->document_number ?? '-';
+                    $linkedDocument = $linkedDocNumber . ' - ' . $linkedDocDocNumber;
+                } elseif ($modelClass === InternationalTripRealization::class && $item->trip) {
+                    $linkedDocNumber = $item->trip->number ?? '-';
+                    $linkedDocDocNumber = $item->trip->document_number ?? '-';
+                    $linkedDocument = $linkedDocNumber . ' - ' . $linkedDocDocNumber;
+                }
+
                 $results[] = [
                     'document_type' => $typeName,
                     'number' => $item->number ?? '-',
                     'document_number' => $item->document_number ?? '-',
+                    'linked_document' => $linkedDocument,
                     'user_name' => $item->user->name ?? '-',
                     'department' => $item->user->department->department ?? '-',
                     'status' => $item->status->status ?? '-',

@@ -42,6 +42,7 @@
                 <th>Document Type</th>
                 <th>Number</th>
                 <th>Document Number</th>
+                <th>Linked Document</th>
                 <th>User Name</th>
                 <th>Department</th>
                 <th>Document Status</th>
@@ -58,6 +59,7 @@
                 <td>{{ $row['document_type'] }}</td>
                 <td>{{ $row['number'] }}</td>
                 <td>{{ $row['document_number'] }}</td>
+                <td>{{ $row['linked_document'] }}</td>
                 <td>{{ $row['user_name'] }}</td>
                 <td>{{ $row['department'] }}</td>
                 <td>{{ $row['status'] }}</td>
