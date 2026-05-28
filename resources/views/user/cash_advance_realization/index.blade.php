@@ -62,12 +62,25 @@
                             @elseif($statusFilter === 'fully-approved') Fully Approved
                             @endif
                         </h4>
+                        <div class="card-header-action">
+                            <form id="bulk-submit-form" action="{{ route('user.cash-advance-realization.bulk-submit-hardfile') }}" method="POST">
+                                @csrf
+                                <div id="bulk-inputs"></div>
+                                <button type="button" class="btn btn-primary" id="btn-bulk-submit" style="display: none;">Submit Hardfile Selected (<span id="selected-count">0</span>)</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                                                <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                                            </div>
+                                        </th>
                                         <th>No</th>
                                         <th>Document Number</th>
                                         <th>Linked Cash Advance Draw</th>
@@ -83,6 +96,18 @@
                                 <tbody>
                                     @foreach($cashAdvanceRealizations as $cashAdvanceRealization)
                                     <tr>
+                                        <td class="text-center">
+                                            @php
+                                                $staffRole = \App\Models\ApprovalRole::where('sequence', 1)->first();
+                                                $hasStaffApproved = $staffRole ? $cashAdvanceRealization->approvals->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->isNotEmpty() : false;
+                                            @endphp
+                                            @if(!$cashAdvanceRealization->is_hardfile_submitted && $hasStaffApproved)
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input doc-checkbox" id="checkbox-{{ $cashAdvanceRealization->id }}" value="{{ $cashAdvanceRealization->id }}">
+                                                <label for="checkbox-{{ $cashAdvanceRealization->id }}" class="custom-control-label">&nbsp;</label>
+                                            </div>
+                                            @endif
+                                        </td>
                                         <td>
                                             {{ $loop->iteration }}
                                         </td>
@@ -152,4 +177,57 @@
 </script>
 @endif
 
+@if(session()->has('error'))
+<script>
+    iziToast.warning({
+        message: '{{ session()->get("error") }}',
+        position: 'topRight'
+    });
+</script>
+@endif
+
+<!-- Script for Bulk Submit -->
+<script>
+    $(document).ready(function() {
+        function updateBulkSubmitButton() {
+            var selectedCount = $('.doc-checkbox:checked').length;
+            $('#selected-count').text(selectedCount);
+            if (selectedCount > 0) {
+                $('#btn-bulk-submit').show();
+            } else {
+                $('#btn-bulk-submit').hide();
+            }
+        }
+
+        $('#table-1').on('change', 'input[type="checkbox"]', function() {
+            setTimeout(updateBulkSubmitButton, 50);
+        });
+
+        $('#btn-bulk-submit').click(function() {
+            var selectedIds = [];
+            $('.doc-checkbox:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) return;
+
+            swal({
+                title: 'Submit Hardfile?',
+                text: 'You are about to submit hardfile for ' + selectedIds.length + ' document(s).',
+                icon: 'warning',
+                buttons: true,
+            })
+            .then((willSubmit) => {
+                if (willSubmit) {
+                    $('#bulk-inputs').empty();
+                    selectedIds.forEach(function(id) {
+                        $('#bulk-inputs').append('<input type="hidden" name="document_ids[]" value="' + id + '">');
+                    });
+                    
+                    $('#bulk-submit-form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endpush

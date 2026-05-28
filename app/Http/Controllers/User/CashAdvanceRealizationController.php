@@ -244,6 +244,65 @@ class CashAdvanceRealizationController extends Controller
     }
 
     /**
+     * Bulk submit hardfiles by user
+     */
+    public function bulkSubmitHardfile(Request $request)
+    {
+        $validated = $request->validate([
+            'document_ids' => 'required|array',
+            'document_ids.*' => 'exists:cash_advance_realization,id',
+        ]);
+
+        $successCount = 0;
+        $errors = [];
+
+        foreach ($validated['document_ids'] as $docId) {
+            try {
+                $cashAdvanceRealization = CashAdvanceRealization::findOrFail($docId);
+
+                if ($cashAdvanceRealization->user_id != Auth::user()->id) {
+                    throw new \Exception('Unauthorized action.');
+                }
+
+                if ($cashAdvanceRealization->is_hardfile_submitted) {
+                    throw new \Exception('Hardfile has already been submitted for this document.');
+                }
+
+                $staffRole = \App\Models\ApprovalRole::where('sequence', 1)->first();
+                if (!$staffRole) {
+                    throw new \Exception('Approval role not found.');
+                }
+
+                $staffApproval = $cashAdvanceRealization->approvals()
+                    ->where('approval_role_id', $staffRole->id)
+                    ->where('approval_status_id', 1)
+                    ->exists();
+
+                if (!$staffApproval) {
+                    throw new \Exception('Cannot submit hardfile: document has not been approved by Accounting Staff yet.');
+                }
+
+                $cashAdvanceRealization->update([
+                    'is_hardfile_submitted' => true,
+                    'hardfile_submitted_at' => now(),
+                ]);
+
+                $this->notificationService->notifyHardfileSubmitted($cashAdvanceRealization, Auth::user());
+                $successCount++;
+            } catch (\Exception $e) {
+                $errors[] = "ID {$docId}: " . $e->getMessage();
+            }
+        }
+
+        if (count($errors) > 0) {
+            $errorMessage = "Submitted hardfile for {$successCount} documents. Errors on " . count($errors) . " documents: " . implode(', ', $errors);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+        return redirect()->back()->with('success', "Successfully submitted hardfile for {$successCount} documents.");
+    }
+
+    /**
      * Submit hardfile by user
      */
     public function submitHardfile(Request $request, CashAdvanceRealization $cashAdvanceRealization)
