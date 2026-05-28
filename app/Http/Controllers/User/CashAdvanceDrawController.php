@@ -217,6 +217,52 @@ class CashAdvanceDrawController extends Controller
         return redirect()->route('user.cash-advance-draw.show', $cashAdvanceDraw)->with('success', 'Revision submitted successfully.');
     }
 
+    /**
+     * Submit hardfile by user
+     */
+    public function submitHardfile(Request $request, CashAdvanceDraw $cashAdvanceDraw)
+    {
+        // Check if user owns this document
+        if ($cashAdvanceDraw->user_id != Auth::user()->id) {
+            abort(403);
+        }
+
+        try {
+            if ($cashAdvanceDraw->is_hardfile_submitted) {
+                throw new \Exception('Hardfile has already been submitted for this document.');
+            }
+
+            // Check if document has been approved by accounting staff (sequence 1)
+            $staffRole = \App\Models\ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) {
+                throw new \Exception('Approval role not found.');
+            }
+
+            $staffApproval = $cashAdvanceDraw->approvals()
+                ->where('approval_role_id', $staffRole->id)
+                ->where('approval_status_id', 1) // 1 = approved
+                ->exists();
+
+            if (!$staffApproval) {
+                throw new \Exception('Cannot submit hardfile: document has not been approved by Accounting Staff yet.');
+            }
+
+            $cashAdvanceDraw->update([
+                'is_hardfile_submitted' => true,
+                'hardfile_submitted_at' => now(),
+            ]);
+
+            // Notify accounting staff
+            $this->notificationService->notifyHardfileSubmitted($cashAdvanceDraw, Auth::user());
+
+            return redirect()->route('user.cash-advance-draw.show', $cashAdvanceDraw)
+                ->with('success', 'Hardfile submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('user.cash-advance-draw.show', $cashAdvanceDraw)
+                ->with('error', $e->getMessage());
+        }
+    }
+
     public function destroy(string $id)
     {
         //

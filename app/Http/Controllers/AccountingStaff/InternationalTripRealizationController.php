@@ -131,6 +131,9 @@ class InternationalTripRealizationController extends Controller
             if ($internationalTripRealization->hardfile_received_at) {
                 throw new \Exception('Hardfile has already been received for this document.');
             }
+            if (!$internationalTripRealization->is_hardfile_submitted) {
+                throw new \Exception('Cannot receive hardfile: user has not submitted the hardfile yet.');
+            }
             $staffRole = ApprovalRole::where('sequence', 1)->first();
             if (!$staffRole) throw new \Exception('Approval role not found.');
             if (!$internationalTripRealization->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) {
@@ -156,6 +159,7 @@ class InternationalTripRealizationController extends Controller
             try {
                 $doc = InternationalTripRealization::findOrFail($docId);
                 if ($doc->hardfile_received_at) throw new \Exception('Hardfile has already been received.');
+                if (!$doc->is_hardfile_submitted) throw new \Exception('User has not submitted the hardfile yet.');
                 $staffRole = ApprovalRole::where('sequence', 1)->first();
                 if (!$staffRole) throw new \Exception('Approval role not found.');
                 if (!$doc->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) throw new \Exception('Document has not been approved by Accounting Staff yet.');

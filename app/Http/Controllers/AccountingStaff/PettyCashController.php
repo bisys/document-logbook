@@ -201,6 +201,10 @@ class PettyCashController extends Controller
                 throw new \Exception('Hardfile has already been received for this document.');
             }
 
+            if (!$pettyCash->is_hardfile_submitted) {
+                throw new \Exception('Cannot receive hardfile: user has not submitted the hardfile yet.');
+            }
+
             $staffRole = ApprovalRole::where('sequence', 1)->first();
             if (!$staffRole) {
                 throw new \Exception('Approval role not found.');
@@ -292,6 +296,10 @@ class PettyCashController extends Controller
                 
                 if ($pettyCash->hardfile_received_at) {
                     throw new \Exception('Hardfile has already been received.');
+                }
+
+                if (!$pettyCash->is_hardfile_submitted) {
+                    throw new \Exception('User has not submitted the hardfile yet.');
                 }
 
                 $staffRole = ApprovalRole::where('sequence', 1)->first();

@@ -341,6 +341,11 @@ class SupplierPaymentController extends Controller
                 throw new \Exception('Hardfile has already been received for this document.');
             }
 
+            // Check if user has submitted hardfile
+            if (!$supplierPayment->is_hardfile_submitted) {
+                throw new \Exception('Cannot receive hardfile: user has not submitted the hardfile yet.');
+            }
+
             // Check if document has been approved by accounting staff (sequence 1)
             $staffRole = ApprovalRole::where('sequence', 1)->first();
             if (!$staffRole) {
@@ -432,9 +437,12 @@ class SupplierPaymentController extends Controller
             try {
                 $supplierPayment = SupplierPayment::findOrFail($docId);
                 
-                // Check if already received
                 if ($supplierPayment->hardfile_received_at) {
                     throw new \Exception('Hardfile has already been received.');
+                }
+
+                if (!$supplierPayment->is_hardfile_submitted) {
+                    throw new \Exception('User has not submitted the hardfile yet.');
                 }
 
                 // Check if document has been approved by accounting staff (sequence 1)

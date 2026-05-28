@@ -134,6 +134,9 @@ class CashAdvanceRealizationController extends Controller
             if ($cashAdvanceRealization->hardfile_received_at) {
                 throw new \Exception('Hardfile has already been received for this document.');
             }
+            if (!$cashAdvanceRealization->is_hardfile_submitted) {
+                throw new \Exception('Cannot receive hardfile: user has not submitted the hardfile yet.');
+            }
             $staffRole = ApprovalRole::where('sequence', 1)->first();
             if (!$staffRole) throw new \Exception('Approval role not found.');
             if (!$cashAdvanceRealization->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) {
@@ -163,6 +166,10 @@ class CashAdvanceRealizationController extends Controller
                 
                 if ($cashAdvanceRealization->hardfile_received_at) {
                     throw new \Exception('Hardfile has already been received.');
+                }
+
+                if (!$cashAdvanceRealization->is_hardfile_submitted) {
+                    throw new \Exception('User has not submitted the hardfile yet.');
                 }
 
                 $staffRole = ApprovalRole::where('sequence', 1)->first();

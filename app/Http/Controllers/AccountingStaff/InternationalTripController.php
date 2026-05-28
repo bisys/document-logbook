@@ -150,6 +150,9 @@ class InternationalTripController extends Controller
             if ($internationalTrip->hardfile_received_at) {
                 throw new \Exception('Hardfile has already been received for this document.');
             }
+            if (!$internationalTrip->is_hardfile_submitted) {
+                throw new \Exception('Cannot receive hardfile: user has not submitted the hardfile yet.');
+            }
             $staffRole = ApprovalRole::where('sequence', 1)->first();
             if (!$staffRole) throw new \Exception('Approval role not found.');
             if (!$internationalTrip->approvals()->where('approval_role_id', $staffRole->id)->where('approval_status_id', 1)->exists()) {
@@ -225,6 +228,10 @@ class InternationalTripController extends Controller
                 
                 if ($internationalTrip->hardfile_received_at) {
                     throw new \Exception('Hardfile has already been received.');
+                }
+
+                if (!$internationalTrip->is_hardfile_submitted) {
+                    throw new \Exception('User has not submitted the hardfile yet.');
                 }
 
                 $staffRole = ApprovalRole::where('sequence', 1)->first();

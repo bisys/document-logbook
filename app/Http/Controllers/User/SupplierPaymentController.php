@@ -381,6 +381,52 @@ class SupplierPaymentController extends Controller
     }
 
     /**
+     * Submit hardfile by user
+     */
+    public function submitHardfile(Request $request, SupplierPayment $supplierPayment)
+    {
+        // Check if user owns this supplier payment
+        if ($supplierPayment->user_id != Auth::user()->id) {
+            abort(403);
+        }
+
+        try {
+            if ($supplierPayment->is_hardfile_submitted) {
+                throw new \Exception('Hardfile has already been submitted for this document.');
+            }
+
+            // Check if document has been approved by accounting staff (sequence 1)
+            $staffRole = \App\Models\ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) {
+                throw new \Exception('Approval role not found.');
+            }
+
+            $staffApproval = $supplierPayment->approvals()
+                ->where('approval_role_id', $staffRole->id)
+                ->where('approval_status_id', 1) // 1 = approved
+                ->exists();
+
+            if (!$staffApproval) {
+                throw new \Exception('Cannot submit hardfile: document has not been approved by Accounting Staff yet.');
+            }
+
+            $supplierPayment->update([
+                'is_hardfile_submitted' => true,
+                'hardfile_submitted_at' => now(),
+            ]);
+
+            // Notify accounting staff
+            $this->notificationService->notifyHardfileSubmitted($supplierPayment, Auth::user());
+
+            return redirect()->route('user.supplier-payment.show', $supplierPayment)
+                ->with('success', 'Hardfile submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('user.supplier-payment.show', $supplierPayment)
+                ->with('error', $e->getMessage());
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

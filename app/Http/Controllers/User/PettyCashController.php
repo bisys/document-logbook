@@ -226,6 +226,52 @@ class PettyCashController extends Controller
         return redirect()->route('user.petty-cash.show', $pettyCash)->with('success', 'Revision submitted successfully.');
     }
 
+    /**
+     * Submit hardfile by user
+     */
+    public function submitHardfile(Request $request, PettyCash $pettyCash)
+    {
+        // Check if user owns this document
+        if ($pettyCash->user_id != Auth::user()->id) {
+            abort(403);
+        }
+
+        try {
+            if ($pettyCash->is_hardfile_submitted) {
+                throw new \Exception('Hardfile has already been submitted for this document.');
+            }
+
+            // Check if document has been approved by accounting staff (sequence 1)
+            $staffRole = \App\Models\ApprovalRole::where('sequence', 1)->first();
+            if (!$staffRole) {
+                throw new \Exception('Approval role not found.');
+            }
+
+            $staffApproval = $pettyCash->approvals()
+                ->where('approval_role_id', $staffRole->id)
+                ->where('approval_status_id', 1) // 1 = approved
+                ->exists();
+
+            if (!$staffApproval) {
+                throw new \Exception('Cannot submit hardfile: document has not been approved by Accounting Staff yet.');
+            }
+
+            $pettyCash->update([
+                'is_hardfile_submitted' => true,
+                'hardfile_submitted_at' => now(),
+            ]);
+
+            // Notify accounting staff
+            $this->notificationService->notifyHardfileSubmitted($pettyCash, Auth::user());
+
+            return redirect()->route('user.petty-cash.show', $pettyCash)
+                ->with('success', 'Hardfile submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('user.petty-cash.show', $pettyCash)
+                ->with('error', $e->getMessage());
+        }
+    }
+
     public function destroy(string $id)
     {
         //

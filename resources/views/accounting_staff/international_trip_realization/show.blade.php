@@ -65,37 +65,71 @@
             @endforeach
         </ul></div></div>
 
-        {{-- Hardfile Receipt Section --}}
+        {{-- Handover Log Section --}}
         @php
         $staffApproved = $internationalTripRealization->approvals()->whereHas('role', function($q) { $q->where('sequence', 1); })->where('approval_status_id', 1)->exists();
         @endphp
         <div class="mt-4">
             <div class="card">
                 <div class="card-header">
-                    <h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4>
+                    <h4><i class="fas fa-handshake mr-2"></i>Handover Log</h4>
                 </div>
                 <div class="card-body">
-                    @if($internationalTripRealization->hardfile_received_at)
-                        <div class="alert alert-success mb-0">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-check-circle fa-2x mr-3"></i>
-                                <div>
-                                    <strong>Hardfile Received</strong><br>
-                                    <span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($internationalTripRealization->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br>
-                                    <span class="text-muted" style="color: white !important;">Date: <strong>{{ $internationalTripRealization->hardfile_received_at->format('d M Y H:i') }}</strong></span>
+                    <div class="row">
+                        {{-- Left Column: Submit Hardfile (User Role) - Read Only --}}
+                        <div class="col-md-6 border-right">
+                            <h5 class="mb-3">Submit Hardfile</h5>
+                            @if($internationalTripRealization->is_hardfile_submitted)
+                                <div class="alert alert-success mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                        <div>
+                                            <strong>Hardfile Submitted by User</strong><br>
+                                            <span class="text-white">Date: <strong>{{ optional($internationalTripRealization->hardfile_submitted_at)->format('d M Y H:i') }}</strong></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif($staffApproved)
+                                <div class="alert alert-warning mb-0">
+                                    <i class="fas fa-clock mr-2"></i> Waiting for user to submit the hardfile.
+                                </div>
+                            @else
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="fas fa-info-circle mr-2"></i> User can submit hardfile after your approval.
+                                </div>
+                            @endif
                         </div>
-                    @elseif($staffApproved)
-                        <p class="text-muted mb-3">Document has been approved. You can now record the hardfile receipt.</p>
-                        <button class="btn btn-info" data-toggle="modal" data-target="#receiveHardfileModal">
-                            <i class="fas fa-box"></i> Receive Hardfile
-                        </button>
-                    @else
-                        <div class="alert alert-secondary mb-0">
-                            <i class="fas fa-info-circle mr-2"></i> Hardfile receipt can only be recorded after the document is approved by Accounting Staff.
+
+                        {{-- Right Column: Receive Hardfile (Accounting Staff Role) --}}
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Receive Hardfile</h5>
+                            @if($internationalTripRealization->hardfile_received_at)
+                                <div class="alert alert-success mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                        <div>
+                                            <strong>Hardfile Received</strong><br>
+                                            <span class="text-white">Received by: <strong>{{ optional($internationalTripRealization->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br>
+                                            <span class="text-white">Date: <strong>{{ optional($internationalTripRealization->hardfile_received_at)->format('d M Y H:i') }}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($internationalTripRealization->is_hardfile_submitted)
+                                <p class="text-muted mb-3">User has submitted the hardfile. You can now record the hardfile receipt.</p>
+                                <button class="btn btn-info" data-toggle="modal" data-target="#receiveHardfileModal">
+                                    <i class="fas fa-box"></i> Receive Hardfile
+                                </button>
+                            @elseif($staffApproved)
+                                <div class="alert alert-warning mb-0">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Cannot receive yet. Waiting for user submission.
+                                </div>
+                            @else
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="fas fa-info-circle mr-2"></i> Receive hardfile is available after user submission.
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>

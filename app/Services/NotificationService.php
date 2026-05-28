@@ -8,6 +8,7 @@ use App\Mail\RevisionSubmittedMail;
 use App\Mail\DocumentApprovedMail;
 use App\Mail\DocumentRejectedMail;
 use App\Mail\HardfileReceivedMail;
+use App\Mail\HardfileSubmittedMail;
 use App\Mail\DocumentPaidMail;
 use App\Models\User;
 use App\Models\Revision;
@@ -27,6 +28,7 @@ class NotificationService
         'App\Models\SupplierPayment' => 'Supplier Payment',
         'App\Models\PettyCash' => 'Petty Cash',
         'App\Models\InternationalTrip' => 'International Trip',
+        'App\Models\InternationalTripRealization' => 'International Trip Realization',
         'App\Models\CashAdvanceDraw' => 'Cash Advance Draw',
         'App\Models\CashAdvanceRealization' => 'Cash Advance Realization',
     ];
@@ -280,6 +282,37 @@ class NotificationService
             }
         } catch (\Exception $e) {
             Log::error('Failed to send hardfile received notification: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Notify accounting staff when user submits the hardfile
+     */
+    public function notifyHardfileSubmitted(Model $document, User $submitter): void
+    {
+        try {
+            $documentType = $this->getDocumentType($document);
+            $document->load('user');
+            
+            $staffUsers = $this->getUsersByRole('accounting-staff');
+            $slug = Str::kebab(class_basename($document));
+            $url = route('accounting-staff.' . $slug . '.show', $document->id);
+
+            foreach ($staffUsers as $staff) {
+                if ($staff->email) {
+                    Mail::to($staff->email)->queue(new HardfileSubmittedMail($document, $documentType, $submitter, $url));
+                }
+            }
+
+            Notification::send($staffUsers, new DocumentNotification([
+                'title' => 'Hardfile Submitted',
+                'message' => 'The ' . $documentType . ' hardfile has been submitted by ' . $submitter->name . '.',
+                'url' => $url,
+                'icon' => 'fas fa-box',
+                'icon_bg' => 'bg-warning'
+            ]));
+        } catch (\Exception $e) {
+            Log::error('Failed to send hardfile submitted notification: ' . $e->getMessage());
         }
     }
 

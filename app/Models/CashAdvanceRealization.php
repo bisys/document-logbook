@@ -26,12 +26,16 @@ class CashAdvanceRealization extends Model
         'other_document',
         'document_status_id',
         'edit_count',
+        'is_hardfile_submitted',
+        'hardfile_submitted_at',
         'hardfile_received_at',
         'hardfile_received_by',
     ];
 
     protected $casts = [
+        'hardfile_submitted_at' => 'datetime',
         'hardfile_received_at' => 'datetime',
+        'is_hardfile_submitted' => 'boolean',
     ];
 
     public function hardfileReceivedByUser()

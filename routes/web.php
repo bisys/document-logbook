@@ -347,6 +347,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{supplierPayment}', [UserSupplierPaymentController::class, 'show'])->name('show');
             Route::get('/{supplierPayment}/edit', [UserSupplierPaymentController::class, 'edit'])->name('edit');
             Route::put('/{supplierPayment}', [UserSupplierPaymentController::class, 'update'])->name('update');
+            Route::post('/{supplierPayment}/submit-hardfile', [UserSupplierPaymentController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{supplierPayment}/{revision}/submit-revision', [UserSupplierPaymentController::class, 'submitRevision'])->name('submit-revision');
         });
 
@@ -357,6 +358,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{pettyCash}', [UserPettyCashController::class, 'show'])->name('show');
             Route::get('/{pettyCash}/edit', [UserPettyCashController::class, 'edit'])->name('edit');
             Route::put('/{pettyCash}', [UserPettyCashController::class, 'update'])->name('update');
+            Route::post('/{pettyCash}/submit-hardfile', [UserPettyCashController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{pettyCash}/{revision}/submit-revision', [UserPettyCashController::class, 'submitRevision'])->name('submit-revision');
         });
 
@@ -367,6 +369,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{internationalTrip}', [UserInternationalTripController::class, 'show'])->name('show');
             Route::get('/{internationalTrip}/edit', [UserInternationalTripController::class, 'edit'])->name('edit');
             Route::put('/{internationalTrip}', [UserInternationalTripController::class, 'update'])->name('update');
+            Route::post('/{internationalTrip}/submit-hardfile', [UserInternationalTripController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{internationalTrip}/{revision}/submit-revision', [UserInternationalTripController::class, 'submitRevision'])->name('submit-revision');
         });
 
@@ -377,6 +380,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceDraw}', [UserCashAdvanceDrawController::class, 'show'])->name('show');
             Route::get('/{cashAdvanceDraw}/edit', [UserCashAdvanceDrawController::class, 'edit'])->name('edit');
             Route::put('/{cashAdvanceDraw}', [UserCashAdvanceDrawController::class, 'update'])->name('update');
+            Route::post('/{cashAdvanceDraw}/submit-hardfile', [UserCashAdvanceDrawController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{cashAdvanceDraw}/{revision}/submit-revision', [UserCashAdvanceDrawController::class, 'submitRevision'])->name('submit-revision');
         });
 
@@ -387,6 +391,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{cashAdvanceRealization}', [UserCashAdvanceRealizationController::class, 'show'])->name('show');
             Route::get('/{cashAdvanceRealization}/edit', [UserCashAdvanceRealizationController::class, 'edit'])->name('edit');
             Route::put('/{cashAdvanceRealization}', [UserCashAdvanceRealizationController::class, 'update'])->name('update');
+            Route::post('/{cashAdvanceRealization}/submit-hardfile', [UserCashAdvanceRealizationController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{cashAdvanceRealization}/{revision}/submit-revision', [UserCashAdvanceRealizationController::class, 'submitRevision'])->name('submit-revision');
         });
 
@@ -397,6 +402,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{internationalTripRealization}', [UserInternationalTripRealizationController::class, 'show'])->name('show');
             Route::get('/{internationalTripRealization}/edit', [UserInternationalTripRealizationController::class, 'edit'])->name('edit');
             Route::put('/{internationalTripRealization}', [UserInternationalTripRealizationController::class, 'update'])->name('update');
+            Route::post('/{internationalTripRealization}/submit-hardfile', [UserInternationalTripRealizationController::class, 'submitHardfile'])->name('submit-hardfile');
             Route::post('/{internationalTripRealization}/{revision}/submit-revision', [UserInternationalTripRealizationController::class, 'submitRevision'])->name('submit-revision');
         });
 

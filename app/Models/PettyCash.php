@@ -27,6 +27,8 @@ class PettyCash extends Model
         'other_document',
         'document_status_id',
         'edit_count',
+        'is_hardfile_submitted',
+        'hardfile_submitted_at',
         'hardfile_received_at',
         'hardfile_received_by',
         'is_paid',
@@ -36,9 +38,11 @@ class PettyCash extends Model
     ];
 
     protected $casts = [
+        'hardfile_submitted_at' => 'datetime',
         'hardfile_received_at' => 'datetime',
         'paid_at' => 'datetime',
         'is_paid' => 'boolean',
+        'is_hardfile_submitted' => 'boolean',
     ];
 
     public function hardfileReceivedByUser()

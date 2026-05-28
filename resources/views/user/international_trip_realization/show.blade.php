@@ -133,28 +133,72 @@
                             </div>
                         </div>
 
-                        {{-- Hardfile Receipt Status --}}
+                        {{-- Handover Log Section --}}
                         @php
                         $staffApproved = $internationalTripRealization->approvals()->whereHas('role', function($q) { $q->where('sequence', 1); })->where('approval_status_id', 1)->exists();
                         @endphp
-                        @if($internationalTripRealization->hardfile_received_at)
-                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
-                        <div class="card-body">
-                            <div class="alert alert-success mb-0"><div class="d-flex align-items-center"><i class="fas fa-check-circle fa-2x mr-3"></i><div><strong>Hardfile Received</strong><br><span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($internationalTripRealization->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br><span class="text-muted" style="color: white !important;">Date: <strong>{{ $internationalTripRealization->hardfile_received_at->format('d M Y H:i') }}</strong></span></div></div></div>
-                        </div></div></div>
-                        @elseif($staffApproved)
-                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
-                        <div class="card-body">
-                            <div class="alert alert-warning mb-0"><i class="fas fa-clock mr-2"></i> Waiting for hardfile submission to Accounting Staff.</div>
-                        </div></div></div>
-                        @else
-                        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
-                        <div class="card-body">
-                            <div class="alert alert-secondary mb-0">
-                                <i class="fas fa-info-circle mr-2"></i> Hardfile receipt can only be recorded after the document is approved by Accounting Staff.
+                        <div class="mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><i class="fas fa-handshake mr-2"></i>Handover Log</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        {{-- Left Column: Submit Hardfile (User Role) --}}
+                                        <div class="col-md-6 border-right">
+                                            <h5 class="mb-3">Submit Hardfile</h5>
+                                            @if($internationalTripRealization->is_hardfile_submitted)
+                                                <div class="alert alert-success mb-0">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                                        <div>
+                                                            <strong>Hardfile Submitted</strong><br>
+                                                            <span class="text-white">Date: <strong>{{ optional($internationalTripRealization->hardfile_submitted_at)->format('d M Y H:i') }}</strong></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif($staffApproved)
+                                                <div class="alert alert-warning mb-3">
+                                                    <i class="fas fa-exclamation-triangle mr-2"></i> Please submit the hardfile to Accounting Staff.
+                                                </div>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitHardfileModal">
+                                                    <i class="fas fa-paper-plane mr-2"></i> Submit Hardfile
+                                                </button>
+                                            @else
+                                                <div class="alert alert-secondary mb-0">
+                                                    <i class="fas fa-info-circle mr-2"></i> Submission available after Accounting Staff approval.
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        {{-- Right Column: Receive Hardfile (Accounting Staff Role) --}}
+                                        <div class="col-md-6">
+                                            <h5 class="mb-3">Receive Hardfile</h5>
+                                            @if($internationalTripRealization->hardfile_received_at)
+                                                <div class="alert alert-success mb-0">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                                        <div>
+                                                            <strong>Hardfile Received</strong><br>
+                                                            <span class="text-white">Received by: <strong>{{ optional($internationalTripRealization->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br>
+                                                            <span class="text-white">Date: <strong>{{ optional($internationalTripRealization->hardfile_received_at)->format('d M Y H:i') }}</strong></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif($internationalTripRealization->is_hardfile_submitted)
+                                                <div class="alert alert-warning mb-0">
+                                                    <i class="fas fa-clock mr-2"></i> Waiting for Accounting Staff to receive the hardfile.
+                                                </div>
+                                            @else
+                                                <div class="alert alert-secondary mb-0">
+                                                    <i class="fas fa-info-circle mr-2"></i> Accounting Staff can receive hardfile after it is submitted.
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div></div></div>
-                        @endif
+                        </div>
 
                         <div class="row">
                             <div class="col-md-6">
@@ -342,6 +386,33 @@
     </div>
 </div>
 @endforeach
+
+<!-- Submit Hardfile Modal -->
+@if(!$internationalTripRealization->is_hardfile_submitted && $staffApproved)
+<div class="modal fade" id="submitHardfileModal" tabindex="-1" role="dialog" aria-labelledby="submitHardfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitHardfileModalLabel">Submit Hardfile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('user.international-trip-realization.submit-hardfile', $internationalTripRealization) }}" method="POST" id="submit-hardfile-form">
+                @csrf
+                <div class="modal-body">
+                    <p>Are you sure you want to submit the hardfile for this document?</p>
+                    <p class="text-muted small">By clicking submit, you confirm that you have physically handed over the document to the Accounting Staff.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Yes, Submit Hardfile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection
 
