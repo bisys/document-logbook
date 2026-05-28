@@ -47,21 +47,73 @@
             @endforeach
         </ul></div></div>
 
-        {{-- Hardfile Receipt Status --}}
+        {{-- Handover Log Section --}}
         @php
         $staffApproved = $cashAdvanceDraw->approvals()->whereHas('role', function($q) { $q->where('sequence', 1); })->where('approval_status_id', 1)->exists();
         @endphp
-        @if($cashAdvanceDraw->hardfile_received_at)
-        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
-        <div class="card-body">
-            <div class="alert alert-success mb-0"><div class="d-flex align-items-center"><i class="fas fa-check-circle fa-2x mr-3"></i><div><strong>Hardfile Received</strong><br><span class="text-muted" style="color: white !important;">Received by: <strong>{{ optional($cashAdvanceDraw->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br><span class="text-muted" style="color: white !important;">Date: <strong>{{ $cashAdvanceDraw->hardfile_received_at->format('d M Y H:i') }}</strong></span></div></div></div>
-        </div></div></div>
-        @elseif($staffApproved)
-        <div class="mt-4"><div class="card"><div class="card-header"><h4><i class="fas fa-box mr-2"></i>Hardfile Receipt</h4></div>
-        <div class="card-body">
-            <div class="alert alert-secondary mb-0"><i class="fas fa-clock mr-2"></i> Waiting for hardfile submission to Accounting Staff.</div>
-        </div></div></div>
-        @endif
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-handshake mr-2"></i>Handover Log</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {{-- Left Column: Submit Hardfile (User Role) - Read Only --}}
+                        <div class="col-md-6 border-right">
+                            <h5 class="mb-3">Submit Hardfile</h5>
+                            @if($cashAdvanceDraw->is_hardfile_submitted)
+                                <div class="alert alert-success mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                        <div>
+                                            <strong>Hardfile Submitted by User</strong><br>
+                                            <span class="text-white">Date: <strong>{{ optional($cashAdvanceDraw->hardfile_submitted_at)->format('d M Y H:i') }}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($staffApproved)
+                                <div class="alert alert-warning mb-0">
+                                    <i class="fas fa-clock mr-2"></i> Waiting for user to submit the hardfile.
+                                </div>
+                            @else
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="fas fa-info-circle mr-2"></i> Waiting for Accounting Staff approval before user can submit.
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Right Column: Receive Hardfile (Accounting Staff Role) - Read Only --}}
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Receive Hardfile</h5>
+                            @if($cashAdvanceDraw->hardfile_received_at)
+                                <div class="alert alert-success mb-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle fa-2x mr-3"></i>
+                                        <div>
+                                            <strong>Hardfile Received</strong><br>
+                                            <span class="text-white">Received by: <strong>{{ optional($cashAdvanceDraw->hardfileReceivedByUser)->name ?? '-' }}</strong></span><br>
+                                            <span class="text-white">Date: <strong>{{ optional($cashAdvanceDraw->hardfile_received_at)->format('d M Y H:i') }}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif($cashAdvanceDraw->is_hardfile_submitted)
+                                <div class="alert alert-warning mb-0">
+                                    <i class="fas fa-clock mr-2"></i> Waiting for Accounting Staff to receive hardfile.
+                                </div>
+                            @elseif($staffApproved)
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Cannot receive yet. Waiting for user submission.
+                                </div>
+                            @else
+                                <div class="alert alert-secondary mb-0">
+                                    <i class="fas fa-info-circle mr-2"></i> Receive hardfile is available after user submission.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {{-- Payment Receipt Status --}}
         @php
