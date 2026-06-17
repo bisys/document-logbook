@@ -23,19 +23,19 @@ class UpdateSupplierPaymentRequest extends FormRequest
     {
         return [
             'cost_center_id' => 'required|exists:cost_centers,id',
-            'spr_form' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'spr_form' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'required|string|max:255|unique:supplier_payment,document_number,' . $this->route('supplierPayment')->id,
-            'original_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'copy_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'tax_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'agreement' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'internal_memo_entertain' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'entertain_realization_form' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'minutes_of_meeting' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'nominative_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'calculation_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'budget_plan' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'original_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'copy_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'tax_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'agreement' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:15360',
+            'internal_memo_entertain' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'entertain_realization_form' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'minutes_of_meeting' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'nominative_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'calculation_summary' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'budget_plan' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:15360',
         ];
     }
 }

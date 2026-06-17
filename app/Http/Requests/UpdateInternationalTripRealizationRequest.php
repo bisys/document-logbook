@@ -14,8 +14,8 @@ class UpdateInternationalTripRealizationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transfer_evidence' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
-            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'transfer_evidence' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
+            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:15360',
         ];
     }
 }

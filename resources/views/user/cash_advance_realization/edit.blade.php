@@ -56,7 +56,7 @@
                                         <input type="file" name="car_form" class="custom-file-input" id="car-form" {{ empty($cashAdvanceRealization->car_form) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($cashAdvanceRealization->car_form) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -80,7 +80,7 @@
                                         <input type="file" name="original_invoice" class="custom-file-input" id="original-invoice" {{ empty($cashAdvanceRealization->original_invoice) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($cashAdvanceRealization->original_invoice) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -104,11 +104,11 @@
                                         <input type="file" name="copy_invoice" class="custom-file-input" id="copy-invoice" {{ empty($cashAdvanceRealization->copy_invoice) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($cashAdvanceRealization->copy_invoice) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Internal Memo Entertain</label>
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Internal Memo / Entertain</label>
                                 <div class="col-sm-12 col-md-7">
                                     @if(!empty($cashAdvanceRealization->internal_memo_entertain))
                                     <div class="card card-sm mb-2 bg-light">
@@ -128,7 +128,7 @@
                                         <input type="file" name="internal_memo_entertain" class="custom-file-input" id="internal-memo-entertain">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -152,7 +152,7 @@
                                         <input type="file" name="entertain_realization_form" class="custom-file-input" id="entertain-realization-form">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -176,7 +176,7 @@
                                         <input type="file" name="minutes_of_meeting" class="custom-file-input" id="minutes-of-meeting">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -200,7 +200,7 @@
                                         <input type="file" name="nominative_summary" class="custom-file-input" id="nominative-summary">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -224,7 +224,7 @@
                                         <input type="file" name="cic_form" class="custom-file-input" id="cic-form">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -248,7 +248,7 @@
                                         <input type="file" name="transfer_evidence" class="custom-file-input" id="transfer-evidence">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -272,7 +272,7 @@
                                         <input type="file" name="other_document" class="custom-file-input" id="other-document">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 15MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">

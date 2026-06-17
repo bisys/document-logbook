@@ -45,7 +45,7 @@
                                         <input type="file" name="transfer_evidence" class="custom-file-input" id="transfer-evidence" required>
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -55,7 +55,7 @@
                                         <input type="file" name="other_document" class="custom-file-input" id="other-document">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 15MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">

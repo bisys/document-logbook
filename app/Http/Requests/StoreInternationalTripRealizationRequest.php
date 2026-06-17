@@ -15,8 +15,8 @@ class StoreInternationalTripRealizationRequest extends FormRequest
     {
         return [
             'international_trip_id' => 'required|exists:international_trip,id',
-            'transfer_evidence' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
-            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:500',
+            'transfer_evidence' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
+            'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:15360',
         ];
     }
 }

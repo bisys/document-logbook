@@ -73,7 +73,7 @@
                                         <input type="file" name="itar_form" class="custom-file-input" id="itar-form" {{ empty($internationalTrip->itar_form) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->itar_form) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -97,7 +97,7 @@
                                         <input type="file" name="internal_memo" class="custom-file-input" id="internal-memo" {{ empty($internationalTrip->internal_memo) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->internal_memo) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -121,7 +121,7 @@
                                         <input type="file" name="summary_bussiness_trip" class="custom-file-input" id="summary-bussiness-trip" {{ empty($internationalTrip->summary_bussiness_trip) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->summary_bussiness_trip) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -145,7 +145,7 @@
                                         <input type="file" name="overseas_allowance_form" class="custom-file-input" id="overseas-allowance-form" {{ empty($internationalTrip->overseas_allowance_form) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->overseas_allowance_form) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -169,7 +169,7 @@
                                         <input type="file" name="bussiness_trip_allowance" class="custom-file-input" id="bussiness-trip-allowance" {{ empty($internationalTrip->bussiness_trip_allowance) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->bussiness_trip_allowance) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -193,7 +193,7 @@
                                         <input type="file" name="rate" class="custom-file-input" id="rate" {{ empty($internationalTrip->rate) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->rate) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -217,7 +217,7 @@
                                         <input type="file" name="budget_plan" class="custom-file-input" id="budget-plan" {{ empty($internationalTrip->budget_plan) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($internationalTrip->budget_plan) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -241,7 +241,7 @@
                                         <input type="file" name="other_document" class="custom-file-input" id="other-document">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 15MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">

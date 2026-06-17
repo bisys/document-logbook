@@ -89,7 +89,7 @@
                                     'tax_invoice' => 'Tax Invoice',
                                     'agreement' => 'Agreement',
                                     'budget_plan' => 'Budget Plan',
-                                    'internal_memo_entertain' => 'Internal Memo Entertain',
+                                    'internal_memo_entertain' => 'Internal Memo / Entertain',
                                     'entertain_realization_form' => 'Entertain Realization Form',
                                     'minutes_of_meeting' => 'Minutes Of Meeting',
                                     'nominative_summary' => 'Nominative Summary',

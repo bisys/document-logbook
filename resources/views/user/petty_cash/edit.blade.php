@@ -73,7 +73,7 @@
                                         <input type="file" name="pcr_form" class="custom-file-input" id="pcr-form" {{ empty($pettyCash->pcr_form) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($pettyCash->pcr_form) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -97,7 +97,7 @@
                                         <input type="file" name="original_invoice" class="custom-file-input" id="original-invoice" {{ empty($pettyCash->original_invoice) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($pettyCash->original_invoice) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -121,7 +121,7 @@
                                         <input type="file" name="copy_invoice" class="custom-file-input" id="copy-invoice" {{ empty($pettyCash->copy_invoice) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($pettyCash->copy_invoice) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -145,7 +145,7 @@
                                         <input type="file" name="budget_plan" class="custom-file-input" id="budget-plan" {{ empty($pettyCash->budget_plan) ? 'required' : '' }}>
                                         <label class="custom-file-label">{{ empty($pettyCash->budget_plan) ? 'Choose File' : 'Replace File (Optional)' }}</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -169,11 +169,11 @@
                                         <input type="file" name="tax_invoice" class="custom-file-input" id="tax-invoice">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
-                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Internal Memo Entertain</label>
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Internal Memo / Entertain</label>
                                 <div class="col-sm-12 col-md-7">
                                     @if(!empty($pettyCash->internal_memo_entertain))
                                     <div class="card card-sm mb-2 bg-light">
@@ -193,7 +193,7 @@
                                         <input type="file" name="internal_memo_entertain" class="custom-file-input" id="internal-memo-entertain">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -217,7 +217,7 @@
                                         <input type="file" name="entertain_realization_form" class="custom-file-input" id="entertain-realization-form">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -241,7 +241,7 @@
                                         <input type="file" name="minutes_of_meeting" class="custom-file-input" id="minutes-of-meeting">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -265,7 +265,7 @@
                                         <input type="file" name="nominative_summary" class="custom-file-input" id="nominative-summary">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -289,7 +289,7 @@
                                         <input type="file" name="cic_form" class="custom-file-input" id="cic-form">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 5MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
@@ -313,7 +313,7 @@
                                         <input type="file" name="other_document" class="custom-file-input" id="other-document">
                                         <label class="custom-file-label">Choose File</label>
                                     </div>
-                                    <div class="form-text text-muted">The file must have a maximum size of 500KB</div>
+                                    <div class="form-text text-muted">The file must have a maximum size of 15MB</div>
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
