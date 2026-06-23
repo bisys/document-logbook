@@ -205,8 +205,8 @@ class InternationalTripRealizationController extends Controller
         }
 
         $validated = $request->validate([
-            'transfer_evidence' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'transfer_evidence' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:15360',
         ]);
 
         DB::transaction(function () use ($internationalTripRealization, $revision, $validated) {

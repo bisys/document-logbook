@@ -180,15 +180,15 @@ class InternationalTripController extends Controller
         }
 
         $validated = $request->validate([
-            'itar_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'itar_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
-            'internal_memo' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'summary_bussiness_trip' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'overseas_allowance_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'bussiness_trip_allowance' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'rate' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'internal_memo' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'summary_bussiness_trip' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'overseas_allowance_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'bussiness_trip_allowance' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'rate' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:15360',
         ]);
 
         DB::transaction(function () use ($internationalTrip, $revision, $validated) {

@@ -182,18 +182,18 @@ class PettyCashController extends Controller
         }
 
         $validated = $request->validate([
-            'pcr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'pcr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
-            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:15360',
         ]);
 
         DB::transaction(function () use ($pettyCash, $revision, $validated) {

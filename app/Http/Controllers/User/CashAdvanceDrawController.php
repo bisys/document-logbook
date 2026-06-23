@@ -180,11 +180,11 @@ class CashAdvanceDrawController extends Controller
         }
 
         $validated = $request->validate([
-            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
-            'proposal_or_monitor_budget' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'proposal_or_monitor_budget' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:51360',
         ]);
 
         DB::transaction(function () use ($cashAdvanceDraw, $revision, $validated) {

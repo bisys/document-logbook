@@ -205,16 +205,16 @@ class CashAdvanceRealizationController extends Controller
         }
 
         $validated = $request->validate([
-            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'transfer_evidence' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
-            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:500',
+            'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'internal_memo_entertain' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'entertain_realization_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'minutes_of_meeting' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'nominative_summary' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'cic_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'transfer_evidence' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
+            'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:51360',
         ]);
 
         DB::transaction(function () use ($cashAdvanceRealization, $revision, $validated) {
