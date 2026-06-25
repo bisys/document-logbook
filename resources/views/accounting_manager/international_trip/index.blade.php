@@ -84,6 +84,7 @@
                                             </div>
                                         </th>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Approval By Staff</th>
@@ -109,6 +110,7 @@
                                             <strong>{{ $internationalTrip->number }}</strong><br>
                                             <small class="text-muted">{{ $internationalTrip->document_number }}</small>
                                         </td>
+                                        <td>{{ $internationalTrip->purpose }}</td>
                                         <td>
                                             {{ optional($internationalTrip->user)->name }}<br>
                                             <small class="text-muted">{{ optional(optional($internationalTrip->user)->department)->department }}</small>

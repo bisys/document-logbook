@@ -84,6 +84,7 @@
                                             </div>
                                         </th>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Approval By Staff</th>
@@ -109,6 +110,7 @@
                                             <strong>{{ $cashAdvanceDraw->number }}</strong><br>
                                             <small class="text-muted">{{ $cashAdvanceDraw->document_number }}</small>
                                         </td>
+                                        <td>{{ $cashAdvanceDraw->purpose }}</td>
                                         <td>
                                             {{ optional($cashAdvanceDraw->user)->name }}<br>
                                             <small class="text-muted">{{ optional(optional($cashAdvanceDraw->user)->department)->department }}</small>

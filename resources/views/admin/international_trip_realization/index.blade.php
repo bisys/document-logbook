@@ -55,7 +55,6 @@
                                         <th>Status</th>
                                         <th>Hardfile</th>
                                         <th>Revisions</th>
-                                        <th>Approvals</th>
                                         <th>Submitted At</th>
                                         <th>Action</th>
                                     </tr>

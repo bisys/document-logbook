@@ -15,6 +15,7 @@ class PettyCash extends Model
         'cost_center_id',
         'pcr_form',
         'document_number',
+        'purpose',
         'original_invoice',
         'copy_invoice',
         'tax_invoice',

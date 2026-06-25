@@ -87,6 +87,7 @@
                                             </div>
                                         </th>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Approval By Manager</th>
@@ -112,6 +113,7 @@
                                             <strong>{{ $pettyCash->number }}</strong><br>
                                             <small class="text-muted">{{ $pettyCash->document_number }}</small>
                                         </td>
+                                        <td>{{ $pettyCash->purpose }}</td>
                                         <td>
                                             {{ optional($pettyCash->user)->name }}<br>
                                             <small class="text-muted">{{ optional(optional($pettyCash->user)->department)->department }}</small>

@@ -25,6 +25,7 @@
                             <div>
                                 <h4 class="mb-1">{{ $pettyCash->number }}</h4>
                                 <p class="mb-0 text-muted">Document Number: <strong>{{ $pettyCash->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Purpose: <strong>{{ $pettyCash->purpose }}</strong></p>
                                 <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($pettyCash->costCenter)->number }} - {{ optional($pettyCash->costCenter)->name }}</strong></p>
                             </div>
                             <div>

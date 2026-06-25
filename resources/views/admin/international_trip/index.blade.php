@@ -49,12 +49,12 @@
                                 <thead>
                                     <tr>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Status</th>
-                            <th>Hardfile</th>
+                                        <th>Hardfile</th>
                                         <th>Revisions</th>
-                                        <th>Approvals</th>
                                         <th>Submitted At</th>
                                         <th>Action</th>
                                     </tr>
@@ -66,6 +66,7 @@
                                             <strong>{{ $internationalTrip->number }}</strong><br>
                                             <small class="text-muted">{{ $internationalTrip->document_number }}</small>
                                         </td>
+                                        <td>{{ $internationalTrip->purpose }}</td>
                                         <td>
                                             {{ optional($internationalTrip->user)->name }}<br>
                                             <small class="text-muted">{{ optional(optional($internationalTrip->user)->department)->department }}</small>

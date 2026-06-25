@@ -15,6 +15,7 @@ class CashAdvanceDraw extends Model
         'cost_center_id',
         'car_form',
         'document_number',
+        'purpose',
         'proposal_or_monitor_budget',
         'budget_plan',
         'other_document',

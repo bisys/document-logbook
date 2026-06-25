@@ -15,6 +15,7 @@ class SupplierPayment extends Model
         'cost_center_id',
         'spr_form',
         'document_number',
+        'purpose',
         'original_invoice',
         'copy_invoice',
         'tax_invoice',

@@ -25,6 +25,7 @@
                             <div>
                                 <h4 class="mb-1">{{ $cashAdvanceDraw->number }}</h4>
                                 <p class="mb-0 text-muted">Document Number: <strong>{{ $cashAdvanceDraw->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Purpose: <strong>{{ $cashAdvanceDraw->purpose }}</strong></p>
                                 <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($cashAdvanceDraw->costCenter)->number }} - {{ optional($cashAdvanceDraw->costCenter)->name }}</strong></p>
                             </div>
                             <div>

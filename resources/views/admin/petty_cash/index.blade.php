@@ -49,12 +49,12 @@
                                 <thead>
                                     <tr>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Status</th>
-                            <th>Hardfile</th>
+                                        <th>Hardfile</th>
                                         <th>Revisions</th>
-                                        <th>Approvals</th>
                                         <th>Submitted At</th>
                                         <th>Action</th>
                                     </tr>
@@ -66,6 +66,7 @@
                                             <strong>{{ $pettyCash->number }}</strong><br>
                                             <small class="text-muted">{{ $pettyCash->document_number }}</small>
                                         </td>
+                                        <td>{{ $pettyCash->purpose }}</td>
                                         <td>
                                             {{ optional($pettyCash->user)->name }}<br>
                                             <small class="text-muted">{{ optional(optional($pettyCash->user)->department)->department }}</small>

@@ -17,6 +17,7 @@ class StoreCashAdvanceDrawRequest extends FormRequest
             'cost_center_id' => 'required|exists:cost_centers,id',
             'car_form' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'document_number' => 'required|string|max:255|unique:cash_advance_draw,document_number',
+            'purpose' => 'required|string|max:255',
             'proposal_or_monitor_budget' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'budget_plan' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'other_document' => 'sometimes|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:15360',

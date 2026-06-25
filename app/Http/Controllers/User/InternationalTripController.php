@@ -74,6 +74,7 @@ class InternationalTripController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             foreach (['itar_form', 'internal_memo', 'summary_bussiness_trip', 'overseas_allowance_form', 'bussiness_trip_allowance', 'rate', 'budget_plan', 'other_document'] as $fileField) {
@@ -148,6 +149,7 @@ class InternationalTripController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             $currentEditCount = $internationalTrip->edit_count ?? 0;
@@ -182,6 +184,7 @@ class InternationalTripController extends Controller
         $validated = $request->validate([
             'itar_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
+            'purpose' => 'nullable|string',
             'internal_memo' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'summary_bussiness_trip' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'overseas_allowance_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
@@ -203,6 +206,9 @@ class InternationalTripController extends Controller
 
             if (isset($validated['document_number'])) {
                 $internationalTrip->update(['document_number' => $validated['document_number']]);
+            }
+            if (isset($validated['purpose'])) {
+                $internationalTrip->update(['purpose' => $validated['purpose']]);
             }
 
             $revision->update(['revision_status_id' => 2, 'revision_at' => now()]);

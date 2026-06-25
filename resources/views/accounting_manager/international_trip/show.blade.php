@@ -11,6 +11,7 @@
             <div>
                 <h4 class="mb-1">{{ $internationalTrip->number }}</h4>
                 <p class="mb-0 text-muted">Document Number: <strong>{{ $internationalTrip->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Purpose: <strong>{{ $internationalTrip->purpose }}</strong></p>
                 <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($internationalTrip->costCenter)->number ?? '' }} - {{ optional($internationalTrip->costCenter)->name ?? '' }}</strong></p>
             </div>
             <div>

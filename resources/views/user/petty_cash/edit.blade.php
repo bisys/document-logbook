@@ -42,6 +42,12 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Purpose*</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <input type="text" class="form-control" name="purpose" value="{{ old('purpose', $pettyCash->purpose) }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Cost Center*</label>
                                 <div class="col-sm-12 col-md-7">
                                     <select class="form-control selectric" name="cost_center_id" required>

@@ -26,6 +26,7 @@ class StoreSupplierPaymentRequest extends FormRequest
             'cost_center_id' => 'required|exists:cost_centers,id',
             'spr_form' => 'required|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'required|string|max:255|unique:supplier_payment,document_number',
+            'purpose' => 'required|string|max:255',
             'original_invoice' => 'required|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'copy_invoice' => 'required|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'tax_invoice' => 'sometimes|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',

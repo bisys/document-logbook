@@ -74,6 +74,7 @@ class CashAdvanceDrawController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             foreach (['car_form', 'proposal_or_monitor_budget', 'budget_plan', 'other_document'] as $fileField) {
@@ -148,6 +149,7 @@ class CashAdvanceDrawController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             $currentEditCount = $cashAdvanceDraw->edit_count ?? 0;
@@ -182,6 +184,7 @@ class CashAdvanceDrawController extends Controller
         $validated = $request->validate([
             'car_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
+            'purpose' => 'nullable|string',
             'proposal_or_monitor_budget' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'budget_plan' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'other_document' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:51360',
@@ -199,6 +202,9 @@ class CashAdvanceDrawController extends Controller
 
             if (isset($validated['document_number'])) {
                 $cashAdvanceDraw->update(['document_number' => $validated['document_number']]);
+            }
+            if (isset($validated['purpose'])) {
+                $cashAdvanceDraw->update(['purpose' => $validated['purpose']]);
             }
 
             $revision->update(['revision_status_id' => 2, 'revision_at' => now()]);

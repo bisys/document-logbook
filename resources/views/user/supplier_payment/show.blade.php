@@ -25,6 +25,7 @@
                             <div>
                                 <h4 class="mb-1">{{ $supplierPayment->number }}</h4>
                                 <p class="mb-0 text-muted">Document Number: <strong>{{ $supplierPayment->document_number }}</strong></p>
+                                <p class="mb-0 text-muted">Purpose: <strong>{{ $supplierPayment->purpose }}</strong></p>
                                 <p class="mb-0 text-muted">Cost Center: <strong>{{ optional($supplierPayment->costCenter)->number }} - {{ optional($supplierPayment->costCenter)->name }}</strong></p>
                             </div>
                             <div>

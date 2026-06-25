@@ -15,6 +15,7 @@ class InternationalTrip extends Model
         'cost_center_id',
         'itar_form',
         'document_number',
+        'purpose',
         'internal_memo',
         'summary_bussiness_trip',
         'overseas_allowance_form',

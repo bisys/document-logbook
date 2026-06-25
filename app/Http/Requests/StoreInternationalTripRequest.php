@@ -17,6 +17,7 @@ class StoreInternationalTripRequest extends FormRequest
             'cost_center_id' => 'required|exists:cost_centers,id',
             'itar_form' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'document_number' => 'required|string|max:255|unique:international_trip,document_number',
+            'purpose' => 'required|string|max:255',
             'internal_memo' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'summary_bussiness_trip' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',
             'overseas_allowance_form' => 'required|file|mimes:pdf,xlsx,xls,jpg,jpeg,png|max:5120',

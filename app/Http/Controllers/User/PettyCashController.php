@@ -74,6 +74,7 @@ class PettyCashController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             foreach (['pcr_form', 'original_invoice', 'copy_invoice', 'tax_invoice', 'internal_memo_entertain', 'entertain_realization_form', 'minutes_of_meeting', 'nominative_summary', 'cic_form', 'budget_plan', 'other_document'] as $fileField) {
@@ -150,6 +151,7 @@ class PettyCashController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;
 
             $currentEditCount = $pettyCash->edit_count ?? 0;
@@ -184,6 +186,7 @@ class PettyCashController extends Controller
         $validated = $request->validate([
             'pcr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
+            'purpose' => 'nullable|string',
             'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
@@ -208,6 +211,9 @@ class PettyCashController extends Controller
 
             if (isset($validated['document_number'])) {
                 $pettyCash->update(['document_number' => $validated['document_number']]);
+            }
+            if (isset($validated['purpose'])) {
+                $pettyCash->update(['purpose' => $validated['purpose']]);
             }
 
             $revision->update(['revision_status_id' => 2, 'revision_at' => now()]);

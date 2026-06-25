@@ -103,6 +103,7 @@ class SupplierPaymentController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;  // Set initial status to 'Waiting Approval Staff'
 
             // Handle file uploads with custom naming format
@@ -238,6 +239,7 @@ class SupplierPaymentController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['cost_center_id'] = $request->input('cost_center_id');
             $data['document_number'] = $request->input('document_number');
+            $data['purpose'] = $request->input('purpose');
             $data['document_status_id'] = DocumentStatus::where('slug', 'waiting-approval-staff')->first()->id;  // Set initial status to 'Waiting Approval Staff'
 
             // Increment edit count
@@ -305,6 +307,7 @@ class SupplierPaymentController extends Controller
         $validated = $request->validate([
             'spr_form' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'document_number' => 'nullable|string',
+            'purpose' => 'nullable|string',
             'original_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'copy_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
             'tax_invoice' => 'nullable|file|mimes:pdf,xls,xlsx,jpg,jpeg,png|max:5120',
@@ -349,6 +352,9 @@ class SupplierPaymentController extends Controller
             // Update document number if provided
             if (isset($validated['document_number'])) {
                 $supplierPayment->update(['document_number' => $validated['document_number']]);
+            }
+            if (isset($validated['purpose'])) {
+                $supplierPayment->update(['purpose' => $validated['purpose']]);
             }
 
             // Update revision status to 'revised'

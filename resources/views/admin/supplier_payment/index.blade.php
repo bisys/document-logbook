@@ -49,12 +49,12 @@
                                 <thead>
                                     <tr>
                                         <th>Document Number</th>
+                                        <th>Purpose</th>
                                         <th>Submitted By</th>
                                         <th>Cost Center</th>
                                         <th>Status</th>
-                            <th>Hardfile</th>
+                                        <th>Hardfile</th>
                                         <th>Revisions</th>
-                                        <th>Approvals</th>
                                         <th>Submitted At</th>
                                         <th>Action</th>
                                     </tr>
